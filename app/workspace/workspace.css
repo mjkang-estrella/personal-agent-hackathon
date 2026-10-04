@@ -451,3 +451,40 @@
     max-width: none;
   }
 }
+
+/* Keep the integrated agent desk in the same editorial palette. */
+.app-shell .agent-overview {
+  background: #243b61;
+  border-radius: 24px;
+}
+.app-shell .agent-mode,
+.app-shell .agent-capabilities > div {
+  color: #dbe7ff;
+}
+.app-shell .agent-mode > span {
+  background: #b7ceff;
+}
+.app-shell .agent-overview > p,
+.app-shell .agent-capabilities small,
+.app-shell .agent-scope {
+  color: #d5deed;
+}
+.app-shell .review-inbox {
+  background: #fffefa;
+  border-color: #e6e3dd;
+  border-radius: 24px;
+}
+.app-shell .agent-handoff {
+  background: #edf2fa;
+  border-color: #dce5f3;
+  border-radius: 18px;
+}
+.app-shell .agent-handoff strong,
+.app-shell .review-inbox h2,
+.app-shell .review-empty strong {
+  color: var(--ink);
+}
+.app-shell .agent-handoff p,
+.app-shell .review-empty p {
+  color: var(--muted);
+}
