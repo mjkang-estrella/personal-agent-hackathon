@@ -1,0 +1,47 @@
+From: Jordan Lee | Orbit People Team <people@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Subject: Reminder: complete your profile before October 15
+Date: Wed, 14 Oct 2026 10:00:00 -0700
+Message-ID: <s08-m04@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 08-onboarding-coordination
+X-JobSwitch-Stage: duplicate-reminder
+In-Reply-To: <s08-m01@jobswitch.example>
+References: <s08-m01@jobswitch.example>
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="jobswitch-s08-m04-0"
+
+--jobswitch-s08-m04-0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Alex,
+
+This scheduled reminder concerns the same People Portal profile task in your =
+welcome checklist. If you already received a profile verification confirmatio=
+n, no additional profile is required. This reminder does not reverse that con=
+firmation.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s08-m04-0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+i Alex,</p><p>This scheduled reminder concerns the same People Portal profile=
+ task in your welcome checklist. If you already received a profile verificati=
+on confirmation, no additional profile is required. This reminder does not re=
+verse that confirmation.</p><p>Best,<br>Jordan</p><p>---<br>Fictional JobSwit=
+ch demo. All people, policies and events in this message are synthetic. Addre=
+sses use reserved .example domains. Do not deliver to real people.<br></p></d=
+iv></body></html>
+
+--jobswitch-s08-m04-0--

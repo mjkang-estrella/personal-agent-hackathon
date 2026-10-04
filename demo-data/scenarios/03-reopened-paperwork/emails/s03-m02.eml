@@ -1,0 +1,49 @@
+From: Jordan Lee | Orbit People Team <people@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Subject: Action required: correction to your submitted form
+Date: Thu, 22 Oct 2026 10:00:00 -0700
+Message-ID: <s03-m02@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 03-reopened-paperwork
+X-JobSwitch-Stage: correction-request
+In-Reply-To: <s03-m01@jobswitch.example>
+References: <s03-m01@jobswitch.example>
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="jobswitch-s03-m02-0"
+
+--jobswitch-s03-m02-0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Alex,
+
+During quality review we found that the representative title says Friend. It =
+must say Authorized Representative in this demo form. Your previously complet=
+ed task is reopened.
+
+Please ask your representative to correct that field in the secure portal by =
+October 23. Do not email identity documents.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s03-m02-0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+i Alex,</p><p>During quality review we found that the representative title sa=
+ys Friend. It must say Authorized Representative in this demo form. Your prev=
+iously completed task is reopened.</p><p>Please ask your representative to co=
+rrect that field in the secure portal by October 23. Do not email identity do=
+cuments.</p><p>Best,<br>Jordan</p><p>---<br>Fictional JobSwitch demo. All peo=
+ple, policies and events in this message are synthetic. Addresses use reserve=
+d .example domains. Do not deliver to real people.<br></p></div></body></html>
+
+--jobswitch-s03-m02-0--

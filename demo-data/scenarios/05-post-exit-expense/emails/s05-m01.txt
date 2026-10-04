@@ -1,0 +1,17 @@
+From: Northstar Expense Operations <expenses@northstar.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-19T09:00:00-07:00
+Subject: Your $240 workshop expense still needs a claim
+Message-ID: <s05-m01@jobswitch.example>
+Attachments: attachments/s05-policy.pdf
+
+Hi Alex,
+
+We noticed an unsubmitted $240 workshop expense from October 12. Your employee portal is now disabled. Use the alternative route in the attached policy; your deadline is October 30 at 5 p.m. Pacific.
+
+We currently have only a card authorization, not an itemized receipt. Please obtain the receipt before submitting.
+
+Northstar Expense Operations
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

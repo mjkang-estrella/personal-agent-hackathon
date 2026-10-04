@@ -1,0 +1,49 @@
+From: Jordan Lee | Orbit People Team <people@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Subject: Update: your start date is moving to November 2
+Date: Thu, 08 Oct 2026 14:00:00 -0700
+Message-ID: <s01-m02@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 01-start-date-change
+X-JobSwitch-Stage: date-change
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="jobswitch-s01-m02-0"
+
+--jobswitch-s01-m02-0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Alex,
+
+Following our scheduling conversation, your new start date will be November 2=
+, 2026. Your October 19 offer schedule is now out of date. We have not yet is=
+sued the replacement document.
+
+Please keep your Northstar departure date unchanged unless you agree a separa=
+te change with them. I will send revised paperwork and confirm the benefits d=
+ates.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s01-m02-0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+i Alex,</p><p>Following our scheduling conversation, your new start date will=
+ be November 2, 2026. Your October 19 offer schedule is now out of date. We h=
+ave not yet issued the replacement document.</p><p>Please keep your Northstar=
+ departure date unchanged unless you agree a separate change with them. I wil=
+l send revised paperwork and confirm the benefits dates.</p><p>Best,<br>Jorda=
+n</p><p>---<br>Fictional JobSwitch demo. All people, policies and events in t=
+his message are synthetic. Addresses use reserved .example domains. Do not de=
+liver to real people.<br></p></div></body></html>
+
+--jobswitch-s01-m02-0--

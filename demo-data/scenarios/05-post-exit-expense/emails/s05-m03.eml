@@ -1,0 +1,106 @@
+From: Alex Morgan <alex.morgan@personal.example>
+To: Northstar Expense Operations <expenses@northstar.example>
+Subject: Expense claim DEMO-EXP-042 - $240 workshop
+Date: Tue, 20 Oct 2026 13:00:00 -0700
+Message-ID: <s05-m03@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 05-post-exit-expense
+X-JobSwitch-Stage: approved-submission
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="jobswitch-s05-m03-0"
+
+--jobswitch-s05-m03-0
+Content-Type: multipart/alternative; boundary="jobswitch-s05-m03-1"
+
+--jobswitch-s05-m03-1
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hello Expense Operations,
+
+Please review my $240.00 USD expense for the Product Discovery Workshop purch=
+ased October 12 and attended October 14 for the Northstar product planning pr=
+oject. My last working day was October 16 and my portal access is disabled.
+
+The itemized receipt is attached. Please route this claim for manager review =
+and confirm receipt.
+
+Thank you,
+Alex
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s05-m03-1
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+ello Expense Operations,</p><p>Please review my $240.00 USD expense for the P=
+roduct Discovery Workshop purchased October 12 and attended October 14 for th=
+e Northstar product planning project. My last working day was October 16 and =
+my portal access is disabled.</p><p>The itemized receipt is attached. Please =
+route this claim for manager review and confirm receipt.</p><p>Thank you,<br>=
+Alex</p><p>---<br>Fictional JobSwitch demo. All people, policies and events i=
+n this message are synthetic. Addresses use reserved .example domains. Do not=
+ deliver to real people.<br></p></div></body></html>
+
+--jobswitch-s05-m03-1--
+
+--jobswitch-s05-m03-0
+Content-Type: application/pdf
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="s05-receipt.pdf"
+MIME-Version: 1.0
+
+JVBERi0xLjQKJZOMi54gUmVwb3J0TGFiIEdlbmVyYXRlZCBQREYgZG9jdW1lbnQgKG9wZW5zb3Vy
+Y2UpCjEgMCBvYmoKPDwKL0YxIDIgMCBSIC9GMiAzIDAgUgo+PgplbmRvYmoKMiAwIG9iago8PAov
+QmFzZUZvbnQgL0hlbHZldGljYSAvRW5jb2RpbmcgL1dpbkFuc2lFbmNvZGluZyAvTmFtZSAvRjEg
+L1N1YnR5cGUgL1R5cGUxIC9UeXBlIC9Gb250Cj4+CmVuZG9iagozIDAgb2JqCjw8Ci9CYXNlRm9u
+dCAvSGVsdmV0aWNhLUJvbGQgL0VuY29kaW5nIC9XaW5BbnNpRW5jb2RpbmcgL05hbWUgL0YyIC9T
+dWJ0eXBlIC9UeXBlMSAvVHlwZSAvRm9udAo+PgplbmRvYmoKNCAwIG9iago8PAovQ29udGVudHMg
+OCAwIFIgL01lZGlhQm94IFsgMCAwIDYxMiA3OTIgXSAvUGFyZW50IDcgMCBSIC9SZXNvdXJjZXMg
+PDwKL0ZvbnQgMSAwIFIgL1Byb2NTZXQgWyAvUERGIC9UZXh0IC9JbWFnZUIgL0ltYWdlQyAvSW1h
+Z2VJIF0KPj4gL1JvdGF0ZSAwIC9UcmFucyA8PAoKPj4gCiAgL1R5cGUgL1BhZ2UKPj4KZW5kb2Jq
+CjUgMCBvYmoKPDwKL1BhZ2VNb2RlIC9Vc2VOb25lIC9QYWdlcyA3IDAgUiAvVHlwZSAvQ2F0YWxv
+Zwo+PgplbmRvYmoKNiAwIG9iago8PAovQXV0aG9yIChKb2JTd2l0Y2ggU3ludGhldGljIERlbW8p
+IC9DcmVhdGlvbkRhdGUgKEQ6MjAwMDAxMDEwMDAwMDArMDAnMDAnKSAvQ3JlYXRvciAoSm9iU3dp
+dGNoIGRlbW8tZGF0YS9idWlsZC5weSkgL0tleXdvcmRzICgpIC9Nb2REYXRlIChEOjIwMDAwMTAx
+MDAwMDAwKzAwJzAwJykgL1Byb2R1Y2VyIChSZXBvcnRMYWIgUERGIExpYnJhcnkgLSBcKG9wZW5z
+b3VyY2VcKSkgCiAgL1N1YmplY3QgKEZJQ1RJT05BTCBERU1PIERBVEEgLSBOT1QgQSBSRUFMIEVN
+UExPWU1FTlQgUkVDT1JEKSAvVGl0bGUgKEhhcmJvciBMZWFybmluZyB8IEl0ZW1pemVkIHdvcmtz
+aG9wIHJlY2VpcHQpIC9UcmFwcGVkIC9GYWxzZQo+PgplbmRvYmoKNyAwIG9iago8PAovQ291bnQg
+MSAvS2lkcyBbIDQgMCBSIF0gL1R5cGUgL1BhZ2VzCj4+CmVuZG9iago4IDAgb2JqCjw8Ci9GaWx0
+ZXIgWyAvQVNDSUk4NURlY29kZSAvRmxhdGVEZWNvZGUgXSAvTGVuZ3RoIDExMTcKPj4Kc3RyZWFt
+CkdhdG05PydDYTknUmZfWlwuPGw7QiVAOmpAQSYmPmcubGlKcmkvWz9jKGJdUVhUVDMjQCdmOl5h
+N2ZwbmxoKVRybCIlZ0MrOjZrRm1eX04nJ0hJJXVrKzpXNkc7NmFXOlAkKGdEaDBbXCtKLUZxbWV0
+cmRiUiRWdSFWJSMnXyNUO1dxLzQsOW1zNS5UJVk9WmJcO2c/WCJgMylpUlJmRTg5ZEdlMEQnWVhM
+L0xVdU1ea2N0PzJwOTxYXXBLPi5ZYVVMZFg3PyQmTGQrOSlbYlk9P0tmMltvIyZQNDorVzhGUTBd
+Ll5SSHBnTFVadSIiZ1M6RiJpSFVAUDRcNkZIMUxlJTQvJWJAOTduYmpfXihyN25kTFNPYiJBMC5B
+OlAwZGooaXJUTlM5R0dxY1VYOE5UPVQrOUUsNFBcZCouNUVaUSwxJSkybT1qTlBBSlIvYFFQUTNz
+Iks8UFJVakkmZmBLMTJHUi9fYjA0R2MtcUReWCsvWjRNJlE7QipQOS9XbTNHXmI5VCo1QVtHLCVP
+aW0ybyVfWTlbc3FUZGJbU24pIkJfKyhWc2FLS0pfbzAvR1ckQDRvPWpeRk1pVWNfQjxnRjNuPkhM
+LmhzKCxYLlZoXTs+Yz9AMzcqPmRAXyYpVF9AOj5wMlwyMXBqWmFyQ1k9YTohSFc8RFVyPkcvUDJO
+KGFUY19eVWA2NkI8IjFtUFwrQU9maTBkRiIoSDwrQltdRjwsU1BWYlosbDpvUmtNU21cR2ZOWWFZ
+blgvKyQwOzhKWmo9IjJPV2RaNUAwSGI/Ul9TN0MjKmArRD1gSF1HPkM4ME9zLFYvaTk1aVZNMTE3
+cFA8X1k0JiJELWEmTE9JWW1BKF5KZmVIcClVRS1tXmZzbEhEPDtqImtTR1pHLjRdQDhMN0JRMVdW
+WF1oZEZyc3FYbTFaPEdPVTFtZik6TkFgJG9LXF1YaFxUViMrdT1eLFhlOWA1UzI0b04sYEVwNCo3
+PiYnPlIkMEVbMlUpbyJQXnJQJDpcIkYnLzdkdTojYHNQXk4kIThJPGcnRV0kbFlZWkIhYytKT0FU
+Rz8qZz5zclJTI08+XiZtR0xxXEJIK1YiK1JKb15Ib2kyaS9KYzpYL2BCZkI8MFdBR0AmN2I5N0Yr
+WUU9SWJxV3IhLWRGLiVWMj9zQDddQ0FdKTRrNl9qKTthQzR0R2p0ckpNWSx0MSQ+az1SKy1TNz1Y
+QTIyVitQb2M/KkFOKUpMJXEpVz9tYztUWW5aRm9xLEhGdDxlayY0UEhocj5rXXA1Sy9ANy1uVzFq
+byNmN2NBUW5FNU1tUy4hITA3JDckQSpHT2ZFPCNWVGBDK2lDYz8wdEEqMjNiNjNiRFs4MkdkJWpS
+Nz1uajxqQ1AxdT06XGB0Z2B0TWJGbGg2XS0rQj43OFhgMiZrNltVTl1Fa0pMPTlfY1Y1YihPcWJv
+VzNeXjhcTFBibT5wVlxXW3UjYW0qaEolLVtXdGJvL0Zufj5lbmRzdHJlYW0KZW5kb2JqCnhyZWYK
+MCA5CjAwMDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAwMDA2MSAwMDAwMCBuIAowMDAwMDAwMTAyIDAw
+MDAwIG4gCjAwMDAwMDAyMDkgMDAwMDAgbiAKMDAwMDAwMDMyMSAwMDAwMCBuIAowMDAwMDAwNTE0
+IDAwMDAwIG4gCjAwMDAwMDA1ODIgMDAwMDAgbiAKMDAwMDAwMDk1MSAwMDAwMCBuIAowMDAwMDAx
+MDEwIDAwMDAwIG4gCnRyYWlsZXIKPDwKL0lEIApbPDk1MWVmNGFjM2YwZWQwNGE5YTRlY2UyYjhh
+Y2ZlNmQ3Pjw5NTFlZjRhYzNmMGVkMDRhOWE0ZWNlMmI4YWNmZTZkNz5dCiUgUmVwb3J0TGFiIGdl
+bmVyYXRlZCBQREYgZG9jdW1lbnQgLS0gZGlnZXN0IChvcGVuc291cmNlKQoKL0luZm8gNiAwIFIK
+L1Jvb3QgNSAwIFIKL1NpemUgOQo+PgpzdGFydHhyZWYKMjIxOAolJUVPRgo=
+
+--jobswitch-s05-m03-0--

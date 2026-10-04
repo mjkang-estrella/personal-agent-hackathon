@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0",
+  "scenarioId": "03-reopened-paperwork",
+  "stage": "initial",
+  "initialProfile": {
+    "name": "Alex Morgan",
+    "previousEmployer": "Northstar Studio",
+    "nextEmployer": "Orbit Labs",
+    "lastDay": "2026-10-16",
+    "startDay": "2026-10-19"
+  },
+  "visibleMessageIds": [
+    "s03-m01"
+  ],
+  "documents": [
+    {
+      "id": "s03-m01",
+      "name": "Your employment-verification submission was received.txt",
+      "employer": "next",
+      "kind": "other",
+      "pages": [
+        "From: Jordan Lee | Orbit People Team <people@orbit.example>\nTo: Alex Morgan <alex.morgan@personal.example>\nDate: 2026-10-20T09:00:00-07:00\nSubject: Your employment-verification submission was received\nMessage-ID: <s03-m01@jobswitch.example>\nAttachments: attachments/s03-original-receipt.pdf\n\nHi Alex,\n\nYour employment-verification submission was received and all sections are present. We have marked the submission task complete pending any later quality-review request. The receipt is attached.\n\nThank you,\nJordan\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n"
+      ],
+      "addedAt": "2026-10-20T09:00:00-07:00"
+    },
+    {
+      "id": "s03-original-receipt",
+      "name": "s03-original-receipt.pdf",
+      "employer": "next",
+      "kind": "other",
+      "pages": [
+        "ORBIT LABS\nJOBSWITCH / SYNTHETIC ATTACHMENT\nFICTIONAL DEMO DATA - NOT A REAL EMPLOYMENT RECORD\ns03-original-receipt | 03-reopened-paperwork\nPage 1\nEmployment-verification submission receipt\nIssued 2026-10-20 | Alex Morgan | Document s03-original-receipt\nSubmission receipt\nDemo record OBL-EV-042 for Alex Morgan was received on October 20, 2026. Workflow status: accepted\nfor processing.\nScope\nAll required form sections were present at submission. Later quality review may reopen the task. This receipt\nis not an I-9, a work authorization, or a legal eligibility determination.\nPrivacy\nNo identity document images, government identifiers, birth date, or authentication secrets are included.\n"
+      ],
+      "addedAt": "2026-10-04T20:00:00Z"
+    }
+  ]
+}

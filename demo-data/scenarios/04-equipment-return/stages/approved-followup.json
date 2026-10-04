@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "1.0",
+  "scenarioId": "04-equipment-return",
+  "stage": "approved-followup",
+  "initialProfile": {
+    "name": "Alex Morgan",
+    "previousEmployer": "Northstar Studio",
+    "nextEmployer": "Orbit Labs",
+    "lastDay": "2026-10-16",
+    "startDay": "2026-10-19"
+  },
+  "visibleMessageIds": [
+    "s04-m01",
+    "s04-m02",
+    "s04-m03",
+    "s04-m04"
+  ],
+  "documents": [
+    {
+      "id": "s04-m01",
+      "name": "Your Northstar equipment return checklist.txt",
+      "employer": "previous",
+      "kind": "other",
+      "pages": [
+        "From: Elliot Reed | Northstar IT <it@northstar.example>\nTo: Alex Morgan <alex.morgan@personal.example>\nDate: 2026-10-14T09:00:00-07:00\nSubject: Your Northstar equipment return checklist\nMessage-ID: <s04-m01@jobswitch.example>\nAttachments: attachments/s04-instructions.pdf\n\nHi Alex,\n\nYour last working day is October 16. Attached are the return instructions for your laptop and accessories. Please confirm whether you will use office drop-off or the prepaid collection.\n\nWe need an IT inventory receipt to close the return task.\n\nThanks,\nElliot\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n"
+      ],
+      "addedAt": "2026-10-14T09:00:00-07:00"
+    },
+    {
+      "id": "s04-instructions",
+      "name": "s04-instructions.pdf",
+      "employer": "previous",
+      "kind": "other",
+      "pages": [
+        "NORTHSTAR STUDIO\nJOBSWITCH / SYNTHETIC ATTACHMENT\nFICTIONAL DEMO DATA - NOT A REAL EMPLOYMENT RECORD\ns04-instructions | 04-equipment-return\nPage 1\nEquipment return instructions\nIssued 2026-10-14 | Alex Morgan | Document s04-instructions\nAssigned equipment\nAlex Morgan | Demo asset NS-LT-042. Return one company laptop, charger, access badge and security\nkey. The asset ID is fictional, not a device serial number.\nReturn options\nReturn in person on October 16, 2026 or use the demo prepaid collection arranged by Northstar IT. If\nshipping is required, obtain written approval for the handover date.\nConfirmation rule\nSigning the return form acknowledges the instructions only. A carrier delivered event is not an inventory\nreceipt. The task closes only when Northstar IT confirms all listed items were checked in.\nAccount cleanup\nFollow company IT guidance for personal-account sign-out. Do not remove company security controls. No\ncorporate shipping account number or live return address is provided.\n"
+      ],
+      "addedAt": "2026-10-04T20:00:00Z"
+    },
+    {
+      "id": "s04-m02",
+      "name": "Return form acknowledged - collection booked.txt",
+      "employer": "previous",
+      "kind": "other",
+      "pages": [
+        "From: Elliot Reed | Northstar IT <it@northstar.example>\nTo: Alex Morgan <alex.morgan@personal.example>\nDate: 2026-10-16T10:00:00-07:00\nSubject: Return form acknowledged - collection booked\nMessage-ID: <s04-m02@jobswitch.example>\nAttachments: (none)\n\nHi Alex,\n\nYour return form has been acknowledged. We approved prepaid collection on October 19 because a pickup was unavailable on your final day. Your return remains open until the equipment is checked in by IT.\n\nThanks,\nElliot\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n"
+      ],
+      "addedAt": "2026-10-16T10:00:00-07:00"
+    },
+    {
+      "id": "s04-m03",
+      "name": "Carrier update for demo shipment NS-SHIP-042.txt",
+      "employer": "previous",
+      "kind": "other",
+      "pages": [
+        "From: Elliot Reed | Northstar IT <it@northstar.example>\nTo: Alex Morgan <alex.morgan@personal.example>\nDate: 2026-10-20T09:00:00-07:00\nSubject: Carrier update for demo shipment NS-SHIP-042\nMessage-ID: <s04-m03@jobswitch.example>\nAttachments: (none)\n\nHi Alex,\n\nThe demo carrier marked shipment NS-SHIP-042 delivered this morning. Our asset team has not yet checked the contents. Please keep the task open until you receive an IT inventory receipt.\n\nThanks,\nElliot\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n"
+      ],
+      "addedAt": "2026-10-20T09:00:00-07:00"
+    },
+    {
+      "id": "s04-m04",
+      "name": "Re: Carrier update for demo shipment NS-SHIP-042.txt",
+      "employer": "personal",
+      "kind": "other",
+      "pages": [
+        "From: Alex Morgan <alex.morgan@personal.example>\nTo: Elliot Reed | Northstar IT <it@northstar.example>\nDate: 2026-10-20T11:00:00-07:00\nSubject: Re: Carrier update for demo shipment NS-SHIP-042\nMessage-ID: <s04-m04@jobswitch.example>\nAttachments: (none)\n\nHi Elliot,\n\nThe shipment is marked delivered. Could you confirm whether the laptop, charger, badge and security key have all been checked in and send the inventory receipt?\n\nThanks,\nAlex\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n"
+      ],
+      "addedAt": "2026-10-20T11:00:00-07:00"
+    }
+  ]
+}

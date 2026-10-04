@@ -1,0 +1,16 @@
+From: Jordan Lee | Orbit People Team <people@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-08T10:00:00-07:00
+Subject: Your Orbit health enrollment window
+Message-ID: <s06-m02@jobswitch.example>
+Attachments: attachments/s06-orbit.pdf
+
+Hi Alex,
+
+For your October 19 start, please review the attached benefits timing guide. November 1 is the projected start if you are eligible and elect coverage. Your election is due November 17. We have not received your selection.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

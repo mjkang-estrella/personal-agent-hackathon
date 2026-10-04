@@ -1,0 +1,18 @@
+From: Jordan Lee | Orbit People Team <people@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-12T09:00:00-07:00
+Subject: Welcome to Orbit - your onboarding checklist
+Message-ID: <s08-m01@jobswitch.example>
+Attachments: attachments/s08-checklist.pdf
+
+Hi Alex,
+
+We look forward to your October 19 start. Please complete your People Portal profile by October 15; that releases your screening invitation. Your payroll payment preference is due October 20 and should be entered directly in the secure portal.
+
+The attached checklist separates each task. We are still confirming the laptop appointment.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

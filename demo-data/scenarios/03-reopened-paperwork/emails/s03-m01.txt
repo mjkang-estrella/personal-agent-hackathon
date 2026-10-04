@@ -1,0 +1,16 @@
+From: Jordan Lee | Orbit People Team <people@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-20T09:00:00-07:00
+Subject: Your employment-verification submission was received
+Message-ID: <s03-m01@jobswitch.example>
+Attachments: attachments/s03-original-receipt.pdf
+
+Hi Alex,
+
+Your employment-verification submission was received and all sections are present. We have marked the submission task complete pending any later quality-review request. The receipt is attached.
+
+Thank you,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

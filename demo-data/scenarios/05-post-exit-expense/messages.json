@@ -1,0 +1,172 @@
+[
+  {
+    "id": "s05-m01",
+    "stage": "initial",
+    "date": "2026-10-19T09:00:00-07:00",
+    "sender": "expenses",
+    "to": [
+      "alex"
+    ],
+    "subject": "Your $240 workshop expense still needs a claim",
+    "body": "Hi Alex,\n\nWe noticed an unsubmitted $240 workshop expense from October 12. Your employee portal is now disabled. Use the alternative route in the attached policy; your deadline is October 30 at 5 p.m. Pacific.\n\nWe currently have only a card authorization, not an itemized receipt. Please obtain the receipt before submitting.\n\nNorthstar Expense Operations\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [
+      {
+        "id": "s05-policy",
+        "title": "Northstar Studio | Post-departure expense route",
+        "path": "attachments/s05-policy.pdf",
+        "mimeType": "application/pdf",
+        "bytes": 2743,
+        "sha256": "ebd6145ff0fd67c4343c5533cdeeaab9c42201e202a42ad025a4e04f21f5dbd7",
+        "pages": 1
+      }
+    ],
+    "inReplyTo": null,
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Northstar Expense Operations",
+      "address": "expenses@northstar.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s05-m01@jobswitch.example>",
+    "emlPath": "emails/s05-m01.eml",
+    "textPath": "emails/s05-m01.txt"
+  },
+  {
+    "id": "s05-m02",
+    "stage": "receipt-available",
+    "date": "2026-10-20T10:00:00-07:00",
+    "sender": "northstar",
+    "to": [
+      "alex"
+    ],
+    "subject": "Itemized workshop receipt recovered",
+    "body": "Hi Alex,\n\nOur events coordinator recovered the itemized receipt from Harbor Learning and shared the attached demo copy with you. Please check the merchant, date and amount before using it in your claim. This email does not approve the reimbursement.\n\nBest,\nMaya\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [
+      {
+        "id": "s05-receipt",
+        "title": "Harbor Learning | Itemized workshop receipt",
+        "path": "attachments/s05-receipt.pdf",
+        "mimeType": "application/pdf",
+        "bytes": 2609,
+        "sha256": "5eb35773cef092caaafdca1353c13310ccdf2c5f4e1dcf487b9fb31e56cd3d62",
+        "pages": 1
+      }
+    ],
+    "inReplyTo": null,
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Maya Chen | Northstar People Team",
+      "address": "people@northstar.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s05-m02@jobswitch.example>",
+    "emlPath": "emails/s05-m02.eml",
+    "textPath": "emails/s05-m02.txt"
+  },
+  {
+    "id": "s05-m03",
+    "stage": "approved-submission",
+    "date": "2026-10-20T13:00:00-07:00",
+    "sender": "alex",
+    "to": [
+      "expenses"
+    ],
+    "subject": "Expense claim DEMO-EXP-042 - $240 workshop",
+    "body": "Hello Expense Operations,\n\nPlease review my $240.00 USD expense for the Product Discovery Workshop purchased October 12 and attended October 14 for the Northstar product planning project. My last working day was October 16 and my portal access is disabled.\n\nThe itemized receipt is attached. Please route this claim for manager review and confirm receipt.\n\nThank you,\nAlex\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [
+      {
+        "id": "s05-receipt",
+        "title": "Harbor Learning | Itemized workshop receipt",
+        "path": "attachments/s05-receipt.pdf",
+        "mimeType": "application/pdf",
+        "bytes": 2609,
+        "sha256": "5eb35773cef092caaafdca1353c13310ccdf2c5f4e1dcf487b9fb31e56cd3d62",
+        "pages": 1
+      }
+    ],
+    "inReplyTo": null,
+    "direction": "outbound",
+    "delivery": "approved-action-fixture",
+    "from": {
+      "name": "Alex Morgan",
+      "address": "alex.morgan@personal.example"
+    },
+    "recipients": [
+      {
+        "name": "Northstar Expense Operations",
+        "address": "expenses@northstar.example"
+      }
+    ],
+    "messageId": "<s05-m03@jobswitch.example>",
+    "emlPath": "emails/s05-m03.eml",
+    "textPath": "emails/s05-m03.txt"
+  },
+  {
+    "id": "s05-m04",
+    "stage": "received",
+    "date": "2026-10-20T15:00:00-07:00",
+    "sender": "expenses",
+    "to": [
+      "alex"
+    ],
+    "subject": "Re: Expense claim DEMO-EXP-042 - $240 workshop",
+    "body": "Hi Alex,\n\nClaim DEMO-EXP-042 and its itemized receipt have been received before the deadline. Manager review is pending. No reimbursement approval or payment has been issued.\n\nNorthstar Expense Operations\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [],
+    "inReplyTo": "s05-m03",
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Northstar Expense Operations",
+      "address": "expenses@northstar.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s05-m04@jobswitch.example>",
+    "emlPath": "emails/s05-m04.eml",
+    "textPath": "emails/s05-m04.txt"
+  },
+  {
+    "id": "s05-m05",
+    "stage": "approved-unpaid",
+    "date": "2026-10-22T14:00:00-07:00",
+    "sender": "expenses",
+    "to": [
+      "alex"
+    ],
+    "subject": "Re: Expense claim DEMO-EXP-042 - $240 workshop",
+    "body": "Hi Alex,\n\nYour manager has approved the $240.00 claim DEMO-EXP-042. It is queued for a future payroll run. Payment has not been issued. We will send a separate payment notice when processing completes.\n\nNorthstar Expense Operations\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [],
+    "inReplyTo": "s05-m04",
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Northstar Expense Operations",
+      "address": "expenses@northstar.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s05-m05@jobswitch.example>",
+    "emlPath": "emails/s05-m05.eml",
+    "textPath": "emails/s05-m05.txt"
+  }
+]

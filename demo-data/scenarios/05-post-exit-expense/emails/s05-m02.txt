@@ -1,0 +1,16 @@
+From: Maya Chen | Northstar People Team <people@northstar.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-20T10:00:00-07:00
+Subject: Itemized workshop receipt recovered
+Message-ID: <s05-m02@jobswitch.example>
+Attachments: attachments/s05-receipt.pdf
+
+Hi Alex,
+
+Our events coordinator recovered the itemized receipt from Harbor Learning and shared the attached demo copy with you. Please check the merchant, date and amount before using it in your claim. This email does not approve the reimbursement.
+
+Best,
+Maya
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

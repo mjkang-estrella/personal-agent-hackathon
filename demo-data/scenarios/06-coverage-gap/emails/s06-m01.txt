@@ -1,0 +1,16 @@
+From: Maya Chen | Northstar People Team <people@northstar.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-08T09:00:00-07:00
+Subject: Please review your coverage at departure
+Message-ID: <s06-m01@jobswitch.example>
+Attachments: attachments/s06-northstar.pdf
+
+Hi Alex,
+
+Attached is our fictional coverage-at-departure policy for your October 16 exit. It describes the general timing but does not confirm your personal or dependent enrollment. Please ask us for an individual end-date confirmation if needed.
+
+Best,
+Maya
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

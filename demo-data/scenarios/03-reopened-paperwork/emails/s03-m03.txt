@@ -1,0 +1,16 @@
+From: Alex Morgan <alex.morgan@personal.example>
+To: Jordan Lee | Orbit People Team <people@orbit.example>
+Date: 2026-10-22T11:00:00-07:00
+Subject: Re: Action required: correction to your submitted form
+Message-ID: <s03-m03@jobswitch.example>
+Attachments: (none)
+
+Hi Jordan,
+
+I will coordinate the title correction in the secure portal. Please confirm that no identity-document resubmission is needed and that only the representative title requires an update.
+
+Thanks,
+Alex
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

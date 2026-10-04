@@ -1,0 +1,54 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>A changed start date leaves an old offer in circulation</title><style>
+:root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:#F3F5F7;color:#172B37;font:16px/1.6 system-ui,-apple-system,sans-serif}main{max-width:1160px;margin:auto;padding:36px 24px 70px}a{color:#2859A0;text-decoration:none}a:hover{text-decoration:underline}header.hero{background:#152E3E;color:#fff;padding:36px;border-radius:16px;margin-bottom:24px}.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8ED6C4}h1{font-size:34px;line-height:1.2;margin:10px 0 16px}h2{font-size:24px;margin:34px 0 12px}h3{font-size:19px;margin:8px 0}p{margin:10px 0}.sub{color:#596D79;font-size:14px}.hero .sub{color:#CAD9E2}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.card,article,.note{background:white;border:1px solid #D8E1E7;padding:24px;border-radius:12px}.pill{display:inline-block;background:#EDF2F7;border-radius:20px;padding:3px 10px;font-size:12px;margin:2px 6px 2px 0}.mailhead{background:#F0F4F7;border-radius:8px;padding:14px;font-size:13px;overflow-wrap:anywhere}.body{white-space:pre-wrap;font:15px/1.7 system-ui,sans-serif;overflow-wrap:anywhere}.attachment{display:inline-block;border:1px solid #CFDBE4;border-radius:6px;padding:8px 12px;margin:5px 8px 5px 0;font-size:13px}details{margin-top:14px}summary{cursor:pointer;font-weight:600}blockquote{margin:12px 0;padding:10px 15px;border-left:3px solid #649283;background:#F4F8F6;font-size:14px}nav{display:flex;gap:14px;flex-wrap:wrap;margin:20px 0}.timeline article{margin:18px 0}.expect{border-left:4px solid #2D7564;padding:10px 16px;margin:15px 0;background:#F2F8F5}.warning{border-left-color:#BB8A30;background:#FFF9ED}code{font-size:13px;overflow-wrap:anywhere}ul{padding-left:20px}footer{margin-top:30px;color:#667D8A;font-size:12px}button{padding:8px 14px;border:1px solid #CCD7DF;border-radius:8px;background:white;color:#213F54;cursor:pointer}button[aria-pressed=true]{background:#213F54;color:white}.hidden{display:none!important}@media(max-width:720px){.grid{grid-template-columns:1fr}main{padding:18px 12px}.hero{padding:24px!important}h1{font-size:28px}article,.card{padding:18px}}
+</style></head><body><main><nav><a href="../../index.html">All scenarios</a><a href="README.md">Replay guide</a><a href="scenario.json">Scenario JSON</a></nav><header class="hero"><div class="eyebrow">01-start-date-change / Synthetic case</div><h1>A changed start date leaves an old offer in circulation</h1><p>Find conflicting dates, request a corrected offer, and review downstream deadlines without silently overwriting the signed version.</p><p class="sub">Alex Morgan · Northstar Studio → Orbit Labs · Independent replay</p></header><div class="note"><strong>Start with the initial stage.</strong> Future messages and attachments are hidden below until you select a later stage. The full dataset is on disk for developers; the agent must receive only the chosen input bundle.</div><nav id="stage-controls"><button data-stage="0" aria-pressed="true">0. Read the original schedule</button><button data-stage="1" aria-pressed="false">1. Detect a conflict</button><button data-stage="2" aria-pressed="false">2. Request corrections</button><button data-stage="3" aria-pressed="false">3. Review replacement</button><button data-stage="4" aria-pressed="false">4. Close the document correction</button></nav><div class="timeline"><section data-release="0" class=""><h2>0. Read the original schedule</h2><div class="expect"><strong>Expected:</strong> Record October 19 as the current documented start.<br><strong>Do not:</strong> Do not see the future revision.<br><a href="stages/initial.json">Developer input for this stage</a></div><article><span class="pill">inbound</span><span class="pill">2026-10-08T09:00:00-07:00</span><h3>Your October 19 start - offer schedule attached</h3><div class="mailhead">From: Jordan Lee | Orbit People Team &lt;people@orbit.example&gt;<br>To: Alex Morgan &lt;alex.morgan@personal.example&gt;</div><pre class="body">Hi Alex,
+
+We are preparing for your October 19 start at Orbit Labs. Attached is the offer schedule you acknowledged last week. Please complete your onboarding profile before your first day.
+
+Keep this copy with your transition records. Let me know if any dates differ from what you have agreed with your current employer.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.
+</pre><a class="attachment" href="attachments/s01-offer-v1.pdf">PDF · Orbit Labs | Offer schedule - version 1</a><p><a href="emails/s01-m01.eml" download>Download email with attachments (.eml)</a> · <a href="emails/s01-m01.txt">Plain text</a></p></article></section><section data-release="1" class="hidden"><h2>1. Detect a conflict</h2><div class="expect"><strong>Expected:</strong> Flag the stale offer; propose November 2 and dependent deadline review.<br><strong>Do not:</strong> Do not invent a revised offer or mark acknowledgment complete.<br><a href="stages/date-change.json">Developer input for this stage</a></div><article><span class="pill">inbound</span><span class="pill">2026-10-08T14:00:00-07:00</span><h3>Update: your start date is moving to November 2</h3><div class="mailhead">From: Jordan Lee | Orbit People Team &lt;people@orbit.example&gt;<br>To: Alex Morgan &lt;alex.morgan@personal.example&gt;</div><pre class="body">Hi Alex,
+
+Following our scheduling conversation, your new start date will be November 2, 2026. Your October 19 offer schedule is now out of date. We have not yet issued the replacement document.
+
+Please keep your Northstar departure date unchanged unless you agree a separate change with them. I will send revised paperwork and confirm the benefits dates.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.
+</pre><p><a href="emails/s01-m02.eml" download>Download email with attachments (.eml)</a> · <a href="emails/s01-m02.txt">Plain text</a></p></article></section><section data-release="2" class="hidden"><h2>2. Request corrections</h2><div class="expect"><strong>Expected:</strong> Track a request awaiting HR.<br><strong>Do not:</strong> Do not send without approval.<br><a href="stages/approved-inquiry.json">Developer input for this stage</a></div><article><span class="pill">outbound</span><span class="pill">2026-10-08T14:30:00-07:00</span><h3>Re: Update: your start date is moving to November 2</h3><div class="mailhead">From: Alex Morgan &lt;alex.morgan@personal.example&gt;<br>To: Jordan Lee | Orbit People Team &lt;people@orbit.example&gt;</div><pre class="body">Hi Jordan,
+
+My saved offer still shows October 19. Please send the revised November 2 schedule and confirm my onboarding deadline, projected insurance start, and benefit election deadline. My last Northstar day is October 16.
+
+Thank you,
+Alex
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.
+</pre><p><a href="emails/s01-m03.eml" download>Download email with attachments (.eml)</a> · <a href="emails/s01-m03.txt">Plain text</a></p></article></section><section data-release="3" class="hidden"><h2>3. Review replacement</h2><div class="expect"><strong>Expected:</strong> Preserve both versions; show November 2 start and December 1 conditional coverage/election dates; request acknowledgment.<br><strong>Do not:</strong> Do not infer insurance enrollment.<br><a href="stages/revised-offer.json">Developer input for this stage</a></div><article><span class="pill">inbound</span><span class="pill">2026-10-09T10:00:00-07:00</span><h3>Re: Update: your start date is moving to November 2</h3><div class="mailhead">From: Jordan Lee | Orbit People Team &lt;people@orbit.example&gt;<br>To: Alex Morgan &lt;alex.morgan@personal.example&gt;</div><pre class="body">Hi Alex,
+
+Attached is version 2, which supersedes the October 19 schedule. Your onboarding profile is due November 2. Subject to eligibility and election, your health coverage would begin December 1; your election deadline is also December 1.
+
+Please review and acknowledge version 2 in the secure portal. Receipt of this email is not acknowledgment.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.
+</pre><a class="attachment" href="attachments/s01-offer-v2.pdf">PDF · Orbit Labs | Revised offer schedule - version 2</a><p><a href="emails/s01-m04.eml" download>Download email with attachments (.eml)</a> · <a href="emails/s01-m04.txt">Plain text</a></p></article></section><section data-release="4" class="hidden"><h2>4. Close the document correction</h2><div class="expect"><strong>Expected:</strong> Mark schedule acknowledgment complete while retaining the open benefits election task.<br><strong>Do not:</strong> Do not mark all onboarding complete.<br><a href="stages/acknowledged.json">Developer input for this stage</a></div><article><span class="pill">inbound</span><span class="pill">2026-10-09T16:00:00-07:00</span><h3>Revised schedule acknowledgment received</h3><div class="mailhead">From: Jordan Lee | Orbit People Team &lt;people@orbit.example&gt;<br>To: Alex Morgan &lt;alex.morgan@personal.example&gt;</div><pre class="body">Hi Alex,
+
+We received your portal acknowledgment of offer schedule version 2. Your November 2 start is now recorded. We have not received a health plan election, so benefits enrollment is still open.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.
+</pre><p><a href="emails/s01-m05.eml" download>Download email with attachments (.eml)</a> · <a href="emails/s01-m05.txt">Plain text</a></p></article></section></div><footer>FICTIONAL DEMO DATA - NOT A REAL EMPLOYMENT RECORD</footer><script>document.querySelectorAll("[data-stage]").forEach(b=>b.addEventListener("click",()=>{const n=Number(b.dataset.stage);document.querySelectorAll("[data-release]").forEach(e=>e.classList.toggle("hidden",Number(e.dataset.release)>n));document.querySelectorAll("[data-stage]").forEach(e=>e.setAttribute("aria-pressed",String(e===b)));}));</script></main></body></html>

@@ -1,0 +1,148 @@
+{
+  "id": "04-equipment-return",
+  "title": "A signed return form is not a returned laptop",
+  "summary": "Follow equipment from instructions through signed paperwork and shipping to a named IT receipt.",
+  "inspiration": "Return instructions and a signing-completion notice existed, but actual receipt was not established. The shipping and IT receipt events below are synthetic additions.",
+  "initialClock": "2026-10-14T09:30:00-07:00",
+  "profile": {
+    "name": "Alex Morgan",
+    "previousEmployer": "Northstar Studio",
+    "nextEmployer": "Orbit Labs",
+    "lastDay": "2026-10-16",
+    "startDay": "2026-10-19"
+  },
+  "schemaVersion": "1.0",
+  "fictional": true,
+  "independentScenario": true,
+  "documents": [
+    {
+      "id": "s04-instructions",
+      "title": "Northstar Studio | Equipment return instructions",
+      "path": "attachments/s04-instructions.pdf",
+      "mimeType": "application/pdf",
+      "bytes": 2718,
+      "sha256": "994af41ad4e271fc3f384d43f45f63a313ada956d1d27290ad03df3e9e8e2757",
+      "pages": 1
+    },
+    {
+      "id": "s04-receipt",
+      "title": "Northstar Studio | IT equipment receipt",
+      "path": "attachments/s04-receipt.pdf",
+      "mimeType": "application/pdf",
+      "bytes": 2438,
+      "sha256": "1406446dbceed76fa6cd63e4a2eadbf153c8ccb30d1138b98e131606535c71e9",
+      "pages": 1
+    }
+  ],
+  "messagesFile": "messages.json",
+  "steps": [
+    {
+      "id": "initial",
+      "title": "Create a return task",
+      "trigger": "Load instructions.",
+      "expected": "List four items and require an IT receipt.",
+      "mustNot": "Do not mark returned from instructions.",
+      "evidence": [
+        {
+          "sourceId": "s04-instructions",
+          "quote": "The task closes only when Northstar IT confirms all listed items were checked in."
+        }
+      ],
+      "releaseMessageIds": [
+        "s04-m01"
+      ],
+      "releaseDocumentIds": [
+        "s04-m01",
+        "s04-instructions"
+      ],
+      "inputBundle": "stages/initial.json",
+      "requiresUserApproval": false
+    },
+    {
+      "id": "form-signed",
+      "title": "Record acknowledged instructions",
+      "trigger": "Deliver signing confirmation.",
+      "expected": "Track October 19 authorized collection and keep return open.",
+      "mustNot": "Do not confuse signing with return.",
+      "evidence": [
+        {
+          "sourceId": "s04-m02",
+          "quote": "Your return remains open"
+        }
+      ],
+      "releaseMessageIds": [
+        "s04-m02"
+      ],
+      "releaseDocumentIds": [
+        "s04-m02"
+      ],
+      "inputBundle": "stages/form-signed.json",
+      "requiresUserApproval": false
+    },
+    {
+      "id": "carrier-delivered",
+      "title": "Await inventory check",
+      "trigger": "Deliver the carrier update.",
+      "expected": "Record delivery but await IT inspection.",
+      "mustNot": "Do not close on carrier delivery.",
+      "evidence": [
+        {
+          "sourceId": "s04-m03",
+          "quote": "Our asset team has not yet checked the contents."
+        }
+      ],
+      "releaseMessageIds": [
+        "s04-m03"
+      ],
+      "releaseDocumentIds": [
+        "s04-m03"
+      ],
+      "inputBundle": "stages/carrier-delivered.json",
+      "requiresUserApproval": false
+    },
+    {
+      "id": "approved-followup",
+      "title": "Request receipt",
+      "trigger": "User approves the follow-up.",
+      "expected": "Send a scoped inventory inquiry.",
+      "mustNot": "Do not create an invented receipt.",
+      "evidence": [
+        {
+          "sourceId": "s04-m04",
+          "quote": "send the inventory receipt?"
+        }
+      ],
+      "releaseMessageIds": [
+        "s04-m04"
+      ],
+      "releaseDocumentIds": [
+        "s04-m04"
+      ],
+      "inputBundle": "stages/approved-followup.json",
+      "requiresUserApproval": true
+    },
+    {
+      "id": "it-received",
+      "title": "Close with evidence",
+      "trigger": "Deliver the IT receipt.",
+      "expected": "Mark equipment returned and retain receipt.",
+      "mustNot": "Do not close unrelated exit tasks.",
+      "evidence": [
+        {
+          "sourceId": "s04-receipt",
+          "quote": "Equipment return is complete."
+        }
+      ],
+      "releaseMessageIds": [
+        "s04-m05"
+      ],
+      "releaseDocumentIds": [
+        "s04-m05",
+        "s04-receipt"
+      ],
+      "inputBundle": "stages/it-received.json",
+      "requiresUserApproval": false
+    }
+  ],
+  "initialBundle": "stages/initial.json"
+}

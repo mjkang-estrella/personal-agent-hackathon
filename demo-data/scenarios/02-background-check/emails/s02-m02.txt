@@ -1,0 +1,16 @@
+From: Alex Morgan <alex.morgan@personal.example>
+To: Maya Chen | Northstar People Team <people@northstar.example>
+Date: 2026-10-05T11:00:00-07:00
+Subject: Employment statement for my Orbit onboarding
+Message-ID: <s02-m02@jobswitch.example>
+Attachments: (none)
+
+Hi Maya,
+
+Could you provide a statement confirming my Northstar employment start and current status? Please label October 16 as my expected final day because I am still employed. I need it for my next employer screening by October 8.
+
+Thanks,
+Alex
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

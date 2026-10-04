@@ -1,0 +1,43 @@
+From: Jordan Lee | Orbit People Team <people@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Subject: Revised schedule acknowledgment received
+Date: Fri, 09 Oct 2026 16:00:00 -0700
+Message-ID: <s01-m05@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 01-start-date-change
+X-JobSwitch-Stage: acknowledged
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="jobswitch-s01-m05-0"
+
+--jobswitch-s01-m05-0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Alex,
+
+We received your portal acknowledgment of offer schedule version 2. Your Nove=
+mber 2 start is now recorded. We have not received a health plan election, so=
+ benefits enrollment is still open.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s01-m05-0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+i Alex,</p><p>We received your portal acknowledgment of offer schedule versio=
+n 2. Your November 2 start is now recorded. We have not received a health pla=
+n election, so benefits enrollment is still open.</p><p>Best,<br>Jordan</p><p=
+>---<br>Fictional JobSwitch demo. All people, policies and events in this mes=
+sage are synthetic. Addresses use reserved .example domains. Do not deliver t=
+o real people.<br></p></div></body></html>
+
+--jobswitch-s01-m05-0--

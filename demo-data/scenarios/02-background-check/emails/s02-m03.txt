@@ -1,0 +1,16 @@
+From: Maya Chen | Northstar People Team <people@northstar.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-06T09:00:00-07:00
+Subject: Re: Employment statement for my Orbit onboarding
+Message-ID: <s02-m03@jobswitch.example>
+Attachments: attachments/s02-employment.pdf
+
+Hi Alex,
+
+Attached is your current-employment statement. It distinguishes your current status from your expected departure. Please review the dates before submitting it to the screening portal.
+
+Best,
+Maya
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

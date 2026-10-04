@@ -1,0 +1,218 @@
+[
+  {
+    "id": "s08-m01",
+    "stage": "initial",
+    "date": "2026-10-12T09:00:00-07:00",
+    "sender": "orbit",
+    "to": [
+      "alex"
+    ],
+    "subject": "Welcome to Orbit - your onboarding checklist",
+    "body": "Hi Alex,\n\nWe look forward to your October 19 start. Please complete your People Portal profile by October 15; that releases your screening invitation. Your payroll payment preference is due October 20 and should be entered directly in the secure portal.\n\nThe attached checklist separates each task. We are still confirming the laptop appointment.\n\nBest,\nJordan\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [
+      {
+        "id": "s08-checklist",
+        "title": "Orbit Labs | First-week onboarding checklist",
+        "path": "attachments/s08-checklist.pdf",
+        "mimeType": "application/pdf",
+        "bytes": 2773,
+        "sha256": "5b2ac6f7415f5bc3ce071a3d1893a2a723e30bd49b7f7412b595c7c473670e28",
+        "pages": 1
+      }
+    ],
+    "inReplyTo": null,
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Jordan Lee | Orbit People Team",
+      "address": "people@orbit.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s08-m01@jobswitch.example>",
+    "emlPath": "emails/s08-m01.eml",
+    "textPath": "emails/s08-m01.txt"
+  },
+  {
+    "id": "s08-m02",
+    "stage": "initial",
+    "date": "2026-10-12T10:00:00-07:00",
+    "sender": "orbit-it",
+    "to": [
+      "alex"
+    ],
+    "subject": "Laptop setup before your Orbit welcome session",
+    "body": "Hi Alex,\n\nYour laptop setup is planned for your first day, October 19, before the virtual welcome session. The appointment time and pickup location are not assigned yet. Please do not travel to an assumed location.\n\nOrbit IT Welcome Team\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [],
+    "inReplyTo": null,
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Orbit IT Welcome Team",
+      "address": "it@orbit.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s08-m02@jobswitch.example>",
+    "emlPath": "emails/s08-m02.eml",
+    "textPath": "emails/s08-m02.txt"
+  },
+  {
+    "id": "s08-m03",
+    "stage": "profile-verified",
+    "date": "2026-10-14T09:00:00-07:00",
+    "sender": "orbit",
+    "to": [
+      "alex"
+    ],
+    "subject": "Profile verified - screening invitation released",
+    "body": "Hi Alex,\n\nYour People Portal profile is verified. We have released the screening invitation; the screening itself is not yet cleared. Payroll preference and employment-verification paperwork remain separate open tasks.\n\nBest,\nJordan\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [],
+    "inReplyTo": "s08-m01",
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Jordan Lee | Orbit People Team",
+      "address": "people@orbit.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s08-m03@jobswitch.example>",
+    "emlPath": "emails/s08-m03.eml",
+    "textPath": "emails/s08-m03.txt"
+  },
+  {
+    "id": "s08-m04",
+    "stage": "duplicate-reminder",
+    "date": "2026-10-14T10:00:00-07:00",
+    "sender": "orbit",
+    "to": [
+      "alex"
+    ],
+    "subject": "Reminder: complete your profile before October 15",
+    "body": "Hi Alex,\n\nThis scheduled reminder concerns the same People Portal profile task in your welcome checklist. If you already received a profile verification confirmation, no additional profile is required. This reminder does not reverse that confirmation.\n\nBest,\nJordan\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [],
+    "inReplyTo": "s08-m01",
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Jordan Lee | Orbit People Team",
+      "address": "people@orbit.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s08-m04@jobswitch.example>",
+    "emlPath": "emails/s08-m04.eml",
+    "textPath": "emails/s08-m04.txt"
+  },
+  {
+    "id": "s08-m05",
+    "stage": "approved-it-inquiry",
+    "date": "2026-10-15T09:00:00-07:00",
+    "sender": "alex",
+    "to": [
+      "orbit-it"
+    ],
+    "subject": "Please confirm my October 19 laptop appointment",
+    "body": "Hello Orbit IT,\n\nCould you confirm the time and location for my October 19 laptop setup and the start time of the welcome session? I want to complete setup before joining.\n\nThanks,\nAlex\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [],
+    "inReplyTo": "s08-m02",
+    "direction": "outbound",
+    "delivery": "approved-action-fixture",
+    "from": {
+      "name": "Alex Morgan",
+      "address": "alex.morgan@personal.example"
+    },
+    "recipients": [
+      {
+        "name": "Orbit IT Welcome Team",
+        "address": "it@orbit.example"
+      }
+    ],
+    "messageId": "<s08-m05@jobswitch.example>",
+    "emlPath": "emails/s08-m05.eml",
+    "textPath": "emails/s08-m05.txt"
+  },
+  {
+    "id": "s08-m06",
+    "stage": "appointment-confirmed",
+    "date": "2026-10-15T13:00:00-07:00",
+    "sender": "orbit-it",
+    "to": [
+      "alex"
+    ],
+    "subject": "Re: Please confirm my October 19 laptop appointment",
+    "body": "Hi Alex,\n\nYour laptop appointment is October 19 at 9 a.m. Pacific in the fictional Orbit Welcome Room A. The virtual welcome session begins at 10 a.m. Pacific. An access link will be provided through the secure portal.\n\nThis confirms the schedule, not attendance or completed setup.\n\nOrbit IT Welcome Team\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [],
+    "inReplyTo": "s08-m05",
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Orbit IT Welcome Team",
+      "address": "it@orbit.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s08-m06@jobswitch.example>",
+    "emlPath": "emails/s08-m06.eml",
+    "textPath": "emails/s08-m06.txt"
+  },
+  {
+    "id": "s08-m07",
+    "stage": "partial-completion",
+    "date": "2026-10-19T16:00:00-07:00",
+    "sender": "orbit",
+    "to": [
+      "alex"
+    ],
+    "subject": "First-day status - two paperwork items remain open",
+    "body": "Hi Alex,\n\nYour profile and screening are complete; IT confirmed laptop setup and the welcome team confirmed attendance. The attached status receipt lists the evidence.\n\nPayroll preference remains unconfirmed, due October 20. Employment-verification paperwork is still under review. Benefits election is also open, due November 17.\n\nBest,\nJordan\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [
+      {
+        "id": "s08-status",
+        "title": "Orbit Labs | Onboarding status receipt",
+        "path": "attachments/s08-status.pdf",
+        "mimeType": "application/pdf",
+        "bytes": 2527,
+        "sha256": "660582be47614c6c680d29cfee5babb2256ec2b9060fbd608da8f6de2db5f484",
+        "pages": 1
+      }
+    ],
+    "inReplyTo": "s08-m01",
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Jordan Lee | Orbit People Team",
+      "address": "people@orbit.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s08-m07@jobswitch.example>",
+    "emlPath": "emails/s08-m07.eml",
+    "textPath": "emails/s08-m07.txt"
+  }
+]

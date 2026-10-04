@@ -1,0 +1,44 @@
+From: Alex Morgan <alex.morgan@personal.example>
+To: Maya Chen | Northstar People Team <people@northstar.example>
+Subject: Please confirm my active coverage end date
+Date: Thu, 08 Oct 2026 13:00:00 -0700
+Message-ID: <s06-m03@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 06-coverage-gap
+X-JobSwitch-Stage: approved-inquiry
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="jobswitch-s06-m03-0"
+
+--jobswitch-s06-m03-0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Maya,
+
+My last Northstar day is October 16 and the Orbit guide projects November 1 c=
+overage. Please confirm when my active Northstar medical coverage ends and se=
+nd the continuation information. I have not selected any continuation option.
+
+Thanks,
+Alex
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s06-m03-0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+i Maya,</p><p>My last Northstar day is October 16 and the Orbit guide project=
+s November 1 coverage. Please confirm when my active Northstar medical covera=
+ge ends and send the continuation information. I have not selected any contin=
+uation option.</p><p>Thanks,<br>Alex</p><p>---<br>Fictional JobSwitch demo. A=
+ll people, policies and events in this message are synthetic. Addresses use r=
+eserved .example domains. Do not deliver to real people.<br></p></div></body>=
+</html>
+
+--jobswitch-s06-m03-0--

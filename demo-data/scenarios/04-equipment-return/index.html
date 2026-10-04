@@ -1,0 +1,50 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>A signed return form is not a returned laptop</title><style>
+:root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:#F3F5F7;color:#172B37;font:16px/1.6 system-ui,-apple-system,sans-serif}main{max-width:1160px;margin:auto;padding:36px 24px 70px}a{color:#2859A0;text-decoration:none}a:hover{text-decoration:underline}header.hero{background:#152E3E;color:#fff;padding:36px;border-radius:16px;margin-bottom:24px}.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8ED6C4}h1{font-size:34px;line-height:1.2;margin:10px 0 16px}h2{font-size:24px;margin:34px 0 12px}h3{font-size:19px;margin:8px 0}p{margin:10px 0}.sub{color:#596D79;font-size:14px}.hero .sub{color:#CAD9E2}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.card,article,.note{background:white;border:1px solid #D8E1E7;padding:24px;border-radius:12px}.pill{display:inline-block;background:#EDF2F7;border-radius:20px;padding:3px 10px;font-size:12px;margin:2px 6px 2px 0}.mailhead{background:#F0F4F7;border-radius:8px;padding:14px;font-size:13px;overflow-wrap:anywhere}.body{white-space:pre-wrap;font:15px/1.7 system-ui,sans-serif;overflow-wrap:anywhere}.attachment{display:inline-block;border:1px solid #CFDBE4;border-radius:6px;padding:8px 12px;margin:5px 8px 5px 0;font-size:13px}details{margin-top:14px}summary{cursor:pointer;font-weight:600}blockquote{margin:12px 0;padding:10px 15px;border-left:3px solid #649283;background:#F4F8F6;font-size:14px}nav{display:flex;gap:14px;flex-wrap:wrap;margin:20px 0}.timeline article{margin:18px 0}.expect{border-left:4px solid #2D7564;padding:10px 16px;margin:15px 0;background:#F2F8F5}.warning{border-left-color:#BB8A30;background:#FFF9ED}code{font-size:13px;overflow-wrap:anywhere}ul{padding-left:20px}footer{margin-top:30px;color:#667D8A;font-size:12px}button{padding:8px 14px;border:1px solid #CCD7DF;border-radius:8px;background:white;color:#213F54;cursor:pointer}button[aria-pressed=true]{background:#213F54;color:white}.hidden{display:none!important}@media(max-width:720px){.grid{grid-template-columns:1fr}main{padding:18px 12px}.hero{padding:24px!important}h1{font-size:28px}article,.card{padding:18px}}
+</style></head><body><main><nav><a href="../../index.html">All scenarios</a><a href="README.md">Replay guide</a><a href="scenario.json">Scenario JSON</a></nav><header class="hero"><div class="eyebrow">04-equipment-return / Synthetic case</div><h1>A signed return form is not a returned laptop</h1><p>Follow equipment from instructions through signed paperwork and shipping to a named IT receipt.</p><p class="sub">Alex Morgan · Northstar Studio → Orbit Labs · Independent replay</p></header><div class="note"><strong>Start with the initial stage.</strong> Future messages and attachments are hidden below until you select a later stage. The full dataset is on disk for developers; the agent must receive only the chosen input bundle.</div><nav id="stage-controls"><button data-stage="0" aria-pressed="true">0. Create a return task</button><button data-stage="1" aria-pressed="false">1. Record acknowledged instructions</button><button data-stage="2" aria-pressed="false">2. Await inventory check</button><button data-stage="3" aria-pressed="false">3. Request receipt</button><button data-stage="4" aria-pressed="false">4. Close with evidence</button></nav><div class="timeline"><section data-release="0" class=""><h2>0. Create a return task</h2><div class="expect"><strong>Expected:</strong> List four items and require an IT receipt.<br><strong>Do not:</strong> Do not mark returned from instructions.<br><a href="stages/initial.json">Developer input for this stage</a></div><article><span class="pill">inbound</span><span class="pill">2026-10-14T09:00:00-07:00</span><h3>Your Northstar equipment return checklist</h3><div class="mailhead">From: Elliot Reed | Northstar IT &lt;it@northstar.example&gt;<br>To: Alex Morgan &lt;alex.morgan@personal.example&gt;</div><pre class="body">Hi Alex,
+
+Your last working day is October 16. Attached are the return instructions for your laptop and accessories. Please confirm whether you will use office drop-off or the prepaid collection.
+
+We need an IT inventory receipt to close the return task.
+
+Thanks,
+Elliot
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.
+</pre><a class="attachment" href="attachments/s04-instructions.pdf">PDF · Northstar Studio | Equipment return instructions</a><p><a href="emails/s04-m01.eml" download>Download email with attachments (.eml)</a> · <a href="emails/s04-m01.txt">Plain text</a></p></article></section><section data-release="1" class="hidden"><h2>1. Record acknowledged instructions</h2><div class="expect"><strong>Expected:</strong> Track October 19 authorized collection and keep return open.<br><strong>Do not:</strong> Do not confuse signing with return.<br><a href="stages/form-signed.json">Developer input for this stage</a></div><article><span class="pill">inbound</span><span class="pill">2026-10-16T10:00:00-07:00</span><h3>Return form acknowledged - collection booked</h3><div class="mailhead">From: Elliot Reed | Northstar IT &lt;it@northstar.example&gt;<br>To: Alex Morgan &lt;alex.morgan@personal.example&gt;</div><pre class="body">Hi Alex,
+
+Your return form has been acknowledged. We approved prepaid collection on October 19 because a pickup was unavailable on your final day. Your return remains open until the equipment is checked in by IT.
+
+Thanks,
+Elliot
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.
+</pre><p><a href="emails/s04-m02.eml" download>Download email with attachments (.eml)</a> · <a href="emails/s04-m02.txt">Plain text</a></p></article></section><section data-release="2" class="hidden"><h2>2. Await inventory check</h2><div class="expect"><strong>Expected:</strong> Record delivery but await IT inspection.<br><strong>Do not:</strong> Do not close on carrier delivery.<br><a href="stages/carrier-delivered.json">Developer input for this stage</a></div><article><span class="pill">inbound</span><span class="pill">2026-10-20T09:00:00-07:00</span><h3>Carrier update for demo shipment NS-SHIP-042</h3><div class="mailhead">From: Elliot Reed | Northstar IT &lt;it@northstar.example&gt;<br>To: Alex Morgan &lt;alex.morgan@personal.example&gt;</div><pre class="body">Hi Alex,
+
+The demo carrier marked shipment NS-SHIP-042 delivered this morning. Our asset team has not yet checked the contents. Please keep the task open until you receive an IT inventory receipt.
+
+Thanks,
+Elliot
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.
+</pre><p><a href="emails/s04-m03.eml" download>Download email with attachments (.eml)</a> · <a href="emails/s04-m03.txt">Plain text</a></p></article></section><section data-release="3" class="hidden"><h2>3. Request receipt</h2><div class="expect"><strong>Expected:</strong> Send a scoped inventory inquiry.<br><strong>Do not:</strong> Do not create an invented receipt.<br><a href="stages/approved-followup.json">Developer input for this stage</a></div><article><span class="pill">outbound</span><span class="pill">2026-10-20T11:00:00-07:00</span><h3>Re: Carrier update for demo shipment NS-SHIP-042</h3><div class="mailhead">From: Alex Morgan &lt;alex.morgan@personal.example&gt;<br>To: Elliot Reed | Northstar IT &lt;it@northstar.example&gt;</div><pre class="body">Hi Elliot,
+
+The shipment is marked delivered. Could you confirm whether the laptop, charger, badge and security key have all been checked in and send the inventory receipt?
+
+Thanks,
+Alex
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.
+</pre><p><a href="emails/s04-m04.eml" download>Download email with attachments (.eml)</a> · <a href="emails/s04-m04.txt">Plain text</a></p></article></section><section data-release="4" class="hidden"><h2>4. Close with evidence</h2><div class="expect"><strong>Expected:</strong> Mark equipment returned and retain receipt.<br><strong>Do not:</strong> Do not close unrelated exit tasks.<br><a href="stages/it-received.json">Developer input for this stage</a></div><article><span class="pill">inbound</span><span class="pill">2026-10-20T15:00:00-07:00</span><h3>Re: Carrier update for demo shipment NS-SHIP-042</h3><div class="mailhead">From: Elliot Reed | Northstar IT &lt;it@northstar.example&gt;<br>To: Alex Morgan &lt;alex.morgan@personal.example&gt;</div><pre class="body">Hi Alex,
+
+IT has checked in all four assigned items. Your equipment return is complete. The inventory receipt is attached.
+
+Thanks for returning everything,
+Elliot
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.
+</pre><a class="attachment" href="attachments/s04-receipt.pdf">PDF · Northstar Studio | IT equipment receipt</a><p><a href="emails/s04-m05.eml" download>Download email with attachments (.eml)</a> · <a href="emails/s04-m05.txt">Plain text</a></p></article></section></div><footer>FICTIONAL DEMO DATA - NOT A REAL EMPLOYMENT RECORD</footer><script>document.querySelectorAll("[data-stage]").forEach(b=>b.addEventListener("click",()=>{const n=Number(b.dataset.stage);document.querySelectorAll("[data-release]").forEach(e=>e.classList.toggle("hidden",Number(e.dataset.release)>n));document.querySelectorAll("[data-stage]").forEach(e=>e.setAttribute("aria-pressed",String(e===b)));}));</script></main></body></html>

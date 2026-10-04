@@ -1,0 +1,17 @@
+From: Northstar Payroll <payroll@northstar.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-22T14:00:00-07:00
+Subject: Your annual tax document will be a separate follow-up
+Message-ID: <s07-m05@jobswitch.example>
+Attachments: (none)
+
+Hi Alex,
+
+Your 2026 annual tax document is scheduled for publication in January 2027. Please keep your personal contact information current in Pay Archive. No further account registration is needed now.
+
+We will notify you when the document is available.
+
+Northstar Payroll
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

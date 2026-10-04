@@ -1,0 +1,47 @@
+From: Northstar Payroll <payroll@northstar.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Subject: Your annual tax document will be a separate follow-up
+Date: Thu, 22 Oct 2026 14:00:00 -0700
+Message-ID: <s07-m05@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 07-payroll-access
+X-JobSwitch-Stage: tax-followup
+In-Reply-To: <s07-m04@jobswitch.example>
+References: <s07-m04@jobswitch.example>
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="jobswitch-s07-m05-0"
+
+--jobswitch-s07-m05-0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Alex,
+
+Your 2026 annual tax document is scheduled for publication in January 2027. P=
+lease keep your personal contact information current in Pay Archive. No furth=
+er account registration is needed now.
+
+We will notify you when the document is available.
+
+Northstar Payroll
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s07-m05-0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+i Alex,</p><p>Your 2026 annual tax document is scheduled for publication in J=
+anuary 2027. Please keep your personal contact information current in Pay Arc=
+hive. No further account registration is needed now.</p><p>We will notify you=
+ when the document is available.</p><p>Northstar Payroll</p><p>---<br>Fiction=
+al JobSwitch demo. All people, policies and events in this message are synthe=
+tic. Addresses use reserved .example domains. Do not deliver to real people.<=
+br></p></div></body></html>
+
+--jobswitch-s07-m05-0--

@@ -1,0 +1,16 @@
+From: Alex Morgan <alex.morgan@personal.example>
+To: Elliot Reed | Northstar IT <it@northstar.example>
+Date: 2026-10-20T11:00:00-07:00
+Subject: Re: Carrier update for demo shipment NS-SHIP-042
+Message-ID: <s04-m04@jobswitch.example>
+Attachments: (none)
+
+Hi Elliot,
+
+The shipment is marked delivered. Could you confirm whether the laptop, charger, badge and security key have all been checked in and send the inventory receipt?
+
+Thanks,
+Alex
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

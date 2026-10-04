@@ -1,0 +1,16 @@
+From: Jordan Lee | Orbit People Team <people@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-09T16:00:00-07:00
+Subject: Revised schedule acknowledgment received
+Message-ID: <s01-m05@jobswitch.example>
+Attachments: (none)
+
+Hi Alex,
+
+We received your portal acknowledgment of offer schedule version 2. Your November 2 start is now recorded. We have not received a health plan election, so benefits enrollment is still open.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

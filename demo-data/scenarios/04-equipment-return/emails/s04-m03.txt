@@ -1,0 +1,16 @@
+From: Elliot Reed | Northstar IT <it@northstar.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-20T09:00:00-07:00
+Subject: Carrier update for demo shipment NS-SHIP-042
+Message-ID: <s04-m03@jobswitch.example>
+Attachments: (none)
+
+Hi Alex,
+
+The demo carrier marked shipment NS-SHIP-042 delivered this morning. Our asset team has not yet checked the contents. Please keep the task open until you receive an IT inventory receipt.
+
+Thanks,
+Elliot
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.
