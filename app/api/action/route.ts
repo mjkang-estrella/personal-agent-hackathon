@@ -23,7 +23,7 @@ import {
   syncMail,
   sendCertificate,
 } from "@/lib/services";
-import { updateDates } from "@/lib/domain";
+import { chooseOption, updateDates } from "@/lib/domain";
 import { completionCertificate } from "@/lib/fixtures";
 import { advanceAgent, analyzeWorkspace, workflowInput } from "@/lib/workflow";
 import { queueAgent } from "@/lib/automation";
@@ -61,6 +61,7 @@ const schema = z.object({
     "dates",
     "profile",
     "complete",
+    "decide",
     "research",
     "new_workspace",
   ]),
@@ -75,6 +76,7 @@ const schema = z.object({
   apply: z.boolean().optional(),
   approval: z.string().optional(),
   taskId: z.string().optional(),
+  optionId: z.string().max(80).optional(),
   to: z.string().max(200).optional(),
   certificateId: z.string().optional(),
   lastDay: z.string().optional(),
@@ -307,6 +309,22 @@ export async function POST(request: Request) {
                 ? "You marked a task complete"
                 : "You reopened a task",
               t.title,
+              "user",
+            );
+          });
+          break;
+        case "decide":
+          w = await mutate(id, (s) => {
+            const { task, option } = chooseOption(
+              s,
+              data.taskId || "",
+              data.optionId || "",
+              s.scenario?.clock,
+            );
+            activity(
+              s,
+              "You made a decision",
+              `${task.title}: ${option.label}`,
               "user",
             );
           });

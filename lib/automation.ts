@@ -53,8 +53,10 @@ export function nextAgentStep(
 export function reviewKind(
   task: Task,
   w: Workspace,
-): "claim" | "reply" | "draft" | "input" | null {
+): "claim" | "reply" | "draft" | "decision" | "input" | null {
   if (task.status === "ready" && task.claim) return "claim";
+  if (task.decision && !task.decision.chosenId && task.status !== "done")
+    return "decision";
   if (openDraft(w, task.id)) return "draft";
   if (
     task.status === "needs_info" &&

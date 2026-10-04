@@ -76,6 +76,27 @@ export function assertCanSubmit(task: Task) {
   if (task.missing.length)
     throw new Error("Resolve the missing information before submission.");
 }
+// Records the person's own choice. Nothing is sent or submitted on their behalf.
+export function chooseOption(
+  w: Workspace,
+  taskId: string,
+  optionId: string,
+  at = new Date().toISOString(),
+) {
+  const task = w.tasks.find((t) => t.id === taskId);
+  const option = task?.decision?.options.find((o) => o.id === optionId);
+  if (!task?.decision || !option)
+    throw new Error("Choose one of the listed options.");
+  task.decision.chosenId = option.id;
+  task.decision.chosenAt = at;
+  task.nextAction = option.nextStep;
+  task.history?.push({
+    at,
+    status: task.status,
+    note: `You chose: ${option.label}`,
+  });
+  return { task, option };
+}
 export function progress(w: Workspace) {
   return w.tasks.filter((t) => ["approved", "done"].includes(t.status)).length;
 }

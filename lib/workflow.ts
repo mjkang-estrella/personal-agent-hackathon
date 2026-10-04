@@ -41,7 +41,16 @@ export async function analyzeWorkspace(id: string) {
       throw new Error(
         "Your documents changed during analysis. Please try again.",
       );
-    const progressed = s.tasks.filter((t) => t.status !== "todo");
+    // Analysis output has no decision options, so keep evidence-backed choices.
+    const progressed = s.tasks.filter(
+      (t) =>
+        t.status !== "todo" ||
+        (t.decision &&
+          [
+            ...t.evidence,
+            ...t.decision.options.flatMap((o) => o.evidence || []),
+          ].every((e) => validEvidence(e, s))),
+    );
     s.tasks = [
       ...progressed,
       ...supported
