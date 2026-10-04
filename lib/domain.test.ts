@@ -1,7 +1,12 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { makeWorkspace } from "./fixtures";
-import { updateDates, validEvidence, assertCanSubmit } from "./domain";
+import {
+  updateDates,
+  validEvidence,
+  assertCanSubmit,
+  groundEvidence,
+} from "./domain";
 test("citations require exact source page evidence", () => {
   const w = makeWorkspace();
   assert.equal(validEvidence(w.tasks[0].evidence[0], w), true);
@@ -31,6 +36,28 @@ test("quotes still verify across PDF line wrapping, but never with changed words
     false,
   );
   assert.equal(validEvidence({ ...e, quote: "   \n  " }, w), false);
+});
+test("grounding restores the source's casing but never accepts changed words", () => {
+  const w = makeWorkspace();
+  w.documents[0].pages[0] =
+    "Following our call, your new start date\nwill be November 2, 2026.";
+  const e = {
+    documentId: w.documents[0].id,
+    page: 1,
+    quote: "Your new start date will be November 2, 2026.",
+  };
+  assert.equal(validEvidence(e, w), false);
+  assert.deepEqual(groundEvidence(e, w), {
+    ...e,
+    quote: "your new start date will be November 2, 2026.",
+  });
+  assert.equal(
+    groundEvidence(
+      { ...e, quote: "Your new start date is November 2, 2026." },
+      w,
+    ),
+    null,
+  );
 });
 test("date changes invalidate prepared claims and recalculate inclusive enrollment deadlines", () => {
   const w = makeWorkspace();

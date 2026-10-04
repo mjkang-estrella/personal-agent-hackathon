@@ -95,6 +95,21 @@ export function PracticeStrip({
           (c) => c.address.toLowerCase() === waiting.address.toLowerCase(),
         ),
     );
+  const isOpen = (t?: Task) => !!t && !["done", "approved"].includes(t.status);
+  // Offer a draft for the task the awaited person last wrote about.
+  const draftTask =
+    waiting && !draft
+      ? [...(w.mail || [])]
+          .reverse()
+          .filter(
+            (m) =>
+              m.direction === "inbound" &&
+              m.from.address.toLowerCase() === waiting.address.toLowerCase(),
+          )
+          .flatMap((m) => m.taskIds)
+          .map((id) => w.tasks.find((t) => t.id === id))
+          .find(isOpen) || w.tasks.find(isOpen)
+      : undefined;
   return (
     <section className="practice-strip" aria-label="Practice case">
       <div className="practice-copy">
@@ -158,6 +173,22 @@ export function PracticeStrip({
                 onClick={() => openTask(draft.taskId)}
               >
                 <PenLine size={16} /> Review the draft
+              </button>
+            ) : !reading && draftTask ? (
+              <button
+                className="primary"
+                disabled={!!busy}
+                onClick={async () => {
+                  const next = await act(
+                    "draft_request",
+                    { taskId: draftTask.id, to: waiting.address },
+                    "Your agent drafted an email. Review it before sending.",
+                  );
+                  if (next) openTask(draftTask.id);
+                }}
+              >
+                <Busy busy={busy === "draft_request"} />
+                <PenLine size={16} /> Draft an email to {firstName(waiting)}
               </button>
             ) : (
               <p className="practice-hint">

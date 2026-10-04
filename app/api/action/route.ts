@@ -75,6 +75,7 @@ const schema = z.object({
   apply: z.boolean().optional(),
   approval: z.string().optional(),
   taskId: z.string().optional(),
+  to: z.string().max(200).optional(),
   certificateId: z.string().optional(),
   lastDay: z.string().optional(),
   startDay: z.string().optional(),
@@ -170,7 +171,7 @@ export async function POST(request: Request) {
           break;
         case "draft_request": {
           const { draftForTask } = await import("@/lib/triage");
-          w = await draftForTask(id, data.taskId || "");
+          w = await draftForTask(id, data.taskId || "", data.to);
           break;
         }
         case "date_proposal":

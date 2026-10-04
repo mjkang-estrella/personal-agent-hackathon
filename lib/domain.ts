@@ -14,6 +14,31 @@ export function validEvidence(e: Evidence, w: Workspace) {
   const quote = squash(e.quote);
   return !!page && quote.length >= 8 && squash(page).includes(quote);
 }
+// Models often re-capitalize a quote's first word. Find the passage ignoring
+// case and spacing, then keep the source's own wording as the quote.
+export function groundEvidence(e: Evidence, w: Workspace): Evidence | null {
+  const page = w.documents.find((d) => d.id === e.documentId)?.pages[
+    e.page - 1
+  ];
+  const quote = [...squash(e.quote)].map((c) => c.toLowerCase()).join("");
+  if (!page || quote.length < 8) return null;
+  let flat = "";
+  const at: number[] = [];
+  for (let i = 0; i < page.length; i++) {
+    const space = /\s/.test(page[i]);
+    if (space && (!flat || flat.endsWith(" "))) continue;
+    for (const c of space ? " " : page[i].toLowerCase()) {
+      flat += c;
+      at.push(i);
+    }
+  }
+  const start = flat.indexOf(quote);
+  if (start < 0) return null;
+  return {
+    ...e,
+    quote: squash(page.slice(at[start], at[start + quote.length - 1] + 1)),
+  };
+}
 export function updateDates(w: Workspace, lastDay: string, startDay: string) {
   if (
     !/^\d{4}-\d{2}-\d{2}$/.test(lastDay) ||

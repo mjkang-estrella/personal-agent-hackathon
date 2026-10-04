@@ -1,5 +1,10 @@
 import { z } from "zod";
-import { matchesApproval, updateDates, validEvidence } from "./domain";
+import {
+  groundEvidence,
+  matchesApproval,
+  updateDates,
+  validEvidence,
+} from "./domain";
 import { draftPayload } from "./drafts";
 import { acknowledgeOutbound } from "./scenarios";
 import type {
@@ -123,9 +128,24 @@ function pushHistory(task: Task, at: string, note: string, ev?: Evidence) {
  */
 export function applyTriage(
   w: Workspace,
-  result: TriageResult,
+  raw: TriageResult,
   messageIds: string[],
 ) {
+  // Unmatched quotes are kept as given so the checks below reject them.
+  const ground = (e: Evidence) => groundEvidence(e, w) || e;
+  const result: TriageResult = {
+    ...raw,
+    tasks: raw.tasks.map((t) => ({
+      ...t,
+      evidence: t.evidence.map(ground),
+      statusEvidence: t.statusEvidence && ground(t.statusEvidence),
+    })),
+    drafts: raw.drafts.map((d) => ({ ...d, evidence: d.evidence.map(ground) })),
+    dateProposal: raw.dateProposal && {
+      ...raw.dateProposal,
+      evidence: ground(raw.dateProposal.evidence),
+    },
+  };
   const at = w.scenario?.clock || new Date().toISOString();
   const triaged = (w.mail || []).filter((m) => messageIds.includes(m.id));
   const fresh = new Set(
@@ -304,7 +324,9 @@ export function applyTriage(
     for (const t of w.tasks)
       if (
         touched.has(t.id) &&
-        t.evidence.some((e) => docs.includes(e.documentId)) &&
+        [...t.evidence, ...(t.history || []).map((h) => h.evidence)].some(
+          (e) => e && docs.includes(e.documentId),
+        ) &&
         !m.taskIds.includes(t.id)
       )
         m.taskIds.push(t.id);
