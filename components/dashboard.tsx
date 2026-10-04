@@ -41,6 +41,7 @@ import {
 } from "lucide-react";
 import type { Workspace, Task, Document, Stage, Status } from "@/lib/types";
 import Assistant from "./assistant";
+import Inbox from "./inbox";
 import BackgroundControls from "./background-controls";
 import { MODEL_LABEL } from "@/lib/model-config";
 import { reviewKind } from "@/lib/automation";
@@ -102,7 +103,7 @@ const stages: {
     icon: BriefcaseBusiness,
   },
 ];
-type Page = "board" | "documents" | "activity" | "settings";
+type Page = "board" | "documents" | "inbox" | "activity" | "settings";
 export default function Dashboard() {
   const [w, setW] = useState<Workspace | null>(null);
   const [page, setPage] = useState<Page>("board");
@@ -288,6 +289,7 @@ export default function Dashboard() {
   const links: [Page, typeof LayoutDashboard, string][] = [
     ["board", LayoutDashboard, "Transition board"],
     ["documents", Files, "My documents"],
+    ["inbox", Mail, "Inbox"],
     ["activity", Activity, "Agent activity"],
   ];
   const visible = w.tasks.filter(
@@ -316,7 +318,11 @@ export default function Dashboard() {
               aria-label={label}
               aria-current={page === id ? "page" : undefined}
               className={`nav-item ${page === id ? "active" : ""}`}
-              onClick={() => setPage(id)}
+              onClick={() => {
+                setPage(id);
+                setSelected(null);
+                setChat(false);
+              }}
             >
               <Icon size={18} />
               {label}
@@ -369,9 +375,11 @@ export default function Dashboard() {
                 ? "Transition board"
                 : page === "documents"
                   ? "My documents"
-                  : page === "activity"
-                    ? "Agent activity"
-                    : "Settings"}
+                  : page === "inbox"
+                    ? "Inbox"
+                    : page === "activity"
+                      ? "Agent activity"
+                      : "Settings"}
             </span>
           </div>
           <div className="topbar-right">
@@ -400,21 +408,26 @@ export default function Dashboard() {
                   ? "Your transition"
                   : page === "documents"
                     ? "Documents"
-                    : page === "activity"
-                      ? "Activity"
-                      : "Workspace settings"}
+                    : page === "inbox"
+                      ? "Inbox"
+                      : page === "activity"
+                        ? "Activity"
+                        : "Workspace settings"}
               </h1>
               <p>
                 {page === "board"
                   ? `${w.profile.previousEmployer} → ${w.profile.nextEmployer} · Your agent prepares. You review.`
                   : page === "documents"
                     ? "The source of truth for your transition. Every recommendation starts here."
-                    : page === "activity"
-                      ? "A clear record of what happened, what changed, and what comes next."
-                      : "Your dates and details keep every next step in sync."}
+                    : page === "inbox"
+                      ? "Read HR replies and keep track of the conversation."
+                      : page === "activity"
+                        ? "A clear record of what happened, what changed, and what comes next."
+                        : "Your dates and details keep every next step in sync."}
               </p>
             </div>
           </div>
+          {page === "inbox" && <Inbox openTask={openTask} />}
           {page === "board" && (
             <>
               {!w.documents.length && (

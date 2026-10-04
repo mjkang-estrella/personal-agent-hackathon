@@ -35,3 +35,7 @@ Run type checking, all 20 unit tests, production build, preparation-only live sm
 - [Minimal UI](2026-10-04-190648-codex-minimal-ui.md)
 - [Durable monitoring](2026-10-04-192000-nolan-durable-monitoring.md)
 - [Initial review queue](2026-10-04-191037-codex-agent-led-review.md)
+
+## Inbox integration
+
+A subsequent main merge added the team's read-only Inbox beneath Documents. Preserve that navigation, API, and message-isolation tests alongside the review queue. The inbox remains read-only and does not grant sending authority. See [the inbox placement decision](2026-10-04-191500-codex-left-inbox-navigation.md).
