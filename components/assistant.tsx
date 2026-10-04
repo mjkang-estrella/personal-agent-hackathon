@@ -7,6 +7,7 @@ import {
 } from "@assistant-ui/react";
 import { useChatRuntime } from "@assistant-ui/ai-sdk";
 import { DefaultChatTransport } from "ai";
+import Modal from "./modal";
 import ReactMarkdown from "react-markdown";
 import { ArrowUp, Sparkles, X, Square } from "lucide-react";
 function MarkdownText({ text }: { text: string }) {
@@ -37,7 +38,11 @@ export default function Assistant({ close }: { close: () => void }) {
     transport: new DefaultChatTransport({ api: "/api/chat" }),
   });
   return (
-    <aside className="assistant-panel" aria-label="JobSwitch assistant">
+    <Modal
+      className="assistant-panel"
+      label="JobSwitch assistant"
+      onClose={close}
+    >
       <header>
         <div className="assistant-heading">
           <span className="icon-bubble peach">
@@ -114,6 +119,6 @@ export default function Assistant({ close }: { close: () => void }) {
           </p>
         </ThreadPrimitive.Root>
       </AssistantRuntimeProvider>
-    </aside>
+    </Modal>
   );
 }

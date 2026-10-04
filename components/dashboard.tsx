@@ -41,6 +41,7 @@ import {
 } from "lucide-react";
 import type { Workspace, Task, Document, Stage, Status } from "@/lib/types";
 import Assistant from "./assistant";
+import Modal, { ModalNotice } from "./modal";
 import Inbox from "./inbox";
 import BackgroundControls from "./background-controls";
 import { MODEL_LABEL } from "@/lib/model-config";
@@ -124,6 +125,12 @@ export default function Dashboard() {
   const [search, setSearch] = useState("");
   const [taskSearch, setTaskSearch] = useState("");
   const [loadError, setLoadError] = useState("");
+  const previousPage = useRef(page);
+  useEffect(() => {
+    if (previousPage.current === page) return;
+    previousPage.current = page;
+    window.document.getElementById("workspace-heading")?.focus();
+  }, [page]);
   const [certificateId, setCertificateId] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
   const notify = (text: string, error = false) => setToast({ text, error });
@@ -146,19 +153,6 @@ export default function Dashboard() {
     const t = setTimeout(() => setToast(null), 7000);
     return () => clearTimeout(t);
   }, [toast]);
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setViewDoc(null);
-        setSelected(null);
-        setUpload(false);
-        setDates(false);
-        setChat(false);
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
   useEffect(() => {
     if (!busy.includes("submit") && busy !== "advance") return;
     const t = setInterval(load, 1800);
@@ -231,20 +225,20 @@ export default function Dashboard() {
   const document = w?.documents.find((d) => d.id === viewDoc?.id);
   if (!w)
     return (
-      <main className="loading-screen">
+      <main className="app-shell loading-screen">
         <span className="brand-mark">
           <ArrowLeftRight size={24} />
         </span>
-        <h2>JobSwitch</h2>
+        <h1>JobSwitch</h1>
         {loadError ? (
           <>
-            <p>{loadError}</p>
+            <p role="alert">{loadError}</p>
             <button className="primary" onClick={load}>
               Try again
             </button>
           </>
         ) : (
-          <p>
+          <p role="status">
             <LoaderCircle size={16} className="spin" /> Getting your next
             chapter ready…
           </p>
@@ -305,6 +299,9 @@ export default function Dashboard() {
   );
   return (
     <div className="app-shell">
+      <a href="#workspace-main" className="skip-link">
+        Skip to workspace content
+      </a>
       <aside className="sidebar">
         <a className="brand" href="/" aria-label="JobSwitch home">
           <span className="brand-mark">
@@ -312,7 +309,7 @@ export default function Dashboard() {
           </span>
           JobSwitch<span className="brand-dot">.</span>
         </a>
-        <nav>
+        <nav aria-label="Workspace navigation">
           {links.map(([id, Icon, label]) => (
             <button
               key={id}
@@ -351,6 +348,7 @@ export default function Dashboard() {
         <div className="sidebar-bottom">
           <button
             aria-label="Workspace settings"
+            aria-current={page === "settings" ? "page" : undefined}
             className={`nav-item ${page === "settings" ? "active" : ""}`}
             onClick={() => setPage("settings")}
           >
@@ -401,10 +399,10 @@ export default function Dashboard() {
             <span className="avatar small">{initials}</span>
           </div>
         </header>
-        <main className="main-content">
+        <main id="workspace-main" tabIndex={-1} className="main-content">
           <div className="page-heading">
             <div>
-              <h1>
+              <h1 id="workspace-heading" tabIndex={-1}>
                 {page === "board" ? (
                   <>
                     A little clarity,{" "}
@@ -419,7 +417,6 @@ export default function Dashboard() {
                 ) : (
                   "Workspace settings"
                 )}
-
               </h1>
               <p>
                 {page === "board"
@@ -571,7 +568,6 @@ export default function Dashboard() {
                 <div className="review-inbox">
                   <div className="review-inbox-heading">
                     <div>
-                      <span className="paper-eyebrow">YOUR PART</span>
                       <h2>
                         Review & decide <span>{reviews.length}</span>
                       </h2>
@@ -660,7 +656,6 @@ export default function Dashboard() {
                     View requests <ArrowRight size={15} />
                   </button>
                 )}
-
               </section>
               <div className="board-toolbar">
                 <div className="board-title">
@@ -746,7 +741,7 @@ export default function Dashboard() {
                           <div className="empty-column">
                             <CheckCircle2 size={24} />
                             <p>
-                              {filter === "all"
+                              {filter === "all" && !taskSearch
                                 ? "Nothing here yet."
                                 : "No matching tasks."}
                             </p>
@@ -791,6 +786,31 @@ export default function Dashboard() {
                   <span>PAGES</span>
                   <span />
                 </div>
+                {!w.documents.some((d) =>
+                  d.name.toLowerCase().includes(search.toLowerCase()),
+                ) && (
+                  <div className="empty-state" role="status">
+                    <FileText size={28} aria-hidden="true" />
+                    <h2>
+                      {search
+                        ? "No matching documents"
+                        : "Your sources start here"}
+                    </h2>
+                    <p>
+                      {search
+                        ? "Try a different name or clear your search."
+                        : "Add a benefits handbook, receipt, or HR email to give your plan some context."}
+                    </p>
+                    {search && (
+                      <button
+                        className="text-button"
+                        onClick={() => setSearch("")}
+                      >
+                        Clear search
+                      </button>
+                    )}
+                  </div>
+                )}
                 {w.documents
                   .filter((d) =>
                     d.name.toLowerCase().includes(search.toLowerCase()),
@@ -871,6 +891,16 @@ export default function Dashboard() {
                 </button>
               </div>
               <div className="activity-feed">
+                {!w.activity.length && (
+                  <div className="empty-state">
+                    <Activity size={28} aria-hidden="true" />
+                    <h2>A clear record, from the first step</h2>
+                    <p>
+                      Document updates, agent progress, and your decisions will
+                      appear here.
+                    </p>
+                  </div>
+                )}
                 {w.activity.map((a) => (
                   <article className="activity-item" key={a.id}>
                     <span
@@ -929,19 +959,28 @@ export default function Dashboard() {
         </footer>
       </div>
       {toast && (
-        <div role="status" className={`toast ${toast.error ? "error" : ""}`}>
-          {toast.error ? <AlertCircle size={18} /> : <CheckCircle2 size={18} />}
-          <span>{toast.text}</span>
-          <button
-            aria-label="Dismiss notification"
-            onClick={() => setToast(null)}
+        <ModalNotice>
+          <div
+            role={toast.error ? "alert" : "status"}
+            className={`toast ${toast.error ? "error" : ""}`}
           >
-            <X size={15} />
-          </button>
-        </div>
+            {toast.error ? (
+              <AlertCircle size={18} />
+            ) : (
+              <CheckCircle2 size={18} />
+            )}
+            <span>{toast.text}</span>
+            <button
+              aria-label="Dismiss notification"
+              onClick={() => setToast(null)}
+            >
+              <X size={15} />
+            </button>
+          </div>
+        </ModalNotice>
       )}
       {busy && (
-        <div className="working-indicator">
+        <div className="working-indicator" role="status">
           <LoaderCircle size={14} className="spin" />
           {busy === "advance"
             ? agentPhase === "prepare"
@@ -964,518 +1003,505 @@ export default function Dashboard() {
         </div>
       )}
       {task && (
-        <>
-          <div className="scrim" onClick={() => setSelected(null)} />
-          <aside
-            className="task-panel"
-            role="dialog"
-            aria-modal="true"
-            aria-label={task.title}
-          >
-            <div className="panel-top">
-              <span>
-                {stages.find((s) => s.id === task.stage)?.title}{" "}
-                <ChevronRight size={13} /> Task details
-              </span>
-              <button
-                className="icon-button"
-                aria-label="Close task details"
-                onClick={() => setSelected(null)}
+        <Modal
+          className="task-panel"
+          label={task.title}
+          onClose={() => setSelected(null)}
+        >
+          <div className="panel-top">
+            <span>
+              {stages.find((s) => s.id === task.stage)?.title}{" "}
+              <ChevronRight size={13} /> Task details
+            </span>
+            <button
+              className="icon-button"
+              aria-label="Close task details"
+              onClick={() => setSelected(null)}
+            >
+              <X size={21} />
+            </button>
+          </div>
+          <div className="panel-content">
+            <div className="task-meta">
+              <span
+                className={`category-label ${categories[task.category].color}`}
               >
-                <X size={21} />
-              </button>
+                {categories[task.category].label}
+              </span>
+              <StatusBadge status={task.status} />
             </div>
-            <div className="panel-content">
-              <div className="task-meta">
-                <span
-                  className={`category-label ${categories[task.category].color}`}
-                >
-                  {categories[task.category].label}
-                </span>
-                <StatusBadge status={task.status} />
+            <h2>{task.title}</h2>
+            <p className="task-description">{task.description}</p>
+            <div className="detail-facts">
+              <div>
+                <small>DEADLINE</small>
+                <strong>
+                  <CalendarDays size={15} />
+                  {date(task.deadline)}
+                </strong>
               </div>
-              <h2>{task.title}</h2>
-              <p className="task-description">{task.description}</p>
-              <div className="detail-facts">
+              {task.amount !== null && (
                 <div>
-                  <small>DEADLINE</small>
-                  <strong>
-                    <CalendarDays size={15} />
-                    {date(task.deadline)}
-                  </strong>
+                  <small>POTENTIAL AMOUNT</small>
+                  <strong>{money(task.amount)}</strong>
                 </div>
-                {task.amount !== null && (
-                  <div>
-                    <small>POTENTIAL AMOUNT</small>
-                    <strong>{money(task.amount)}</strong>
-                  </div>
-                )}
+              )}
+            </div>
+            {task.dateReview && (
+              <div className="notice warning">
+                <CalendarDays size={18} />
+                <p>
+                  Your dates changed. Your agent will recheck documents for
+                  updated coverage details; confirm changes to submitted items
+                  with HR.
+                </p>
               </div>
-              {task.dateReview && (
-                <div className="notice warning">
-                  <CalendarDays size={18} />
+            )}
+            {task.error && (
+              <div className="notice warning">
+                <AlertCircle size={18} />
+                <p>{task.error}</p>
+              </div>
+            )}
+            {task.status === "approved" && (
+              <div className="notice success">
+                <CheckCircle2 size={21} />
+                <div>
+                  <strong>Approved. One less loose end.</strong>
                   <p>
-                    Your dates changed. Your agent will recheck documents for
-                    updated coverage details; confirm changes to submitted items
-                    with HR.
+                    HR confirmed your reimbursement. Payment is still pending.
                   </p>
                 </div>
-              )}
-              {task.error && (
-                <div className="notice warning">
-                  <AlertCircle size={18} />
-                  <p>{task.error}</p>
+              </div>
+            )}
+            {w.demo && task.id === "coverage" && (
+              <div className="coverage-period">
+                <strong>
+                  {Math.max(
+                    0,
+                    Math.round(
+                      (new Date(
+                        Number(w.profile.startDay.slice(0, 4)),
+                        Number(w.profile.startDay.slice(5, 7)),
+                        1,
+                      ).getTime() -
+                        new Date(w.profile.lastDay + "T00:00:00").getTime()) /
+                        86400000,
+                    ) - 1,
+                  )}{" "}
+                  days
+                </strong>
+                <div>
+                  <p>
+                    Potential gap: {date(addDays(w.profile.lastDay, 1))} through
+                    the end of{" "}
+                    {new Date(
+                      w.profile.startDay + "T12:00:00Z",
+                    ).toLocaleDateString("en-US", { month: "long" })}
+                    .
+                  </p>
+                  <small>
+                    Based on the two demo policies. Confirm individual
+                    eligibility with HR.
+                  </small>
                 </div>
-              )}
-              {task.status === "approved" && (
-                <div className="notice success">
-                  <CheckCircle2 size={21} />
-                  <div>
-                    <strong>Approved. One less loose end.</strong>
-                    <p>
-                      HR confirmed your reimbursement. Payment is still pending.
-                    </p>
-                  </div>
-                </div>
-              )}
-              {w.demo && task.id === "coverage" && (
-                <div className="coverage-period">
-                  <strong>
-                    {Math.max(
-                      0,
-                      Math.round(
-                        (new Date(
-                          Number(w.profile.startDay.slice(0, 4)),
-                          Number(w.profile.startDay.slice(5, 7)),
-                          1,
-                        ).getTime() -
-                          new Date(w.profile.lastDay + "T00:00:00").getTime()) /
-                          86400000,
-                      ) - 1,
-                    )}{" "}
-                    days
-                  </strong>
-                  <div>
-                    <p>
-                      Potential gap: {date(addDays(w.profile.lastDay, 1))}{" "}
-                      through the end of{" "}
-                      {new Date(
-                        w.profile.startDay + "T12:00:00Z",
-                      ).toLocaleDateString("en-US", { month: "long" })}
-                      .
-                    </p>
-                    <small>
-                      Based on the two demo policies. Confirm individual
-                      eligibility with HR.
-                    </small>
-                  </div>
-                </div>
-              )}
-              {task.missing.length > 0 && (
-                <section className="detail-section">
-                  <h3>
-                    <CircleHelp size={17} /> Still needs confirmation
-                  </h3>
-                  <ul className="missing-list">
-                    {task.missing.map((m, i) => (
-                      <li key={i}>{m}</li>
-                    ))}
-                  </ul>
-                </section>
-              )}
+              </div>
+            )}
+            {task.missing.length > 0 && (
               <section className="detail-section">
                 <h3>
-                  <BookOpen size={17} /> Why this is on your plan
+                  <CircleHelp size={17} /> Still needs confirmation
                 </h3>
-                {task.evidence.map((e, i) => {
-                  const d = w.documents.find((d) => d.id === e.documentId);
-                  return (
-                    <button
-                      className="evidence-card"
-                      key={i}
-                      onClick={() =>
-                        setViewDoc({ id: e.documentId, page: e.page })
-                      }
-                    >
-                      <blockquote>“{e.quote}”</blockquote>
-                      <span>
-                        <FileText size={14} />
-                        {d?.name || "Document"} · p. {e.page}
-                        <ArrowUpRight size={14} />
-                      </span>
-                    </button>
-                  );
-                })}
+                <ul className="missing-list">
+                  {task.missing.map((m, i) => (
+                    <li key={i}>{m}</li>
+                  ))}
+                </ul>
               </section>
-              {task.lastReply && (
-                <section className="detail-section">
-                  <h3>
-                    <Mail size={17} /> Latest from HR
-                  </h3>
-                  <div className="email-preview">
-                    <span>Northstar People Team</span>
-                    <p>{task.lastReply}</p>
-                  </div>
-                </section>
-              )}
-              {task.claim && (
-                <section className="detail-section">
-                  <h3>
-                    <FileText size={17} />
-                    {task.status === "ready"
-                      ? "Review your claim"
-                      : "Claim details"}
-                  </h3>
-                  <div className="claim-review">
-                    <dl>
-                      <dt>Employee</dt>
-                      <dd>{task.claim.employee}</dd>
-                      <dt>Course</dt>
-                      <dd>{task.claim.course}</dd>
-                      <dt>Amount</dt>
-                      <dd>{money(task.claim.amount)}</dd>
-                      <dt>Receipt</dt>
-                      <dd>
-                        {
-                          w.documents.find(
-                            (d) => d.id === task.claim?.receiptId,
-                          )?.name
-                        }
-                      </dd>
-                      <dt>Destination</dt>
-                      <dd>Northstar test HR portal</dd>
-                    </dl>
-                    <p>{task.claim.note}</p>
-                  </div>
-                </section>
-              )}
-              {task.status === "needs_info" && (
-                <section className="detail-section">
-                  <h3>
-                    <Upload size={17} />{" "}
-                    {selectedCertificate
-                      ? "Review the prepared reply"
-                      : "Your agent needs a completion certificate"}
-                  </h3>
-                  {!w.documents.some((d) => d.kind === "certificate") ? (
-                    <div className="certificate-actions">
-                      <button
-                        className="secondary"
-                        onClick={() => setUpload(true)}
-                      >
-                        Upload certificate
-                      </button>
-                      {w.demo && (
-                        <button
-                          className="text-button"
-                          disabled={!!busy}
-                          onClick={() =>
-                            act("certificate", {}, "Demo certificate added.")
-                          }
-                        >
-                          Use demo certificate <ArrowRight size={14} />
-                        </button>
-                      )}
-                    </div>
-                  ) : (
-                    <>
-                      <select
-                        aria-label="Completion certificate"
-                        value={selectedCertificate?.id || ""}
-                        onChange={(e) => setCertificateId(e.target.value)}
-                      >
-                        {w.documents
-                          .filter((d) => d.kind === "certificate")
-                          .map((d) => (
-                            <option value={d.id} key={d.id}>
-                              {d.name}
-                            </option>
-                          ))}
-                      </select>
-                      <div className="email-preview">
-                        <span>To: Northstar Demo HR · {w.hrInbox}</span>
-                        <p>{`Hello Northstar People Team,\n\nPlease find my completion certificate for ${task.claim?.course} attached, as requested for my $${task.claim?.amount} reimbursement claim.\n\nThank you,\n${w.profile.name}`}</p>
-                        <small>
-                          <FileText size={13} /> Attachment:{" "}
-                          {selectedCertificate?.name} (text)
-                        </small>
-                      </div>
+            )}
+            <section className="detail-section">
+              <h3>
+                <BookOpen size={17} /> Why this is on your plan
+              </h3>
+              {task.evidence.map((e, i) => {
+                const d = w.documents.find((d) => d.id === e.documentId);
+                return (
+                  <button
+                    className="evidence-card"
+                    key={i}
+                    onClick={() =>
+                      setViewDoc({ id: e.documentId, page: e.page })
+                    }
+                  >
+                    <blockquote>“{e.quote}”</blockquote>
+                    <span>
+                      <FileText size={14} />
+                      {d?.name || "Document"} · p. {e.page}
+                      <ArrowUpRight size={14} />
+                    </span>
+                  </button>
+                );
+              })}
+            </section>
+            {task.lastReply && (
+              <section className="detail-section">
+                <h3>
+                  <Mail size={17} /> Latest from HR
+                </h3>
+                <div className="email-preview">
+                  <span>Northstar People Team</span>
+                  <p>{task.lastReply}</p>
+                </div>
+              </section>
+            )}
+            {task.claim && (
+              <section className="detail-section">
+                <h3>
+                  <FileText size={17} />
+                  {task.status === "ready"
+                    ? "Review your claim"
+                    : "Claim details"}
+                </h3>
+                <div className="claim-review">
+                  <dl>
+                    <dt>Employee</dt>
+                    <dd>{task.claim.employee}</dd>
+                    <dt>Course</dt>
+                    <dd>{task.claim.course}</dd>
+                    <dt>Amount</dt>
+                    <dd>{money(task.claim.amount)}</dd>
+                    <dt>Receipt</dt>
+                    <dd>
+                      {
+                        w.documents.find((d) => d.id === task.claim?.receiptId)
+                          ?.name
+                      }
+                    </dd>
+                    <dt>Destination</dt>
+                    <dd>Northstar test HR portal</dd>
+                  </dl>
+                  <p>{task.claim.note}</p>
+                </div>
+              </section>
+            )}
+            {task.status === "needs_info" && (
+              <section className="detail-section">
+                <h3>
+                  <Upload size={17} />{" "}
+                  {selectedCertificate
+                    ? "Review the prepared reply"
+                    : "Your agent needs a completion certificate"}
+                </h3>
+                {!w.documents.some((d) => d.kind === "certificate") ? (
+                  <div className="certificate-actions">
+                    <button
+                      className="secondary"
+                      onClick={() => setUpload(true)}
+                    >
+                      Upload certificate
+                    </button>
+                    {w.demo && (
                       <button
                         className="text-button"
+                        disabled={!!busy}
                         onClick={() =>
-                          setViewDoc({ id: selectedCertificate!.id, page: 1 })
+                          act("certificate", {}, "Demo certificate added.")
                         }
                       >
-                        <FileText size={14} /> Review attachment contents
+                        Use demo certificate <ArrowRight size={14} />
                       </button>
-                      <button
-                        className="primary full"
-                        disabled={!!busy || !w.demo}
-                        onClick={() =>
-                          act(
-                            "send_certificate",
-                            {
-                              taskId: task.id,
-                              certificateId: selectedCertificate?.id,
-                              approval: JSON.stringify(
-                                replyPayload(w, task, selectedCertificate!),
-                              ),
-                            },
-                            "Certificate sent to HR.",
-                          )
-                        }
-                      >
-                        <Busy busy={busy === "send_certificate"} />
-                        <Send size={16} /> Approve & send reply
-                      </button>
-                    </>
-                  )}
-                </section>
-              )}
-              {task.category === "health" && (
-                <section className="detail-section">
-                  <h3>
-                    <Search size={17} /> Understand your options
-                  </h3>
-                  <p className="muted">
-                    Find general guidance from official public sources. Your
-                    employer documents determine the policy details.
-                  </p>
-                  <button
-                    className="secondary"
-                    disabled={!!busy}
-                    onClick={() =>
-                      act(
-                        "research",
-                        {
-                          topic:
-                            task.stage === "after" ? "enrollment" : "coverage",
-                        },
-                        "Official sources added.",
-                      )
-                    }
-                  >
-                    <Busy busy={busy === "research"} />
-                    <Search size={15} /> Find official guidance
-                  </button>
-                  {w.resources.map((r) => (
-                    <a
-                      className="resource-card"
-                      key={r.url}
-                      href={r.url}
-                      target="_blank"
-                      rel="noreferrer"
+                    )}
+                  </div>
+                ) : (
+                  <>
+                    <select
+                      aria-label="Completion certificate"
+                      value={selectedCertificate?.id || ""}
+                      onChange={(e) => setCertificateId(e.target.value)}
                     >
-                      <strong>{r.title}</strong>
-                      <span>
-                        {new URL(r.url).hostname}
-                        <ExternalLink size={13} />
-                      </span>
-                    </a>
-                  ))}
-                </section>
-              )}
-              {task.status === "waiting" && w.demo && (
-                <section className="demo-controls">
-                  <span className="demo-pill">DEMO CONTROLS</span>
-                  <p>
-                    Send a real email from your dedicated test HR inbox, then
-                    let JobSwitch process the reply.
-                  </p>
-                  <button
-                    className="secondary full"
-                    disabled={!!busy}
-                    onClick={() =>
-                      act(
-                        task.claim?.certificateId ? "hr_approve" : "hr_request",
-                        { taskId: task.id },
-                        "Demo HR email sent. Your agent will check for its arrival.",
-                      )
-                    }
-                  >
-                    <Mail size={16} />
-                    {task.claim?.certificateId
-                      ? "Send demo HR approval"
-                      : "Send demo HR document request"}
-                  </button>
-                  <button
-                    className="text-button"
-                    disabled={!!busy}
-                    onClick={() => act("sync", {}, "Inbox checked.")}
-                  >
-                    <RefreshCw size={14} /> Check replies
-                  </button>
-                </section>
-              )}
-            </div>
-            <footer className="panel-footer">
-              {task.status === "todo" && task.category === "money" && (
-                <div className="agent-task-note">
-                  <Sparkles size={17} />
-                  <p>
-                    {task.missing.length
-                      ? "Add the missing evidence. Your agent will check eligibility again automatically."
-                      : "Your agent will check eligibility and prepare this claim for review."}
-                  </p>
-                  <button
-                    className="text-button"
-                    onClick={() => setUpload(true)}
-                  >
-                    Add evidence
-                  </button>
-                </div>
-              )}
-              {task.status === "ready" && w.demo && (
-                <>
-                  <p>
-                    <ShieldCheck size={14} /> Submit only the claim and receipt
-                    shown above.
-                  </p>
-                  <button
-                    className="primary full"
-                    disabled={!!busy}
-                    onClick={() =>
-                      act(
-                        "submit",
-                        {
-                          taskId: task.id,
-                          approval: JSON.stringify(task.claim),
-                        },
-                        "Claim submitted. Waiting for HR review.",
-                      )
-                    }
-                  >
-                    <Busy busy={busy === "submit"} />
-                    <Check size={17} /> Approve & submit claim
-                  </button>
-                </>
-              )}
-              {task.status === "ready" && !w.demo && (
-                <p>
-                  Claim prepared. Submit it through your employer’s secure
-                  portal. Automatic submission is available in the fictional
-                  demo.
+                      {w.documents
+                        .filter((d) => d.kind === "certificate")
+                        .map((d) => (
+                          <option value={d.id} key={d.id}>
+                            {d.name}
+                          </option>
+                        ))}
+                    </select>
+                    <div className="email-preview">
+                      <span>To: Northstar Demo HR · {w.hrInbox}</span>
+                      <p>{`Hello Northstar People Team,\n\nPlease find my completion certificate for ${task.claim?.course} attached, as requested for my $${task.claim?.amount} reimbursement claim.\n\nThank you,\n${w.profile.name}`}</p>
+                      <small>
+                        <FileText size={13} /> Attachment:{" "}
+                        {selectedCertificate?.name} (text)
+                      </small>
+                    </div>
+                    <button
+                      className="text-button"
+                      onClick={() =>
+                        setViewDoc({ id: selectedCertificate!.id, page: 1 })
+                      }
+                    >
+                      <FileText size={14} /> Review attachment contents
+                    </button>
+                    <button
+                      className="primary full"
+                      disabled={!!busy || !w.demo}
+                      onClick={() =>
+                        act(
+                          "send_certificate",
+                          {
+                            taskId: task.id,
+                            certificateId: selectedCertificate?.id,
+                            approval: JSON.stringify(
+                              replyPayload(w, task, selectedCertificate!),
+                            ),
+                          },
+                          "Certificate sent to HR.",
+                        )
+                      }
+                    >
+                      <Busy busy={busy === "send_certificate"} />
+                      <Send size={16} /> Approve & send reply
+                    </button>
+                  </>
+                )}
+              </section>
+            )}
+            {task.category === "health" && (
+              <section className="detail-section">
+                <h3>
+                  <Search size={17} /> Understand your options
+                </h3>
+                <p className="muted">
+                  Find general guidance from official public sources. Your
+                  employer documents determine the policy details.
                 </p>
-              )}
-              {task.status === "submitting" && (
-                <>
-                  <p>
-                    <LoaderCircle size={15} className="spin" /> Kernel is
-                    filling your approved claim.
-                  </p>
-                  {task.browserUrl && (
-                    <a
-                      className="secondary full"
-                      href={task.browserUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Watch browser session <ExternalLink size={14} />
-                    </a>
-                  )}
-                </>
-              )}
-              {!task.claim && task.category !== "money" && (
+                <button
+                  className="secondary"
+                  disabled={!!busy}
+                  onClick={() =>
+                    act(
+                      "research",
+                      {
+                        topic:
+                          task.stage === "after" ? "enrollment" : "coverage",
+                      },
+                      "Official sources added.",
+                    )
+                  }
+                >
+                  <Busy busy={busy === "research"} />
+                  <Search size={15} /> Find official guidance
+                </button>
+                {w.resources.map((r) => (
+                  <a
+                    className="resource-card"
+                    key={r.url}
+                    href={r.url}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <strong>{r.title}</strong>
+                    <span>
+                      {new URL(r.url).hostname}
+                      <ExternalLink size={13} />
+                    </span>
+                  </a>
+                ))}
+              </section>
+            )}
+            {task.status === "waiting" && w.demo && (
+              <section className="demo-controls">
+                <span className="demo-pill">DEMO CONTROLS</span>
+                <p>
+                  Send a real email from your dedicated test HR inbox, then let
+                  JobSwitch process the reply.
+                </p>
                 <button
                   className="secondary full"
                   disabled={!!busy}
-                  onClick={() => act("complete", { taskId: task.id })}
+                  onClick={() =>
+                    act(
+                      task.claim?.certificateId ? "hr_approve" : "hr_request",
+                      { taskId: task.id },
+                      "Demo HR email sent. Your agent will check for its arrival.",
+                    )
+                  }
                 >
-                  <CheckSquare size={16} />
-                  {task.status === "done"
-                    ? "Reopen task"
-                    : "I’ve handled this — mark complete"}
+                  <Mail size={16} />
+                  {task.claim?.certificateId
+                    ? "Send demo HR approval"
+                    : "Send demo HR document request"}
                 </button>
-              )}
-              {["waiting", "approved", "needs_info", "done"].includes(
-                task.status,
-              ) && (
-                <span className="footer-status">
-                  <ShieldCheck size={14} />
-                  {task.nextAction}
-                </span>
-              )}
-            </footer>
-          </aside>
-        </>
+                <button
+                  className="text-button"
+                  disabled={!!busy}
+                  onClick={() => act("sync", {}, "Inbox checked.")}
+                >
+                  <RefreshCw size={14} /> Check replies
+                </button>
+              </section>
+            )}
+          </div>
+          <footer className="panel-footer">
+            {task.status === "todo" && task.category === "money" && (
+              <div className="agent-task-note">
+                <Sparkles size={17} />
+                <p>
+                  {task.missing.length
+                    ? "Add the missing evidence. Your agent will check eligibility again automatically."
+                    : "Your agent will check eligibility and prepare this claim for review."}
+                </p>
+                <button className="text-button" onClick={() => setUpload(true)}>
+                  Add evidence
+                </button>
+              </div>
+            )}
+            {task.status === "ready" && w.demo && (
+              <>
+                <p>
+                  <ShieldCheck size={14} /> Submit only the claim and receipt
+                  shown above.
+                </p>
+                <button
+                  className="primary full"
+                  disabled={!!busy}
+                  onClick={() =>
+                    act(
+                      "submit",
+                      {
+                        taskId: task.id,
+                        approval: JSON.stringify(task.claim),
+                      },
+                      "Claim submitted. Waiting for HR review.",
+                    )
+                  }
+                >
+                  <Busy busy={busy === "submit"} />
+                  <Check size={17} /> Approve & submit claim
+                </button>
+              </>
+            )}
+            {task.status === "ready" && !w.demo && (
+              <p>
+                Claim prepared. Submit it through your employer’s secure portal.
+                Automatic submission is available in the fictional demo.
+              </p>
+            )}
+            {task.status === "submitting" && (
+              <>
+                <p>
+                  <LoaderCircle size={15} className="spin" /> Kernel is filling
+                  your approved claim.
+                </p>
+                {task.browserUrl && (
+                  <a
+                    className="secondary full"
+                    href={task.browserUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Watch browser session <ExternalLink size={14} />
+                  </a>
+                )}
+              </>
+            )}
+            {!task.claim && task.category !== "money" && (
+              <button
+                className="secondary full"
+                disabled={!!busy}
+                onClick={() => act("complete", { taskId: task.id })}
+              >
+                <CheckSquare size={16} />
+                {task.status === "done"
+                  ? "Reopen task"
+                  : "I’ve handled this — mark complete"}
+              </button>
+            )}
+            {["waiting", "approved", "needs_info", "done"].includes(
+              task.status,
+            ) && (
+              <span className="footer-status">
+                <ShieldCheck size={14} />
+                {task.nextAction}
+              </span>
+            )}
+          </footer>
+        </Modal>
       )}
       {chat && <Assistant close={() => setChat(false)} />}
       {document && viewDoc && (
-        <div className="modal-backdrop" onClick={() => setViewDoc(null)}>
-          <section
-            className="document-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Document viewer"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <header>
-              <div>
-                <FileText size={19} />
-                <strong>{document.name}</strong>
-              </div>
+        <Modal
+          className="document-modal"
+          label={`Document: ${document.name}`}
+          onClose={() => setViewDoc(null)}
+        >
+          <header>
+            <div>
+              <FileText size={19} />
+              <strong>{document.name}</strong>
+            </div>
+            <button
+              className="icon-button"
+              aria-label="Close document"
+              onClick={() => setViewDoc(null)}
+            >
+              <X size={20} />
+            </button>
+          </header>
+          <div className="document-paper">
+            <span className="paper-eyebrow">
+              SOURCE DOCUMENT · PAGE {viewDoc.page}
+            </span>
+            <pre>{document.pages[viewDoc.page - 1]}</pre>
+          </div>
+          <footer>
+            <span>
+              {document.employer === "personal"
+                ? "Personal document"
+                : document.employer === "previous"
+                  ? w.profile.previousEmployer
+                  : w.profile.nextEmployer}
+            </span>
+            <div>
               <button
                 className="icon-button"
-                aria-label="Close document"
-                onClick={() => setViewDoc(null)}
+                disabled={viewDoc.page === 1}
+                onClick={() =>
+                  setViewDoc({ ...viewDoc, page: viewDoc.page - 1 })
+                }
+                aria-label="Previous page"
               >
-                <X size={20} />
+                <ChevronRight
+                  size={16}
+                  style={{ transform: "rotate(180deg)" }}
+                />
               </button>
-            </header>
-            <div className="document-paper">
-              <span className="paper-eyebrow">
-                SOURCE DOCUMENT · PAGE {viewDoc.page}
-              </span>
-              <pre>{document.pages[viewDoc.page - 1]}</pre>
-            </div>
-            <footer>
               <span>
-                {document.employer === "personal"
-                  ? "Personal document"
-                  : document.employer === "previous"
-                    ? w.profile.previousEmployer
-                    : w.profile.nextEmployer}
+                {viewDoc.page} / {document.pages.length}
               </span>
-              <div>
-                <button
-                  className="icon-button"
-                  disabled={viewDoc.page === 1}
-                  onClick={() =>
-                    setViewDoc({ ...viewDoc, page: viewDoc.page - 1 })
-                  }
-                  aria-label="Previous page"
-                >
-                  <ChevronRight
-                    size={16}
-                    style={{ transform: "rotate(180deg)" }}
-                  />
-                </button>
-                <span>
-                  {viewDoc.page} / {document.pages.length}
-                </span>
-                <button
-                  className="icon-button"
-                  disabled={viewDoc.page === document.pages.length}
-                  onClick={() =>
-                    setViewDoc({ ...viewDoc, page: viewDoc.page + 1 })
-                  }
-                  aria-label="Next page"
-                >
-                  <ChevronRight size={16} />
-                </button>
-              </div>
-            </footer>
-          </section>
-        </div>
+              <button
+                className="icon-button"
+                disabled={viewDoc.page === document.pages.length}
+                onClick={() =>
+                  setViewDoc({ ...viewDoc, page: viewDoc.page + 1 })
+                }
+                aria-label="Next page"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          </footer>
+        </Modal>
       )}
       {upload && (
-        <div className="modal-backdrop" onClick={() => setUpload(false)}>
+        <Modal
+          className="modal-frame"
+          label="Add document"
+          onClose={() => setUpload(false)}
+        >
           <form
             className="form-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Add document"
-            onClick={(e) => e.stopPropagation()}
             onSubmit={async (e) => {
               e.preventDefault();
               if (busy) return;
@@ -1491,7 +1517,7 @@ export default function Dashboard() {
                 setW(json);
                 setUpload(false);
                 notify(
-                  "Document added. Analyze your documents to update the plan.",
+                  "Document added. Your agent will update the plan when automatic preparation is on.",
                 );
               } catch (e) {
                 notify((e as Error).message, true);
@@ -1563,16 +1589,16 @@ export default function Dashboard() {
               <Busy busy={busy === "upload"} /> Add to my documents
             </button>
           </form>
-        </div>
+        </Modal>
       )}
       {dates && (
-        <div className="modal-backdrop" onClick={() => setDates(false)}>
+        <Modal
+          className="modal-frame"
+          label="Edit transition dates"
+          onClose={() => setDates(false)}
+        >
           <form
             className="form-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Edit transition dates"
-            onClick={(e) => e.stopPropagation()}
             onSubmit={async (e) => {
               e.preventDefault();
               const f = new FormData(e.currentTarget);
@@ -1628,7 +1654,7 @@ export default function Dashboard() {
               <Busy busy={busy === "dates"} /> Update my dates
             </button>
           </form>
-        </div>
+        </Modal>
       )}
     </div>
   );
@@ -1706,8 +1732,50 @@ function SettingsForm({
   editDates: () => void;
   onUpdate: (w: Workspace) => void;
 }) {
+  const [confirmWorkspace, setConfirmWorkspace] = useState(false);
   return (
     <div className="settings-grid">
+      {confirmWorkspace && (
+        <Modal
+          className="modal-frame"
+          label="Create a new workspace?"
+          onClose={() => setConfirmWorkspace(false)}
+        >
+          <div className="form-modal">
+            <h2>Create a new workspace?</h2>
+            <p>
+              This replaces the workspace linked to this browser. You won’t be
+              able to return to the current documents and history from here.
+              Export your plan first if you need a copy.
+            </p>
+            <a className="text-button" href="/api/export">
+              <Download size={16} /> Export current plan
+            </a>
+            <div className="confirmation-actions">
+              <button
+                className="secondary"
+                onClick={() => setConfirmWorkspace(false)}
+              >
+                Keep current workspace
+              </button>
+              <button
+                className="primary"
+                disabled={!!busy}
+                onClick={async () => {
+                  const result = await act(
+                    "new_workspace",
+                    { mode: w.demo ? "personal" : "demo" },
+                    "New workspace created.",
+                  );
+                  if (result) setConfirmWorkspace(false);
+                }}
+              >
+                Create {w.demo ? "personal" : "demo"} workspace
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
       <form
         className="settings-card"
         onSubmit={(e) => {
@@ -1753,8 +1821,11 @@ function SettingsForm({
       </form>
       <BackgroundControls w={w} onUpdate={onUpdate} />
       <div className="settings-card">
-        <h2>Connected to your next chapter</h2>
-        <p className="muted">Live services powering this workspace.</p>
+        <h2>Workspace services</h2>
+        <p className="muted">
+          Services used by this workspace. Availability is checked when a
+          feature runs.
+        </p>
         {[
           [`Mastra + ${MODEL_LABEL}`, "Document reasoning & your assistant"],
           ["Neon", "Documents, evidence & task history"],
@@ -1763,25 +1834,17 @@ function SettingsForm({
           ["AgentMail", "HR emails & follow-ups"],
         ].map(([name, description]) => (
           <div className="service-row" key={name}>
-            <span className="green-dot" />
             <div>
               <strong>{name}</strong>
               <small>{description}</small>
             </div>
-            <Check size={16} />
           </div>
         ))}
         <button
           className="secondary full"
           style={{ marginTop: 20 }}
           disabled={!!busy}
-          onClick={() =>
-            act(
-              "new_workspace",
-              { mode: w.demo ? "personal" : "demo" },
-              "New workspace created.",
-            )
-          }
+          onClick={() => setConfirmWorkspace(true)}
           type="button"
         >
           {w.demo

@@ -2,7 +2,7 @@
 .app-shell {
   --paper: #f8f6f1;
   --ink: #222a35;
-  --muted: #646970;
+  --muted: #59616b;
   --green: #0866ff;
   --line: #e5dfd7;
   background: var(--paper);
@@ -487,4 +487,417 @@
 .app-shell .agent-handoff p,
 .app-shell .review-empty p {
   color: var(--muted);
+}
+
+/* The editorial system also covers forms, evidence, status, and navigation. */
+.app-shell {
+  --accent: #075bd8;
+  --green: var(--accent);
+  --surface: #fffdf9;
+  --surface-soft: #f0ece5;
+  --accent-soft: #e4ecff;
+  --positive: #3c612d;
+  --positive-soft: #eaf1e5;
+  --warning: #825425;
+  --warning-soft: #fcf0e5;
+  --control-line: #8590a0;
+}
+.app-shell :is(button, .board-footer a) {
+  min-height: 44px;
+}
+.app-shell :is(.icon-button, .send-button, .toast button) {
+  min-width: 44px;
+  min-height: 44px;
+}
+.app-shell :is(input, select, textarea) {
+  font-size: 16px;
+  color: var(--ink);
+}
+.app-shell :is(input, select) {
+  min-height: 44px;
+}
+.app-shell
+  :is(
+    .settings-card input,
+    .form-modal input:not([type="file"]),
+    select,
+    .search-field,
+    .chat-composer
+  ) {
+  border-color: var(--control-line);
+}
+.app-shell :is(.search-field, .plan-search, .chat-composer):focus-within {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+.app-shell .plan-search {
+  border: 1px solid var(--control-line);
+}
+.app-shell .search-field input {
+  min-width: 0;
+  width: 100%;
+}
+.app-shell .search-field {
+  min-width: 0;
+}
+.app-shell
+  :is(
+    .settings-card label,
+    .form-modal label,
+    .detail-facts small,
+    .claim-review dt,
+    .paper-eyebrow,
+    .email-preview > span,
+    .email-preview small,
+    .panel-top > span,
+    .evidence-card > span,
+    .panel-footer > p,
+    .footer-status,
+    .app-footer,
+    .breadcrumbs,
+    .icon-button
+  ) {
+  color: var(--muted);
+}
+.app-shell
+  :is(
+    .settings-card label,
+    .form-modal label,
+    .detail-section > h3,
+    .task-description,
+    .evidence-card blockquote,
+    .email-preview p,
+    .claim-review dl,
+    .document-paper pre,
+    .resource-card strong,
+    .suggestion,
+    .activity-item p
+  ) {
+  font-size: 14px;
+}
+.app-shell
+  :is(
+    .paper-eyebrow,
+    .detail-facts small,
+    .evidence-card > span,
+    .panel-footer > p,
+    .footer-status,
+    .email-preview > span,
+    .email-preview small,
+    .claim-review p,
+    .notice p,
+    .drop-zone > span,
+    .chat-note,
+    .assistant-heading small,
+    .document-modal > footer,
+    .document-row small,
+    .activity-item div > span,
+    .service-row small,
+    .profile small,
+    .app-footer
+  ) {
+  font-size: 12px;
+}
+.app-shell
+  :is(
+    .detail-section > h3,
+    .detail-facts strong,
+    .document-modal > header > div,
+    .document-row strong,
+    .service-row strong
+  ) {
+  color: var(--ink);
+}
+.app-shell .avatar {
+  color: #685237;
+}
+.app-shell .segmented button {
+  color: var(--muted);
+}
+.app-shell :is(.notice, .drop-zone, .user-message, .demo-controls) {
+  background: var(--accent-soft);
+  color: #294c83;
+}
+.app-shell .notice.warning,
+.app-shell .missing-list,
+.app-shell .status-needs_info {
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+.app-shell .notice.success,
+.app-shell .status-approved,
+.app-shell .status-done {
+  background: var(--positive-soft);
+  color: var(--positive);
+}
+.app-shell .status-waiting,
+.app-shell .status-submitting {
+  background: var(--accent-soft);
+  color: #294c83;
+}
+.app-shell .task-card.resolved {
+  opacity: 1;
+}
+.app-shell .status-badge {
+  white-space: normal;
+  line-height: 1.4;
+}
+.app-shell .evidence-card blockquote {
+  border-left-width: 1px;
+}
+.app-shell .detail-facts {
+  flex-wrap: wrap;
+  gap: 20px 40px;
+}
+.app-shell
+  :is(.task-meta, .board-toolbar, .agent-scope, .document-modal > footer) {
+  flex-wrap: wrap;
+}
+.app-shell
+  :is(
+    .document-row strong,
+    .document-modal strong,
+    .claim-review dd,
+    .review-item strong,
+    .page-heading h1,
+    .profile strong
+  ) {
+  overflow-wrap: anywhere;
+}
+.app-shell
+  :is(
+    .document-row > span,
+    .document-row > span > span,
+    .document-modal > header > div,
+    .agent-desk > div,
+    .settings-card,
+    .form-grid > label
+  ) {
+  min-width: 0;
+}
+.app-shell .document-row strong {
+  font-size: 14px;
+}
+.app-shell .document-paper {
+  background: white;
+  border-color: var(--line);
+}
+.app-shell .document-modal,
+.app-shell .document-modal > header {
+  background: var(--surface);
+}
+.app-shell .document-modal > header strong {
+  font-size: 14px;
+}
+.app-shell .form-modal {
+  background: var(--surface);
+}
+.app-shell .drop-zone {
+  border-color: var(--control-line);
+}
+.app-shell .chat-composer textarea::placeholder {
+  color: var(--muted);
+}
+.app-shell .assistant-message > div {
+  min-width: 0;
+}
+.app-shell .chat-message {
+  font-size: 14px;
+}
+.app-shell .chat-message pre {
+  overflow: auto;
+}
+.app-shell .chat-message a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+.app-shell .agent-control {
+  color: #e1ebff;
+  border-color: #a0b4d3;
+}
+.app-shell .agent-scope {
+  border-color: #7185a5;
+}
+.app-shell .agent-scope-settings {
+  font-size: 12px;
+  padding-inline: 8px;
+}
+.app-shell .agent-overview > p {
+  font-size: 14px;
+}
+.app-shell
+  :is(
+    .agent-capabilities small,
+    .agent-scope,
+    .review-safety,
+    .review-item small,
+    .agent-handoff p
+  ) {
+  font-size: 12px;
+}
+.app-shell .review-item {
+  background: var(--accent-soft);
+  border-color: #b6c8e9;
+  color: #294c83;
+}
+.app-shell .review-item:hover {
+  background: #d8e4ff;
+}
+.app-shell .review-item strong {
+  color: var(--ink);
+  font-size: 15px;
+}
+.app-shell .review-item small {
+  color: #294c83;
+  letter-spacing: 0.06em;
+}
+.app-shell .review-item-icon,
+.app-shell .review-inbox h2 > span {
+  background: #d4e1ff;
+  color: #294c83;
+}
+.app-shell :is(.review-safety, .review-inbox-heading, .review-empty) {
+  color: var(--muted);
+}
+.app-shell .review-inbox h2 {
+  margin-top: 0;
+}
+.app-shell .inbox-panel {
+  background: var(--surface);
+}
+.app-shell
+  :is(
+    .inbox-heading p,
+    .inbox-list-label,
+    .inbox-message > p,
+    .inbox-message time,
+    .inbox-empty p,
+    .inbox-loading,
+    .inbox-footer,
+    .inbox-footer small,
+    .inbox-limit,
+    .inbox-sender time,
+    .inbox-eyebrow
+  ) {
+  color: var(--muted);
+}
+.app-shell
+  :is(.inbox-from, .inbox-message > strong, .inbox-sender, .inbox-body) {
+  color: var(--ink);
+}
+.app-shell .inbox-message:hover,
+.app-shell .inbox-task,
+.app-shell .inbox-empty-icon {
+  background: var(--accent-soft);
+  color: #294c83;
+}
+.app-shell :is(.inbox-task-label, .inbox-task small) {
+  color: #294c83;
+}
+.app-shell .inbox-task small {
+  font-size: 11px;
+}
+.app-shell .working-indicator {
+  color: #294c83;
+  font-size: 12px;
+}
+.app-shell .nav-item,
+.app-shell .sidebar-assistant {
+  flex-shrink: 0;
+}
+.app-shell .sidebar {
+  overflow-y: auto;
+}
+.app-shell .board-controls {
+  flex-wrap: wrap;
+}
+@media (max-width: 1100px) {
+  .app-shell .agent-desk {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 960px) and (min-width: 721px) {
+  .app-shell .sidebar {
+    padding-inline: 12px;
+  }
+}
+@media (max-width: 720px) {
+  .app-shell .sidebar {
+    padding: 18px 8px;
+    width: 60px;
+  }
+  .app-shell .sidebar nav {
+    margin-top: 24px;
+  }
+  .app-shell .nav-item,
+  .app-shell .sidebar-assistant {
+    padding: 10px;
+  }
+  .app-shell .brand {
+    padding: 0;
+    justify-content: center;
+    min-height: 44px;
+  }
+  .app-shell .topbar {
+    height: auto;
+    min-height: 62px;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    padding: 10px 18px;
+  }
+  .app-shell .topbar-right {
+    gap: 4px;
+  }
+  .app-shell .topbar .avatar {
+    display: none;
+  }
+  .app-shell .main-content {
+    padding-inline: 16px;
+  }
+  .app-shell .segmented {
+    flex-wrap: wrap;
+    border-radius: 16px;
+  }
+  .app-shell .segmented button {
+    padding-inline: 8px;
+  }
+  .app-shell .agent-capabilities {
+    grid-template-columns: 1fr;
+  }
+  .app-shell .agent-capabilities > div {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 5px 10px;
+  }
+  .app-shell .agent-capabilities small {
+    grid-column: 2;
+  }
+  .app-shell .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .app-shell .document-row {
+    grid-template-columns: minmax(0, 1fr) 25px 16px;
+  }
+  .app-shell .document-row strong {
+    font-size: 14px;
+  }
+  .app-shell .activity-item strong {
+    font-size: 14px;
+  }
+  .app-shell .activity-feed {
+    padding: 0;
+  }
+  .app-shell .task-meta {
+    gap: 10px;
+  }
+  .app-shell .panel-footer {
+    padding: 16px 22px max(16px, env(safe-area-inset-bottom));
+  }
+  .app-shell .primary,
+  .app-shell .secondary {
+    white-space: normal;
+  }
+  .app-shell .settings-card > .text-button {
+    margin: 12px 0 0;
+  }
 }
