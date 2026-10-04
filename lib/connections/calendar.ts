@@ -11,9 +11,9 @@ import {
   type ReminderPreview,
 } from "../calendar-state";
 import { connection, access } from "./store";
-import type { Service } from "./config";
+import type { CalendarService } from "./config";
 import { z } from "zod";
-export async function receipts(id: string, service: Service) {
+export async function receipts(id: string, service: CalendarService) {
   const r = await pool.query(
     "SELECT task_id,payload,status,external_id,created_at FROM jobswitch_calendar_events WHERE workspace_id=$1 AND service=$2 ORDER BY created_at DESC",
     [id, service],
@@ -26,7 +26,11 @@ export async function receipts(id: string, service: Service) {
     status: r.status === "pending" ? "unknown" : r.status,
   }));
 }
-export async function preview(id: string, service: Service, value: unknown) {
+export async function preview(
+  id: string,
+  service: CalendarService,
+  value: unknown,
+) {
   const input = reminderInput.parse(value),
     w = await getWorkspace(id),
     c = await connection(id, service);
@@ -58,7 +62,7 @@ export const approvalSchema = z
   .strict();
 export async function createReminder(
   id: string,
-  service: Service,
+  service: CalendarService,
   value: unknown,
 ) {
   const { preview: p, signature: sig } = approvalSchema.parse(value);

@@ -176,13 +176,26 @@ try {
       `Guest denied: ${path}`,
     );
   }
-  for (const service of ["google-calendar", "microsoft-calendar"]) {
+  for (const service of [
+    "google-calendar",
+    "microsoft-calendar",
+    "google-drive",
+    "microsoft-drive",
+  ]) {
     const path = `/api/connections/${service}`;
     assert.equal((await request(guest, path)).status, 401);
     assert.equal(
       (await request(guest, path, { action: "connect" })).status,
       401,
     );
+  }
+  for (const service of ["google-drive", "microsoft-drive"]) {
+    for (const action of ["list", "import"])
+      assert.equal(
+        (await request(guest, `/api/connections/${service}/files`, { action }))
+          .status,
+        401,
+      );
   }
   assert.equal(
     (

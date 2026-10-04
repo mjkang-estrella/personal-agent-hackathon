@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { CalendarDays, Link2 } from "lucide-react";
 import type { Workspace } from "@/lib/types";
-import type { Service } from "@/lib/connections/config";
+import type { CalendarService } from "@/lib/connections/config";
 import type { ReminderPreview } from "@/lib/calendar-state";
 type Receipt = {
   taskId: string;
@@ -36,7 +36,7 @@ export default function CalendarControls({
     if (!result) return;
     setOutcome(
       result === "connected"
-        ? "Connection saved. Choose a task to review a reminder."
+        ? "Connection saved. Open My documents to import files, or choose a task below to review a calendar reminder."
         : result === "denied"
           ? "Access was not granted. You can connect again when ready."
           : "Connection expired or failed. Please try again.",
@@ -50,7 +50,7 @@ export default function CalendarControls({
       {Object.entries(labels).map(([service, label]) => (
         <CalendarConnection
           key={service}
-          service={service as Service}
+          service={service as CalendarService}
           label={label}
           w={w}
           onUpdate={onUpdate}
@@ -65,7 +65,7 @@ function CalendarConnection({
   w,
   onUpdate,
 }: {
-  service: Service;
+  service: CalendarService;
   label: string;
   w: Workspace;
   onUpdate: (w: Workspace) => void;
