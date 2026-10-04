@@ -1,53 +1,15 @@
-import { readImportedGmail } from "@/lib/gmail/inbox";
-import { AgentMailClient } from "agentmail";
 import { sessionId } from "@/lib/session";
-import { getWorkspace, pool } from "@/lib/db";
-import { readInbox } from "@/lib/inbox";
+import { getWorkspace } from "@/lib/db";
+import { inboxSnapshot } from "@/lib/inbox-snapshot";
 
 export async function GET(request: Request) {
   const headers = { "cache-control": "private, no-store" };
   try {
     const id = await sessionId();
     const w = await getWorkspace(id);
-    if (!w.demo) {
-      const messageId =
-        new URL(request.url).searchParams.get("messageId") || undefined;
-      const snapshot = readImportedGmail(w, messageId);
-      if (messageId && !snapshot.message)
-        return Response.json(
-          { error: "Message not found in this workspace." },
-          { status: 404, headers },
-        );
-      return Response.json(snapshot, { headers });
-    }
-    const claims = await pool.query<{ id: string; task_id: string }>(
-      "SELECT id,task_id FROM jobswitch_claims WHERE workspace_id=$1",
-      [id],
-    );
     const messageId =
       new URL(request.url).searchParams.get("messageId") || undefined;
-    if (messageId && messageId.length > 1000)
-      return Response.json(
-        { error: "Message not found in this workspace." },
-        { status: 404, headers },
-      );
-    const snapshot = await readInbox(
-      {
-        inbox: w.inbox,
-        hrInbox: w.hrInbox,
-        demo: w.demo,
-        claims: claims.rows.map((claim) => ({
-          id: claim.id,
-          taskId: claim.task_id,
-          title:
-            w.tasks.find((task) => task.id === claim.task_id)?.title ||
-            "Reimbursement claim",
-        })),
-      },
-      new AgentMailClient({ apiKey: process.env.AGENTMAIL_API_KEY }).inboxes
-        .messages,
-      messageId,
-    );
+    const snapshot = await inboxSnapshot(id, w, messageId);
     if (messageId && !snapshot.message)
       return Response.json(
         { error: "Message not found in this workspace." },

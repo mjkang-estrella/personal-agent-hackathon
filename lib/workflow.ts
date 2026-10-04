@@ -41,7 +41,16 @@ export async function analyzeWorkspace(id: string) {
       throw new Error(
         "Your documents changed during analysis. Please try again.",
       );
-    const progressed = s.tasks.filter((t) => t.status !== "todo");
+    // Analysis output has no decision options, so keep evidence-backed choices.
+    const progressed = s.tasks.filter(
+      (t) =>
+        t.status !== "todo" ||
+        (t.decision &&
+          [
+            ...t.evidence,
+            ...t.decision.options.flatMap((o) => o.evidence || []),
+          ].every((e) => validEvidence(e, s))),
+    );
     s.tasks = [
       ...progressed,
       ...supported
@@ -91,6 +100,10 @@ export async function advanceAgent(id: string) {
   });
   try {
     if (step.kind === "analyze") w = await analyzeWorkspace(id);
+    if (step.kind === "triage") {
+      const { triageMail } = await import("./triage");
+      w = await triageMail(id);
+    }
     if (step.kind === "prepare") {
       w = await prepareClaim(id, step.taskId);
       w = await mutate(id, (s) => {

@@ -32,6 +32,12 @@ The agent runs one bounded step at a time while the workspace is open, with inbo
 
 Use **Workspace settings → Start with my own documents** for an empty personal workspace. Set your name, employers, and dates, then upload text-based PDFs, TXT, or Markdown files. Scanned PDFs need OCR outside this MVP. Real employer portal integrations are not configured; the executable submission demo uses the fictional Northstar portal only.
 
+## Practice cases
+
+**Workspace settings → Practice cases** replays the eight synthetic cases in `demo-data/` without an account. Each case opens a new workspace. **Deliver the next email** releases the case one step at a time.
+
+The agent reads each email, then updates the plan with verbatim quotes and a timeline for each task. It drafts the email you need before you ask: a document request, a confirmation request, or a claim submission with its receipt attached. Review each draft under **Review & decide** or from the case strip. You can edit it, then choose **Approve & send**. Only that exact email is sent, and practice email never leaves JobSwitch. A changed start or last day appears as a proposal you can apply or keep. See the [decision record](docs/decisions/2026-10-04-205230-mj-practice-cases-proactive-drafts.md).
+
 ## Architecture
 
 - **Next.js + assistant-ui:** transition board, evidence viewer, approval controls, streaming assistant.

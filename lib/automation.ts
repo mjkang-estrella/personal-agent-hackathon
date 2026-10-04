@@ -1,9 +1,14 @@
+import { openDraft } from "./drafts";
 import type { Task, Workspace } from "./types";
 
 export type AgentStep =
-  { kind: "analyze" } | { kind: "prepare"; taskId: string } | { kind: "sync" };
+  | { kind: "analyze" }
+  | { kind: "prepare"; taskId: string }
+  | { kind: "sync" }
+  | { kind: "triage" };
 
 // This allowlist deliberately contains no submission, email, or completion action.
+// Triage may write drafts, but only an approved draft is ever sent.
 export function nextAgentStep(
   w: Workspace,
   input: string,
@@ -11,6 +16,12 @@ export function nextAgentStep(
 ): AgentStep | null {
   if (w.agent?.enabled === false || w.agent?.error) return null;
   if (w.tasks.some((t) => t.status === "submitting")) return null;
+  // Practice cases are driven by their mail. Policy re-analysis would replace
+  // mail-grounded tasks, and the portal claim flow belongs to the main demo.
+  if (w.scenario)
+    return w.mail?.some((m) => m.direction === "inbound" && !m.triaged)
+      ? { kind: "triage" }
+      : null;
   if (
     w.documents.some((d) => d.kind === "policy") &&
     w.agent?.analyzedInput !== input
@@ -42,8 +53,11 @@ export function nextAgentStep(
 export function reviewKind(
   task: Task,
   w: Workspace,
-): "claim" | "reply" | "input" | null {
+): "claim" | "reply" | "draft" | "decision" | "input" | null {
   if (task.status === "ready" && task.claim) return "claim";
+  if (task.decision && !task.decision.chosenId && task.status !== "done")
+    return "decision";
+  if (openDraft(w, task.id)) return "draft";
   if (
     task.status === "needs_info" &&
     task.claim &&

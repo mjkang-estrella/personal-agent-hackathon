@@ -12,7 +12,7 @@ export function makeWorkspace(): Workspace {
       pages: [
         "NORTHSTAR STUDIO — 2026 EMPLOYEE BENEFITS\nFictional policy for the JobSwitch demo.\nHealth and dental coverage ends at 11:59 p.m. on the employee’s last working day. HR will provide continuation options separately. Ask HR to confirm the exact end date for your dependents and any available continuation options. This document does not determine eligibility for external programs.",
         "LEARNING & DEVELOPMENT\nEmployees may request reimbursement of up to $1,500 per calendar year for pre-approved, job-related courses completed before their last working day. Claims must be submitted no later than the last working day. Include an itemized receipt and course completion certificate. HR must confirm prior approval, remaining annual allowance, and any repayment obligations before a claim is prepared. Incomplete claims may receive a request for additional documentation.",
-        "RETIREMENT & OFFBOARDING\nDownload your retirement plan statement and save the plan administrator’s contact details before your last working day. Your personal vesting, balances, available options, and any distribution deadlines must be verified with the plan administrator. This handbook does not establish your individual eligibility. Return your laptop and access badge on your last working day. An HR receipt confirms return.",
+        "RETIREMENT & OFFBOARDING\nDownload your retirement plan statement and save the plan administrator’s contact details before your last working day. Your personal vesting, balances, available options, and any distribution deadlines must be verified with the plan administrator. This handbook does not establish your individual eligibility. After you leave, your vested 401(k) balance may stay in the Northstar plan or be rolled over to another eligible plan or an IRA at a financial institution you choose. Northstar does not recommend a destination or provider. Return your laptop and access badge on your last working day. An HR receipt confirms return.",
       ],
     },
     {
@@ -24,7 +24,7 @@ export function makeWorkspace(): Workspace {
       pages: [
         "ORBIT LABS — WELCOME & BENEFITS 2026\nFictional policy for the JobSwitch demo.\nFor eligible employees, health coverage begins on the first day of the month following their start date. HR must confirm employee and dependent eligibility. Submit your health plan election within 30 calendar days of starting, counting the start date as day one. Review plan costs, networks, and dependent details before making an election.",
         "GETTING STARTED\nComplete your onboarding profile and provide the documents requested in your individual onboarding invitation by your first working day. Do not email identity documents; use the designated secure HR portal. New employees can request a home office equipment allowance of up to $600, subject to manager approval. Save itemized receipts and ask HR about eligible equipment before purchasing.",
-        "RETIREMENT\nRetirement plan enrollment is available after starting employment. Contact the plan administrator for eligibility, contribution options, match terms, and enrollment timing. No individual investment or rollover recommendation is included in this guide.",
+        "RETIREMENT\nRetirement plan enrollment is available after starting employment. Contact the plan administrator for eligibility, contribution options, match terms, and enrollment timing. The Orbit 401(k) plan accepts rollovers from eligible prior employer plans once you are enrolled. No individual investment or rollover recommendation is included in this guide.",
       ],
     },
     {
@@ -99,6 +99,81 @@ export function makeWorkspace(): Workspace {
         "Personal vesting and plan options require administrator confirmation.",
       ],
       nextAction: "Download your statement; confirm your individual options.",
+    },
+    {
+      id: "rollover",
+      title: "Decide where your Northstar 401(k) goes",
+      description:
+        "Your old plan balance can stay put or move. This is a personal choice about fees, investments, and convenience, so your agent lays out the options without picking one.",
+      stage: "between",
+      category: "retirement",
+      status: "todo",
+      deadline: null,
+      deadlineRule: "unknown",
+      amount: null,
+      evidence: [
+        {
+          documentId: "northstar-policy",
+          page: 3,
+          quote: "Northstar does not recommend a destination or provider.",
+        },
+        {
+          documentId: "orbit-policy",
+          page: 3,
+          quote:
+            "No individual investment or rollover recommendation is included in this guide.",
+        },
+      ],
+      missing: [
+        "Your vested balance and any distribution deadlines, from the Northstar plan administrator.",
+      ],
+      nextAction: "Choose a destination for your 401(k).",
+      decision: {
+        question: "Where should your Northstar 401(k) go?",
+        why: "Your agent has no preference here. It depends on fees, investment choices, and how you like to manage your accounts.",
+        options: [
+          {
+            id: "stay",
+            label: "Leave it in the Northstar plan",
+            detail: "Nothing moves now. You can still roll it over later.",
+            nextStep:
+              "Save the Northstar plan administrator’s contact details and keep your statement.",
+            evidence: {
+              documentId: "northstar-policy",
+              page: 3,
+              quote:
+                "your vested 401(k) balance may stay in the Northstar plan",
+            },
+          },
+          {
+            id: "orbit",
+            label: "Move it into the Orbit 401(k)",
+            detail:
+              "Keeps your retirement savings in one workplace plan. Available once you’re enrolled at Orbit.",
+            nextStep:
+              "Enroll in the Orbit 401(k), then ask both plan administrators for rollover forms.",
+            evidence: {
+              documentId: "orbit-policy",
+              page: 3,
+              quote:
+                "The Orbit 401(k) plan accepts rollovers from eligible prior employer plans once you are enrolled.",
+            },
+          },
+          {
+            id: "ira",
+            label: "Roll it into an IRA at a bank or brokerage you pick",
+            detail:
+              "You choose the institution. Neither handbook covers its fees or investments, so compare those yourself.",
+            nextStep:
+              "Pick your bank or brokerage, open the IRA, then request a direct rollover from Northstar’s plan administrator.",
+            evidence: {
+              documentId: "northstar-policy",
+              page: 3,
+              quote: "an IRA at a financial institution you choose",
+            },
+          },
+        ],
+      },
     },
     {
       id: "coverage",

@@ -13,7 +13,8 @@ export async function POST(req: Request) {
         { error: "Start a new conversation to continue." },
         { status: 400 },
       );
-    const w = await getWorkspace(await sessionId());
+    const id = await sessionId();
+    const w = await getWorkspace(id);
     const input = messages
       .slice(-20)
       .map(
@@ -26,9 +27,9 @@ export async function POST(req: Request) {
             .slice(0, 8000),
         }),
       );
-    const result = await chatAgent(w).stream(
+    const result = await chatAgent(w, id).stream(
       input.map((m) => `${m.role}: ${m.content}`).join("\n\n"),
-      { maxSteps: 3 },
+      { maxSteps: 4 },
     );
     const stream = createUIMessageStream({
       execute: async ({ writer }) => {

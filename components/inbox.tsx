@@ -6,11 +6,14 @@ import {
   Inbox as InboxIcon,
   LoaderCircle,
   Mail,
+  Paperclip,
   RefreshCw,
+  Send,
   ShieldCheck,
 } from "lucide-react";
 import type { InboxMessage, InboxSnapshot } from "@/lib/types";
-const timestamp = (at: string) =>
+import { caseTime } from "./practice";
+const localTime = (at: string) =>
   new Date(at).toLocaleString("en-US", {
     month: "short",
     day: "numeric",
@@ -19,8 +22,14 @@ const timestamp = (at: string) =>
   });
 export default function Inbox({
   openTask,
+  openDocument,
+  refreshKey,
+  focus,
 }: {
   openTask: (id: string) => void;
+  openDocument: (id: string) => void;
+  refreshKey?: number;
+  focus?: { id: string; label: string; n: number };
 }) {
   const [data, setData] = useState<InboxSnapshot | null>(null);
   const [selected, setSelected] = useState<InboxMessage | null>(null);
@@ -58,7 +67,20 @@ export default function Inbox({
   useEffect(() => {
     load();
     return () => request.current?.abort();
-  }, [load]);
+  }, [load, refreshKey]);
+  useEffect(() => {
+    if (!focus) return;
+    load({
+      id: focus.id,
+      from: "",
+      subject: focus.label,
+      preview: "",
+      at: new Date().toISOString(),
+    });
+  }, [load, focus]);
+  const practice = data?.provider === "scenario";
+  const timestamp = (at: string) =>
+    practice ? caseTime(at, true) : localTime(at);
   return (
     <section className="inbox-panel" aria-label="Workspace inbox">
       <header className="inbox-heading">
@@ -66,11 +88,13 @@ export default function Inbox({
           <Mail size={20} />
         </span>
         <div>
-          <h2>HR replies</h2>
+          <h2>{practice ? "Practice inbox" : "HR replies"}</h2>
           <p>
             {data?.provider === "gmail"
               ? "Saved replies from your selected email threads."
-              : "Messages for your transition."}
+              : practice
+                ? "Every email in this case, including the ones you approved."
+                : "Messages for your transition."}
           </p>
         </div>
         <button
@@ -99,10 +123,18 @@ export default function Inbox({
             <button className="text-button" onClick={() => load()}>
               <ArrowLeft size={15} /> All messages
             </button>
-            <span className="inbox-eyebrow">RECEIVED EMAIL</span>
+            <span className="inbox-eyebrow">
+              {selected.direction === "outbound"
+                ? "SENT AFTER YOUR APPROVAL"
+                : "RECEIVED EMAIL"}
+            </span>
             <h3>{selected.subject}</h3>
             <div className="inbox-sender">
-              <strong>{selected.from}</strong>
+              <strong>
+                {selected.direction === "outbound"
+                  ? `To ${selected.to}`
+                  : selected.from}
+              </strong>
               <time dateTime={selected.at}>{timestamp(selected.at)}</time>
             </div>
             {busy ? (
@@ -112,16 +144,31 @@ export default function Inbox({
             ) : (
               !error && <p className="inbox-body">{selected.body}</p>
             )}
-            <button
-              className="inbox-task"
-              onClick={() => openTask(selected.taskId)}
-            >
-              <span>
-                <small>RELATED TASK</small>
-                {selected.taskTitle}
-              </span>
-              <ArrowUpRight size={17} />
-            </button>
+            {!busy && !!selected.attachments?.length && (
+              <div className="inbox-attachments">
+                {selected.attachments.map((a) => (
+                  <button
+                    key={a.id}
+                    className="text-button"
+                    onClick={() => openDocument(a.id)}
+                  >
+                    <Paperclip size={14} aria-hidden="true" /> {a.name}
+                  </button>
+                ))}
+              </div>
+            )}
+            {selected.taskId && (
+              <button
+                className="inbox-task"
+                onClick={() => openTask(selected.taskId!)}
+              >
+                <span>
+                  <small>RELATED TASK</small>
+                  {selected.taskTitle}
+                </span>
+                <ArrowUpRight size={17} />
+              </button>
+            )}
           </article>
         ) : (
           <>
@@ -148,17 +195,36 @@ export default function Inbox({
                         onClick={() => load(message)}
                       >
                         <span className="inbox-message-top">
-                          <span className="inbox-from">{message.from}</span>
+                          <span className="inbox-from">
+                            {message.direction === "outbound" ? (
+                              <>
+                                <Send size={13} aria-label="Sent" />
+                                To {message.to}
+                              </>
+                            ) : (
+                              message.from
+                            )}
+                          </span>
                           <time dateTime={message.at}>
                             {timestamp(message.at)}
                           </time>
                         </span>
                         <strong>{message.subject}</strong>
                         <p>{message.preview || "Open to read this message."}</p>
-                        <span className="inbox-task-label">
-                          {message.taskTitle}
-                          <ArrowUpRight size={13} />
-                        </span>
+                        {!!message.attachments?.length && (
+                          <span className="inbox-attachment-count">
+                            <Paperclip size={12} aria-hidden="true" />
+                            {message.attachments.length === 1
+                              ? message.attachments[0].name
+                              : `${message.attachments.length} attachments`}
+                          </span>
+                        )}
+                        {message.taskTitle && (
+                          <span className="inbox-task-label">
+                            {message.taskTitle}
+                            <ArrowUpRight size={13} />
+                          </span>
+                        )}
                       </button>
                     ))}
                   </div>
@@ -175,11 +241,13 @@ export default function Inbox({
                           : "A home for your HR replies."}
                       </h3>
                       <p>
-                        {data.provider === "gmail"
-                          ? "Connect email and choose HR threads in workspace settings. Replies appear here after checking. Refresh reloads saved replies."
-                          : data.connected
-                            ? "No HR replies for this workspace yet. Refresh when you’re ready to check again."
-                            : "Demo HR replies will appear here once the reimbursement workflow connects your test inbox."}
+                        {practice
+                          ? "This case has no email yet. Deliver the first one from your board."
+                          : data.provider === "gmail"
+                            ? "Connect email and choose HR threads in workspace settings. Replies appear here after checking. Refresh reloads saved replies."
+                            : data.connected
+                              ? "No HR replies for this workspace yet. Refresh when you’re ready to check again."
+                              : "Demo HR replies will appear here once the reimbursement workflow connects your test inbox."}
                       </p>
                     </div>
                   )
@@ -197,11 +265,15 @@ export default function Inbox({
       <footer className="inbox-footer">
         <ShieldCheck size={15} />
         <div>
-          Only replies linked to this workspace.
+          {practice
+            ? "Simulated email for this practice case."
+            : "Only replies linked to this workspace."}
           <small>
-            {updatedAt
-              ? `Last checked ${timestamp(updatedAt)}`
-              : "Reading email never sends a reply."}
+            {practice
+              ? "Nothing here is delivered to a real inbox."
+              : updatedAt
+                ? `Last checked ${localTime(updatedAt)}`
+                : "Reading email never sends a reply."}
           </small>
         </div>
       </footer>

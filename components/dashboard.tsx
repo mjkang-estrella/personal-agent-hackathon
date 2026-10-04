@@ -38,8 +38,11 @@ import {
   Send,
   CheckSquare,
   BookOpen,
+  PenLine,
+  Signpost,
 } from "lucide-react";
 import type { Workspace, Task, Document, Stage, Status } from "@/lib/types";
+import type { WorkspaceFocus } from "@/lib/focus";
 import Assistant from "./assistant";
 import Modal, { ModalNotice } from "./modal";
 import Inbox from "./inbox";
@@ -53,6 +56,16 @@ import AccountControls from "./account-controls";
 import { MODEL_LABEL } from "@/lib/model-config";
 import { reviewKind } from "@/lib/automation";
 import { addDays, replyPayload } from "@/lib/domain";
+import { openDraft } from "@/lib/drafts";
+import {
+  DateProposalNotice,
+  DraftReview,
+  PracticeCases,
+  PracticeStrip,
+  RequestDraft,
+  TaskTimeline,
+  contactName,
+} from "./practice";
 const money = (n: number) =>
   new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -70,7 +83,7 @@ const statuses: Record<Status, string> = {
   todo: "Agent tracking",
   ready: "Ready for approval",
   submitting: "Submitting",
-  waiting: "Waiting for HR",
+  waiting: "Waiting for a reply",
   needs_info: "Needs your input",
   approved: "Approved · unpaid",
   done: "Completed",
@@ -84,6 +97,7 @@ const categories = {
     icon: BriefcaseBusiness,
     color: "blue",
   },
+  offboarding: { label: "Leaving well", icon: LogOut, color: "peach" },
 };
 const stages: {
   id: Stage;
@@ -120,6 +134,14 @@ export default function Dashboard() {
     null,
   );
   const [chat, setChat] = useState(false);
+  const [highlight, setHighlight] = useState<string | null>(null);
+  const [reader, setReader] = useState<{ id: string; page: number } | null>(
+    null,
+  );
+  const [inboxFocus, setInboxFocus] = useState<
+    { id: string; label: string; n: number } | undefined
+  >();
+  const assistantMoved = useRef(false);
   const [busy, setBusy] = useState("");
   const [agentTransportError, setAgentTransportError] = useState(false);
   const requestInFlight = useRef(false);
@@ -136,8 +158,26 @@ export default function Dashboard() {
   useEffect(() => {
     if (previousPage.current === page) return;
     previousPage.current = page;
-    window.document.getElementById("workspace-heading")?.focus();
+    // Keep the caret in the chat when the assistant changes the view.
+    if (assistantMoved.current) assistantMoved.current = false;
+    else window.document.getElementById("workspace-heading")?.focus();
   }, [page]);
+  useEffect(() => {
+    const saved = window.localStorage.getItem("jobswitch.assistant");
+    setChat(
+      saved
+        ? saved === "open"
+        : window.matchMedia("(min-width: 1100px)").matches,
+    );
+  }, []);
+  useEffect(() => {
+    if (!highlight) return;
+    window.document
+      .getElementById(`task-${highlight}`)
+      ?.scrollIntoView({ behavior: "smooth", block: "center" });
+    const t = setTimeout(() => setHighlight(null), 6000);
+    return () => clearTimeout(t);
+  }, [highlight]);
   const [certificateId, setCertificateId] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
   const notify = (text: string, error = false) => setToast({ text, error });
@@ -254,10 +294,41 @@ export default function Dashboard() {
   }
   function openTask(id: string) {
     setSelected(id);
-    setChat(false);
     setCertificateId("");
   }
+  function toggleAssistant(open: boolean) {
+    setChat(open);
+    window.localStorage.setItem("jobswitch.assistant", open ? "open" : "closed");
+  }
+  function showFocus(f: WorkspaceFocus) {
+    const target: Page =
+      f.view === "document"
+        ? "documents"
+        : f.view === "message" || f.view === "inbox"
+          ? "inbox"
+          : f.view === "activity"
+            ? "activity"
+            : "board";
+    if (target !== page) assistantMoved.current = true;
+    setPage(target);
+    setSelected(null);
+    setViewDoc(null);
+    if (f.view === "task" && f.id) {
+      setFilter("all");
+      setTaskSearch("");
+      setHighlight(f.id);
+    }
+    if (f.view === "document" && f.id) {
+      setSearch("");
+      setReader({ id: f.id, page: f.page || 1 });
+    }
+    if (f.view === "message" && f.id)
+      setInboxFocus({ id: f.id, label: f.label, n: Date.now() });
+    // A narrow screen shows one pane, so reveal the content that changed.
+    if (!window.matchMedia("(min-width: 1100px)").matches) setChat(false);
+  }
   const task = w?.tasks.find((t) => t.id === selected);
+  const taskDraft = w && task ? openDraft(w, task.id) : undefined;
   const document = w?.documents.find((d) => d.id === viewDoc?.id);
   if (!w)
     return (
@@ -310,9 +381,17 @@ export default function Dashboard() {
       </main>
     );
   const attention = w.tasks.filter((t) => reviewKind(t, w) !== null).length;
-  const reviews = w.tasks.filter((t) =>
-    ["claim", "reply"].includes(reviewKind(t, w) || ""),
-  );
+  // Prepared work comes first; personal choices follow it.
+  const reviews = w.tasks
+    .filter((t) =>
+      ["claim", "reply", "draft", "decision"].includes(reviewKind(t, w) || ""),
+    )
+    .sort(
+      (a, b) =>
+        Number(reviewKind(a, w) === "decision") -
+        Number(reviewKind(b, w) === "decision"),
+    );
+  const practice = !!w.scenario;
   const needsInput = w.tasks.filter((t) => reviewKind(t, w) === "input");
   const agentPaused = w.agent?.enabled === false;
   const agentError =
@@ -322,19 +401,13 @@ export default function Dashboard() {
       : "");
   const agentWorking = busy === "advance";
   const agentPhase = w.agent?.phase;
-  const agentTitle = agentError
-    ? "Your agent needs a retry"
+  const agentStatus = agentError
+    ? "Agent needs a retry"
     : agentPaused
-      ? "Automatic preparation is paused"
+      ? "Agent paused"
       : agentWorking
-        ? agentPhase === "prepare"
-          ? "Checking evidence. Preparing claims."
-          : agentPhase === "sync"
-            ? "Checking for the next HR reply."
-            : "Reading the details for you."
-        : reviews.length
-          ? "Prepared by your agent. Ready for you."
-          : "Your agent is keeping things moving.";
+        ? "Agent working"
+        : "Agent on duty";
   const initials = w.profile.name
     .split(" ")
     .map((n) => n[0])
@@ -363,7 +436,7 @@ export default function Dashboard() {
           .includes(taskSearch.toLowerCase())),
   );
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${chat ? "assistant-open" : ""}`}>
       <a href="#workspace-main" className="skip-link">
         Skip to workspace content
       </a>
@@ -384,7 +457,6 @@ export default function Dashboard() {
               onClick={() => {
                 setPage(id);
                 setSelected(null);
-                setChat(false);
               }}
             >
               <Icon size={18} />
@@ -401,14 +473,12 @@ export default function Dashboard() {
         <button
           aria-label="Ask JobSwitch"
           className="sidebar-assistant"
-          onClick={() => {
-            setChat(true);
-            setSelected(null);
-          }}
+          aria-pressed={chat}
+          onClick={() => toggleAssistant(!chat)}
         >
           <Sparkles size={18} />
           <span>Ask JobSwitch</span>
-          <span className="shortcut">↗</span>
+          <span className="shortcut">{chat ? "On" : "↗"}</span>
         </button>
         <div className="sidebar-bottom">
           <button
@@ -449,8 +519,45 @@ export default function Dashboard() {
             </span>
           </div>
           <div className="topbar-right">
+            <div
+              className={`agent-chip ${agentError ? "error" : agentPaused ? "paused" : ""}`}
+            >
+              <span
+                className={`agent-chip-dot ${agentWorking ? "agent-pulse" : ""}`}
+                aria-hidden="true"
+              />
+              <span role="status" className="agent-chip-label">
+                {agentStatus}
+              </span>
+              <button
+                disabled={!!busy}
+                aria-label={
+                  agentError
+                    ? "Retry agent"
+                    : agentPaused
+                      ? "Resume agent"
+                      : "Pause agent"
+                }
+                onClick={() =>
+                  act(agentPaused || agentError ? "agent_resume" : "agent_pause")
+                }
+              >
+                {agentPaused || agentError ? (
+                  <Play size={13} />
+                ) : (
+                  <Pause size={13} />
+                )}
+                <span className="agent-chip-label">
+                  {agentError ? "Retry" : agentPaused ? "Resume" : "Pause"}
+                </span>
+              </button>
+            </div>
             <button className="demo-pill" onClick={() => setPage("settings")}>
-              {w.demo ? "Demo workspace" : "Personal workspace"}
+              {practice
+                ? "Practice case"
+                : w.demo
+                  ? "Demo workspace"
+                  : "Personal workspace"}
             </button>
             <button
               className="icon-button"
@@ -503,10 +610,26 @@ export default function Dashboard() {
               </p>
             </div>
           </div>
-          {page === "inbox" && <Inbox openTask={openTask} />}
+          {page === "inbox" && (
+            <Inbox
+              openTask={openTask}
+              openDocument={(id) => setViewDoc({ id, page: 1 })}
+              refreshKey={(w.mail || []).length}
+              focus={inboxFocus}
+            />
+          )}
           {page === "accounts" && <BrowserAccounts />}
           {page === "board" && (
             <>
+              {practice && (
+                <PracticeStrip
+                  w={w}
+                  busy={busy}
+                  act={act}
+                  openTask={openTask}
+                  chooseCase={() => setPage("settings")}
+                />
+              )}
               {!w.documents.length && (
                 <section className="empty-start">
                   <div>
@@ -522,33 +645,19 @@ export default function Dashboard() {
                   </button>
                 </section>
               )}
-              <div className="workspace-shortcuts" aria-label="Quick actions">
-                <button onClick={openUpload}>
-                  <Upload size={24} />
-                  <strong>Add documents</strong>
-                  <span>Give your plan some context</span>
-                </button>
-                <button
-                  onClick={() => {
-                    setPage("documents");
-                    setSearch("");
-                  }}
-                >
-                  <Files size={24} />
-                  <strong>Browse your sources</strong>
-                  <span>{w.documents.length} documents in your workspace</span>
-                </button>
-                <button
-                  onClick={() => {
-                    setChat(true);
-                    setSelected(null);
-                  }}
-                >
-                  <Sparkles size={24} />
-                  <strong>Ask your assistant</strong>
-                  <span>Make sense of the details</span>
-                </button>
-              </div>
+              {agentError && (
+                <div className="notice warning agent-alert" role="alert">
+                  <AlertCircle size={18} />
+                  <p>{agentError}</p>
+                  <button
+                    className="secondary small-button"
+                    disabled={!!busy}
+                    onClick={() => act("agent_resume")}
+                  >
+                    <RefreshCw size={14} /> Retry
+                  </button>
+                </div>
+              )}
               <section
                 className="transition-overview"
                 aria-label="Transition overview"
@@ -569,76 +678,17 @@ export default function Dashboard() {
                   </button>
                 </div>
               </section>
-              <section className="agent-desk" aria-label="Agent workspace">
-                <div className="agent-overview">
-                  <div className="agent-overview-top">
-                    <span className="agent-mode">
-                      <span className={agentWorking ? "agent-pulse" : ""} />{" "}
-                      {agentPaused
-                        ? "PREPARATION PAUSED"
-                        : agentError
-                          ? "NEEDS A RETRY"
-                          : "AGENT ON DUTY"}
-                    </span>
-                    <button
-                      className="agent-control"
-                      disabled={!!busy}
-                      onClick={() =>
-                        act(
-                          agentPaused || agentError
-                            ? "agent_resume"
-                            : "agent_pause",
-                        )
-                      }
-                    >
-                      {agentPaused || agentError ? (
-                        <Play size={13} />
-                      ) : (
-                        <Pause size={13} />
-                      )}
-                      {agentError ? "Retry" : agentPaused ? "Resume" : "Pause"}
-                    </button>
-                  </div>
-                  <h2 aria-live="polite">{agentTitle}</h2>
-                  <p>
-                    {agentError ||
-                      "I’ll turn your documents into a plan, check the evidence, and prepare the next step. Nothing gets sent without your approval."}
-                  </p>
-                  <div className="agent-capabilities">
-                    <div>
-                      <FileText size={16} />
-                      <span>Read & compare</span>
-                      <small>
-                        {w.analyzedAt ? "Evidence checked" : "Documents queued"}
-                      </small>
-                    </div>
-                    <div>
-                      <Sparkles size={16} />
-                      <span>Prepare for review</span>
-                      <small>{reviews.length} ready for you</small>
-                    </div>
-                    <div>
-                      <Mail size={16} />
-                      <span>Track HR replies</span>
-                      <small>
-                        {w.inbox ? "Inbox connected" : "After demo HR connects"}
-                      </small>
-                    </div>
-                  </div>
-                  <div className="agent-scope">
-                    <ShieldCheck size={14} />
-                    {w.background?.enabled
-                      ? "Preparation while open · Background HR checks on"
-                      : "Active while open · Background checks off"}
-                    <button
-                      className="agent-scope-settings"
-                      onClick={() => setPage("settings")}
-                    >
-                      Manage
-                    </button>
-                  </div>
-                </div>
-                <div className="review-inbox">
+              {w.dateProposal && (
+                <DateProposalNotice
+                  w={w}
+                  busy={busy}
+                  act={act}
+                  viewEvidence={(e) =>
+                    setViewDoc({ id: e.documentId, page: e.page })
+                  }
+                />
+              )}
+              <section className="review-inbox" aria-label="Review and decide">
                   <div className="review-inbox-heading">
                     <div>
                       <h2>
@@ -648,54 +698,78 @@ export default function Dashboard() {
                     <CheckCheck size={22} />
                   </div>
                   {reviews.length ? (
-                    reviews.map((t) => (
-                      <button
-                        className="review-item"
-                        key={t.id}
-                        onClick={() => openTask(t.id)}
-                      >
-                        <span className="review-item-icon">
-                          {reviewKind(t, w) === "reply" ? (
-                            <Mail size={20} />
-                          ) : (
-                            <Wallet size={20} />
-                          )}
-                        </span>
-                        <span>
-                          <small>
-                            {reviewKind(t, w) === "reply"
-                              ? "REPLY DRAFTED"
-                              : "CLAIM PREPARED"}
-                          </small>
-                          <strong>{t.claim?.course || t.title}</strong>
-                          <span>
-                            {reviewKind(t, w) === "reply"
-                              ? "Review message & attachment"
-                              : `${money(t.claim!.amount)} · Review claim & evidence`}
+                    reviews.map((t) => {
+                      const kind = reviewKind(t, w);
+                      const draft =
+                        kind === "draft" ? openDraft(w, t.id) : undefined;
+                      return (
+                        <button
+                          className="review-item"
+                          key={t.id}
+                          onClick={() => openTask(t.id)}
+                        >
+                          <span className="review-item-icon">
+                            {kind === "draft" ? (
+                              <PenLine size={20} />
+                            ) : kind === "reply" ? (
+                              <Mail size={20} />
+                            ) : kind === "decision" ? (
+                              <Signpost size={20} />
+                            ) : (
+                              <Wallet size={20} />
+                            )}
                           </span>
-                        </span>
-                        <ArrowUpRight size={18} />
-                      </button>
-                    ))
+                          <span>
+                            <small>
+                              {draft
+                                ? draft.inReplyTo
+                                  ? "REPLY DRAFTED"
+                                  : "EMAIL DRAFTED"
+                                : kind === "reply"
+                                  ? "REPLY DRAFTED"
+                                  : kind === "decision"
+                                    ? "YOUR CALL"
+                                    : "CLAIM PREPARED"}
+                            </small>
+                            <strong>
+                              {draft?.subject ||
+                                t.decision?.question ||
+                                t.claim?.course ||
+                                t.title}
+                            </strong>
+                            <span>
+                              {draft
+                                ? `To ${draft.to.map(contactName).join(", ")} · Review & approve`
+                                : kind === "reply"
+                                  ? "Review message & attachment"
+                                  : kind === "decision"
+                                    ? `${t.decision!.options.length} options laid out · No recommendation`
+                                    : `${money(t.claim!.amount)} · Review claim & evidence`}
+                            </span>
+                          </span>
+                          <ArrowUpRight size={18} />
+                        </button>
+                      );
+                    })
                   ) : (
                     <div className="review-empty">
                       <ShieldCheck size={27} />
                       <strong>
                         {agentWorking
                           ? "Your agent is doing the prep."
-                          : "Nothing to approve right now."}
+                          : "Nothing to approve or decide right now."}
                       </strong>
                       <p>
-                        Prepared claims and replies will appear here. You get
-                        the final say.
+                        {practice
+                          ? "Emails your agent drafts will appear here. You get the final say."
+                          : "Prepared claims, replies, and choices only you can make will appear here."}
                       </p>
                     </div>
                   )}
                   <div className="review-safety">
                     <ShieldCheck size={14} /> Review the exact contents before
-                    approving.
+                    approving. Personal choices stay yours.
                   </div>
-                </div>
               </section>
               <section
                 className="agent-handoff"
@@ -708,7 +782,9 @@ export default function Dashboard() {
                   <div>
                     <strong>
                       {needsInput.length
-                        ? `${needsInput.length} tasks need information only you can provide`
+                        ? needsInput.length === 1
+                          ? "1 task needs information only you can provide"
+                          : `${needsInput.length} tasks need information only you can provide`
                         : "Your agent has the information it needs for now"}
                     </strong>
                     <p>
@@ -807,6 +883,8 @@ export default function Dashboard() {
                           <TaskCard
                             key={t.id}
                             task={t}
+                            drafted={!!openDraft(w, t.id)}
+                            highlighted={highlight === t.id}
                             open={() => openTask(t.id)}
                           />
                         ))}
@@ -852,7 +930,14 @@ export default function Dashboard() {
                   <Upload size={16} /> Add document
                 </button>
               </div>
-              <CloudDocuments w={w} onUpdate={setW} />
+              {reader && (
+                <FocusedDocument
+                  w={w}
+                  reader={reader}
+                  setReader={setReader}
+                />
+              )}
+              {!practice && <CloudDocuments w={w} onUpdate={setW} />}
               <div className="documents-list">
                 <div className="list-header">
                   <span>DOCUMENT</span>
@@ -1005,7 +1090,9 @@ export default function Dashboard() {
                         {a.type === "user"
                           ? "You"
                           : a.type === "mail"
-                            ? "AgentMail"
+                            ? practice
+                              ? "Practice inbox"
+                              : "AgentMail"
                             : a.type === "browser"
                               ? "Kernel"
                               : "JobSwitch"}
@@ -1062,18 +1149,26 @@ export default function Dashboard() {
               ? "Preparing work for your review"
               : agentPhase === "sync"
                 ? "Checking HR replies"
-                : "Reading your documents"
-            : busy === "analyze"
-              ? "Reading your documents"
-              : busy === "submit"
-                ? "Submitting with Kernel"
-                : busy === "prepare"
-                  ? "Checking your receipt and policy"
-                  : busy.includes("hr_")
-                    ? "Sending demo HR email"
-                    : busy === "sync"
-                      ? "Checking HR replies"
-                      : "Working on it"}
+                : agentPhase === "triage"
+                  ? "Reading your new email and drafting replies"
+                  : "Reading your documents"
+            : busy === "scenario_next"
+              ? "Delivering the next email"
+              : busy === "draft_request"
+                ? "Drafting an email for your review"
+                : busy === "draft_send"
+                  ? "Sending your approved email"
+                  : busy === "analyze"
+                    ? "Reading your documents"
+                    : busy === "submit"
+                      ? "Submitting with Kernel"
+                      : busy === "prepare"
+                        ? "Checking your receipt and policy"
+                        : busy.includes("hr_")
+                          ? "Sending demo HR email"
+                          : busy === "sync"
+                            ? "Checking HR replies"
+                            : "Working on it"}
           <span>…</span>
         </div>
       )}
@@ -1126,9 +1221,9 @@ export default function Dashboard() {
               <div className="notice warning">
                 <CalendarDays size={18} />
                 <p>
-                  Your dates changed. Your agent will recheck documents for
-                  updated coverage details; confirm changes to submitted items
-                  with HR.
+                  {practice
+                    ? "Your dates changed. Check this task against the latest email before relying on its deadline."
+                    : "Your dates changed. Your agent will recheck documents for updated coverage details; confirm changes to submitted items with HR."}
                 </p>
               </div>
             )}
@@ -1144,7 +1239,9 @@ export default function Dashboard() {
                 <div>
                   <strong>Approved. One less loose end.</strong>
                   <p>
-                    HR confirmed your reimbursement. Payment is still pending.
+                    {practice
+                      ? "The approval is in writing. No payment has been recorded yet."
+                      : "HR confirmed your reimbursement. Payment is still pending."}
                   </p>
                 </div>
               </div>
@@ -1182,6 +1279,30 @@ export default function Dashboard() {
                 </div>
               </div>
             )}
+            {task.decision && (
+              <DecisionReview
+                key={task.id}
+                w={w}
+                task={task}
+                busy={busy}
+                act={act}
+                viewEvidence={(e) =>
+                  setViewDoc({ id: e.documentId, page: e.page })
+                }
+              />
+            )}
+            {taskDraft && (
+              <DraftReview
+                key={taskDraft.id}
+                w={w}
+                draft={taskDraft}
+                busy={busy}
+                act={act}
+                viewEvidence={(e) =>
+                  setViewDoc({ id: e.documentId, page: e.page })
+                }
+              />
+            )}
             {task.missing.length > 0 && (
               <section className="detail-section">
                 <h3>
@@ -1218,6 +1339,19 @@ export default function Dashboard() {
                 );
               })}
             </section>
+            <TaskTimeline
+              w={w}
+              task={task}
+              badge={(status) => <StatusBadge status={status} />}
+              viewEvidence={(e) =>
+                setViewDoc({ id: e.documentId, page: e.page })
+              }
+            />
+            {practice &&
+              !taskDraft &&
+              !["done", "approved"].includes(task.status) && (
+                <RequestDraft task={task} busy={busy} act={act} />
+              )}
             {task.lastReply && (
               <section className="detail-section">
                 <h3>
@@ -1259,7 +1393,7 @@ export default function Dashboard() {
                 </div>
               </section>
             )}
-            {task.status === "needs_info" && (
+            {task.status === "needs_info" && task.claim && (
               <section className="detail-section">
                 <h3>
                   <Upload size={17} />{" "}
@@ -1382,7 +1516,7 @@ export default function Dashboard() {
                 ))}
               </section>
             )}
-            {task.status === "waiting" && w.demo && (
+            {task.status === "waiting" && w.demo && !practice && (
               <section className="demo-controls">
                 <span className="demo-pill">DEMO CONTROLS</span>
                 <p>
@@ -1416,19 +1550,21 @@ export default function Dashboard() {
             )}
           </div>
           <footer className="panel-footer">
-            {task.status === "todo" && task.category === "money" && (
-              <div className="agent-task-note">
-                <Sparkles size={17} />
-                <p>
-                  {task.missing.length
-                    ? "Add the missing evidence. Your agent will check eligibility again automatically."
-                    : "Your agent will check eligibility and prepare this claim for review."}
-                </p>
-                <button className="text-button" onClick={openUpload}>
-                  Add evidence
-                </button>
-              </div>
-            )}
+            {task.status === "todo" &&
+              task.category === "money" &&
+              !practice && (
+                <div className="agent-task-note">
+                  <Sparkles size={17} />
+                  <p>
+                    {task.missing.length
+                      ? "Add the missing evidence. Your agent will check eligibility again automatically."
+                      : "Your agent will check eligibility and prepare this claim for review."}
+                  </p>
+                  <button className="text-button" onClick={openUpload}>
+                    Add evidence
+                  </button>
+                </div>
+              )}
             {task.status === "ready" && w.demo && (
               <>
                 <p>
@@ -1490,9 +1626,10 @@ export default function Dashboard() {
                   : "I’ve handled this — mark complete"}
               </button>
             )}
-            {["waiting", "approved", "needs_info", "done"].includes(
-              task.status,
-            ) && (
+            {(practice ||
+              ["waiting", "approved", "needs_info", "done"].includes(
+                task.status,
+              )) && (
               <span className="footer-status">
                 <ShieldCheck size={14} />
                 {task.nextAction}
@@ -1501,7 +1638,19 @@ export default function Dashboard() {
           </footer>
         </Modal>
       )}
-      {chat && <Assistant close={() => setChat(false)} />}
+      <Assistant
+        open={chat}
+        close={() => toggleAssistant(false)}
+        onFocus={showFocus}
+      />
+      {!chat && (
+        <button
+          className="assistant-launcher"
+          onClick={() => toggleAssistant(true)}
+        >
+          <Sparkles size={18} /> Ask JobSwitch
+        </button>
+      )}
       {document && viewDoc && (
         <Modal
           className="document-modal"
@@ -1742,14 +1891,178 @@ function StatusBadge({ status }: { status: Status }) {
     </span>
   );
 }
-function TaskCard({ task, open }: { task: Task; open: () => void }) {
+function FocusedDocument({
+  w,
+  reader,
+  setReader,
+}: {
+  w: Workspace;
+  reader: { id: string; page: number };
+  setReader: (r: { id: string; page: number } | null) => void;
+}) {
+  const doc = w.documents.find((d) => d.id === reader.id);
+  if (!doc) return null;
+  const page = Math.min(reader.page, doc.pages.length);
+  return (
+    <section className="focused-document" aria-label={`Document: ${doc.name}`}>
+      <header>
+        <div>
+          <span className="paper-eyebrow">
+            OPENED BY YOUR ASSISTANT · PAGE {page} OF {doc.pages.length}
+          </span>
+          <strong>
+            <FileText size={17} /> {doc.name}
+          </strong>
+        </div>
+        <div className="focused-document-controls">
+          <button
+            className="icon-button"
+            disabled={page === 1}
+            onClick={() => setReader({ id: doc.id, page: page - 1 })}
+            aria-label="Previous page"
+          >
+            <ChevronRight size={16} style={{ transform: "rotate(180deg)" }} />
+          </button>
+          <button
+            className="icon-button"
+            disabled={page === doc.pages.length}
+            onClick={() => setReader({ id: doc.id, page: page + 1 })}
+            aria-label="Next page"
+          >
+            <ChevronRight size={16} />
+          </button>
+          <button
+            className="icon-button"
+            onClick={() => setReader(null)}
+            aria-label="Close document"
+          >
+            <X size={18} />
+          </button>
+        </div>
+      </header>
+      <pre>{doc.pages[page - 1]}</pre>
+    </section>
+  );
+}
+function DecisionReview({
+  w,
+  task,
+  busy,
+  act,
+  viewEvidence,
+}: {
+  w: Workspace;
+  task: Task;
+  busy: string;
+  act: (
+    a: string,
+    b: Record<string, unknown>,
+    m?: string,
+  ) => Promise<Workspace | undefined>;
+  viewEvidence: (e: { documentId: string; page: number }) => void;
+}) {
+  const decision = task.decision!;
+  const [pick, setPick] = useState(decision.chosenId || "");
+  const chosen = decision.options.find((o) => o.id === decision.chosenId);
+  return (
+    <section className="detail-section decision-review">
+      <h3>
+        <Signpost size={17} /> {decision.question}
+      </h3>
+      <p className="decision-why">
+        <ShieldCheck size={15} /> {decision.why}
+      </p>
+      <div
+        className="decision-options"
+        role="radiogroup"
+        aria-label={decision.question}
+      >
+        {decision.options.map((o) => {
+          const doc = o.evidence
+            ? w.documents.find((d) => d.id === o.evidence!.documentId)
+            : undefined;
+          return (
+            <div
+              key={o.id}
+              className={`decision-option ${pick === o.id ? "selected" : ""}`}
+            >
+              <button
+                role="radio"
+                aria-checked={pick === o.id}
+                onClick={() => setPick(o.id)}
+              >
+                <span className="decision-radio" aria-hidden="true">
+                  {pick === o.id && <Check size={13} />}
+                </span>
+                <span>
+                  <strong>{o.label}</strong>
+                  <small>{o.detail}</small>
+                </span>
+              </button>
+              {o.evidence && (
+                <button
+                  className="quote-link"
+                  onClick={() => viewEvidence(o.evidence!)}
+                >
+                  “{o.evidence.quote}”
+                  <span>
+                    <FileText size={13} /> {doc?.name || "Document"} · p.{" "}
+                    {o.evidence.page}
+                    <ArrowUpRight size={13} />
+                  </span>
+                </button>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      {chosen && (
+        <p className="decision-chosen">
+          <CheckCircle2 size={15} />
+          <span>
+            You chose <strong>{chosen.label}</strong>. Next: {chosen.nextStep}
+          </span>
+        </p>
+      )}
+      <button
+        className="primary full"
+        disabled={!!busy || !pick || pick === decision.chosenId}
+        onClick={() =>
+          act(
+            "decide",
+            { taskId: task.id, optionId: pick },
+            "Your choice is saved. Your plan shows the next step.",
+          )
+        }
+      >
+        <Busy busy={busy === "decide"} />
+        <Check size={16} /> {chosen ? "Change my choice" : "Confirm my choice"}
+      </button>
+      <p className="decision-note">
+        Saving a choice only updates your plan. Nothing is sent or moved.
+      </p>
+    </section>
+  );
+}
+function TaskCard({
+  task,
+  drafted,
+  highlighted,
+  open,
+}: {
+  task: Task;
+  drafted: boolean;
+  highlighted: boolean;
+  open: () => void;
+}) {
   const c = categories[task.category];
   const Icon = task.title.toLowerCase().includes("learning")
     ? GraduationCap
     : c.icon;
   return (
     <button
-      className={`task-card ${["done", "approved"].includes(task.status) ? "resolved" : ""}`}
+      id={`task-${task.id}`}
+      className={`task-card ${["done", "approved"].includes(task.status) ? "resolved" : ""} ${highlighted ? "highlighted" : ""}`}
       onClick={open}
     >
       <div className="card-top">
@@ -1774,6 +2087,16 @@ function TaskCard({ task, open }: { task: Task; open: () => void }) {
         <FileText size={13} />
         {task.evidence.length}{" "}
         {task.evidence.length === 1 ? "source" : "sources"}
+        {drafted && (
+          <span className="card-draft">
+            <PenLine size={12} aria-hidden="true" /> Email draft ready
+          </span>
+        )}
+        {task.decision && !task.decision.chosenId && (
+          <span className="card-draft">
+            <Signpost size={12} aria-hidden="true" /> Your call
+          </span>
+        )}
       </div>
       <div className="card-bottom">
         <StatusBadge status={task.status} />
@@ -1804,19 +2127,64 @@ function SettingsForm({
   editDates: () => void;
   onUpdate: (w: Workspace) => void;
 }) {
-  const [confirmWorkspace, setConfirmWorkspace] = useState(false);
+  type NewWorkspace = {
+    mode: "demo" | "personal" | "scenario";
+    scenarioId?: string;
+    title?: string;
+  };
+  const [confirmWorkspace, setConfirmWorkspace] = useState<NewWorkspace | null>(
+    null,
+  );
   const [accountError, setAccountError] = useState("");
+  const practice = !!w.scenario;
+  const fresh = w.demo && !practice ? "personal" : "demo";
+  // Personal workspaces belong to an account; demo and practice cases do not.
+  async function chooseWorkspace(next: NewWorkspace) {
+    setAccountError("");
+    try {
+      if (next.mode === "personal") {
+        const r = await fetch("/api/account");
+        if (!r.ok || !(await r.json()).user) {
+          window.location.assign("/sign-in");
+          return;
+        }
+      }
+      setConfirmWorkspace(next);
+    } catch {
+      setAccountError("Account status is unavailable. Please try again.");
+    }
+  }
   return (
     <div className="settings-grid">
       <AccountControls />
       {confirmWorkspace && (
         <Modal
           className="modal-frame"
-          label="Create a new workspace?"
-          onClose={() => setConfirmWorkspace(false)}
+          label={
+            confirmWorkspace.mode === "scenario"
+              ? "Open a practice case?"
+              : "Create a new workspace?"
+          }
+          onClose={() => setConfirmWorkspace(null)}
         >
           <div className="form-modal">
-            <h2>Create a new workspace?</h2>
+            <h2>
+              {confirmWorkspace.mode === "scenario"
+                ? "Open this practice case?"
+                : "Create a new workspace?"}
+            </h2>
+            {confirmWorkspace.title && (
+              <p>
+                <strong>{confirmWorkspace.title}</strong>
+              </p>
+            )}
+            {confirmWorkspace.mode === "scenario" && (
+              <p>
+                The case starts in a new workspace with fictional people. Your
+                agent reads the first email right away, and practice email
+                never leaves JobSwitch.
+              </p>
+            )}
             <p>
               Your signed-in workspaces stay saved under Your account. You can
               return to them using Saved workspaces. Background monitoring for
@@ -1830,7 +2198,7 @@ function SettingsForm({
             <div className="confirmation-actions">
               <button
                 className="secondary"
-                onClick={() => setConfirmWorkspace(false)}
+                onClick={() => setConfirmWorkspace(null)}
               >
                 Keep current workspace
               </button>
@@ -1840,13 +2208,20 @@ function SettingsForm({
                 onClick={async () => {
                   const result = await act(
                     "new_workspace",
-                    { mode: w.demo ? "personal" : "demo" },
-                    "New workspace created.",
+                    {
+                      mode: confirmWorkspace.mode,
+                      scenarioId: confirmWorkspace.scenarioId,
+                    },
+                    confirmWorkspace.mode === "scenario"
+                      ? "Practice case opened. Your agent is reading the first email."
+                      : "New workspace created.",
                   );
-                  if (result) setConfirmWorkspace(false);
+                  if (result) setConfirmWorkspace(null);
                 }}
               >
-                Create {w.demo ? "personal" : "demo"} workspace
+                {confirmWorkspace.mode === "scenario"
+                  ? "Open practice case"
+                  : `Create ${confirmWorkspace.mode} workspace`}
               </button>
             </div>
           </div>
@@ -1895,10 +2270,23 @@ function SettingsForm({
           <CalendarDays size={15} /> Edit transition dates
         </button>
       </form>
-      <GmailControls w={w} onUpdate={onUpdate} />
-      <OutlookControls w={w} onUpdate={onUpdate} />
-      <CalendarControls w={w} onUpdate={onUpdate} />
-      <BackgroundControls w={w} onUpdate={onUpdate} />
+      {/* Practice cases are simulated, so real inbox and calendar
+          connections and background checks do not apply to them. */}
+      {!practice && (
+        <>
+          <GmailControls w={w} onUpdate={onUpdate} />
+          <OutlookControls w={w} onUpdate={onUpdate} />
+          <CalendarControls w={w} onUpdate={onUpdate} />
+          <BackgroundControls w={w} onUpdate={onUpdate} />
+        </>
+      )}
+      <PracticeCases
+        current={w.scenario?.id}
+        busy={busy}
+        choose={(scenarioId, title) =>
+          chooseWorkspace({ mode: "scenario", scenarioId, title })
+        }
+      />
       <div className="settings-card">
         <h2>Workspace services</h2>
         <p className="muted">
@@ -1923,37 +2311,31 @@ function SettingsForm({
           className="secondary full"
           style={{ marginTop: 20 }}
           disabled={!!busy}
-          onClick={async () => {
-            setAccountError("");
-            try {
-              if (w.demo) {
-                const r = await fetch("/api/account");
-                if (!r.ok || !(await r.json()).user) {
-                  window.location.assign("/sign-in");
-                  return;
-                }
-              }
-              setConfirmWorkspace(true);
-            } catch {
-              setAccountError(
-                "Account status is unavailable. Please try again.",
-              );
-            }
-          }}
+          onClick={() => chooseWorkspace({ mode: fresh })}
           type="button"
         >
-          {w.demo
+          {fresh === "personal"
             ? "Start with my own documents"
             : "Open a fresh demo workspace"}{" "}
           <ArrowRight size={15} />
         </button>
+        {practice && (
+          <button
+            className="text-button"
+            disabled={!!busy}
+            onClick={() => chooseWorkspace({ mode: "personal" })}
+            type="button"
+          >
+            Start with my own documents
+          </button>
+        )}
         {accountError && <p role="alert">{accountError}</p>}
         <div className="notice">
           <ShieldCheck size={18} />
           <p>
-            Signed-in workspaces are saved to your account. Anonymous demos stay
-            in this browser. The demo uses fictional employers and dedicated
-            test email inboxes.
+            {practice
+              ? "Signed-in workspaces are saved to your account. Anonymous practice cases stay in this browser. Practice cases use fictional people, and their email never leaves JobSwitch."
+              : "Signed-in workspaces are saved to your account. Anonymous demos stay in this browser. The demo uses fictional employers and dedicated test email inboxes."}
           </p>
         </div>
       </div>

@@ -4,10 +4,40 @@ export function addDays(date: string, n: number) {
   d.setUTCDate(d.getUTCDate() + n);
   return d.toISOString().slice(0, 10);
 }
+// PDF extraction wraps lines mid-sentence, so compare with whitespace collapsed.
+// Every word and character must still appear verbatim and in order.
+const squash = (s: string) => s.replace(/\s+/g, " ").trim();
 export function validEvidence(e: Evidence, w: Workspace) {
-  return !!w.documents
-    .find((d) => d.id === e.documentId)
-    ?.pages[e.page - 1]?.includes(e.quote);
+  const page = w.documents.find((d) => d.id === e.documentId)?.pages[
+    e.page - 1
+  ];
+  const quote = squash(e.quote);
+  return !!page && quote.length >= 8 && squash(page).includes(quote);
+}
+// Models often re-capitalize a quote's first word. Find the passage ignoring
+// case and spacing, then keep the source's own wording as the quote.
+export function groundEvidence(e: Evidence, w: Workspace): Evidence | null {
+  const page = w.documents.find((d) => d.id === e.documentId)?.pages[
+    e.page - 1
+  ];
+  const quote = [...squash(e.quote)].map((c) => c.toLowerCase()).join("");
+  if (!page || quote.length < 8) return null;
+  let flat = "";
+  const at: number[] = [];
+  for (let i = 0; i < page.length; i++) {
+    const space = /\s/.test(page[i]);
+    if (space && (!flat || flat.endsWith(" "))) continue;
+    for (const c of space ? " " : page[i].toLowerCase()) {
+      flat += c;
+      at.push(i);
+    }
+  }
+  const start = flat.indexOf(quote);
+  if (start < 0) return null;
+  return {
+    ...e,
+    quote: squash(page.slice(at[start], at[start + quote.length - 1] + 1)),
+  };
 }
 export function updateDates(w: Workspace, lastDay: string, startDay: string) {
   if (
@@ -45,6 +75,27 @@ export function assertCanSubmit(task: Task) {
     throw new Error("Prepare and review this claim before approving it.");
   if (task.missing.length)
     throw new Error("Resolve the missing information before submission.");
+}
+// Records the person's own choice. Nothing is sent or submitted on their behalf.
+export function chooseOption(
+  w: Workspace,
+  taskId: string,
+  optionId: string,
+  at = new Date().toISOString(),
+) {
+  const task = w.tasks.find((t) => t.id === taskId);
+  const option = task?.decision?.options.find((o) => o.id === optionId);
+  if (!task?.decision || !option)
+    throw new Error("Choose one of the listed options.");
+  task.decision.chosenId = option.id;
+  task.decision.chosenAt = at;
+  task.nextAction = option.nextStep;
+  task.history?.push({
+    at,
+    status: task.status,
+    note: `You chose: ${option.label}`,
+  });
+  return { task, option };
 }
 export function progress(w: Workspace) {
   return w.tasks.filter((t) => ["approved", "done"].includes(t.status)).length;
