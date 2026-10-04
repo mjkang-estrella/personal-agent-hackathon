@@ -29,3 +29,7 @@ Apply the additive Gmail migration and configure the four server environment var
 - [Durable monitoring](2026-10-04-192000-nolan-durable-monitoring.md)
 - [Google server authorization](https://developers.google.com/workspace/gmail/api/auth/web-server)
 - [AgentMail inbox ownership](https://www.agentmail.to/blog/trigger-ai-agent-when-email-arrives)
+
+## Integration with the inbox and review queue
+
+Main subsequently added a read-only inbox and workspace advisory locks around agent preparation. Preserve both: Gmail sync/track/disconnect routes share the lock, and the durable monitor invokes Gmail inside that existing lock. The personal Inbox displays saved, selected Gmail reply evidence; refreshing it never fetches, classifies, or sends mail. Metadata is stored with each imported evidence document, and list/detail reads remain scoped to the signed workspace. Untracking gets a new binding identity on re-link so old in-flight classifications cannot apply to a new selection. AgentMail's demo inbox and outgoing approval checks remain unchanged.

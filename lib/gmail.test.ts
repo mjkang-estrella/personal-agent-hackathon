@@ -95,3 +95,38 @@ test("Only bounded plain-text reply content becomes evidence", () => {
     "Checking.",
   );
 });
+
+test("Gmail inbox only reads saved workspace evidence and retains it after disconnect", async () => {
+  const { readImportedGmail } = await import("./gmail/inbox");
+  const { makeWorkspace } = await import("./fixtures");
+  const w = makeWorkspace();
+  w.demo = false;
+  w.documents.push({
+    id: "gmail-123",
+    name: "HR reply",
+    employer: "personal",
+    kind: "other",
+    pages: ["Please send a certificate."],
+    addedAt: "2026-10-04T12:00:00Z",
+    emailSource: {
+      id: "gmail:123",
+      from: "hr@example.com",
+      subject: "Fictional claim",
+      at: "2026-10-04T12:00:00Z",
+      taskId: "learning",
+    },
+  });
+  const list = readImportedGmail(w);
+  assert.equal(list.messages.length, 1);
+  assert.equal(list.messages[0].body, undefined);
+  assert.equal(
+    readImportedGmail(w, "gmail:123").message?.body,
+    "Please send a certificate.",
+  );
+  assert.equal(readImportedGmail(w, "foreign-id").message, undefined);
+  assert.equal(
+    readImportedGmail(makeWorkspace(), "gmail:123").message,
+    undefined,
+  );
+  assert.equal(w.tasks[0].status, "todo");
+});

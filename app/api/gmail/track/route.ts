@@ -1,3 +1,4 @@
+import { withWorkspaceLock, WorkspaceBusyError } from "@/lib/db";
 import { z } from "zod";
 import { sessionId, sameOrigin, publicError } from "@/lib/session";
 import { senderAddress } from "@/lib/gmail/security";
@@ -19,13 +20,20 @@ export async function POST(request: Request) {
       .parse(await request.json());
     const id = await sessionId();
     if (data.action === "untrack")
-      return Response.json(await untrackThread(id, data.taskId));
+      return Response.json(
+        await withWorkspaceLock(id, () => untrackThread(id, data.taskId)),
+      );
     const sender = senderAddress(data.sender);
     if (!sender) throw new Error("Enter a valid HR email address.");
     return Response.json(
-      await trackThread(id, data.taskId, data.threadId, sender),
+      await withWorkspaceLock(id, () =>
+        trackThread(id, data.taskId, data.threadId, sender),
+      ),
     );
   } catch (e) {
-    return Response.json({ error: publicError(e) }, { status: 400 });
+    return Response.json(
+      { error: publicError(e) },
+      { status: e instanceof WorkspaceBusyError ? 409 : 400 },
+    );
   }
 }

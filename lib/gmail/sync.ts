@@ -209,6 +209,13 @@ export async function syncGmail(id: string, generation?: string) {
             throw new Error("Your workspace document limit is reached.");
           s.documents.push({
             id: docId,
+            emailSource: {
+              id: "gmail:" + m.id,
+              from: binding.sender,
+              subject: header(m, "Subject").slice(0, 200),
+              at: new Date(Number(m.internalDate)).toISOString(),
+              taskId: t.id,
+            },
             name: `Gmail · ${header(m, "Subject").slice(0, 120)}`,
             employer: "personal",
             kind: "other",
