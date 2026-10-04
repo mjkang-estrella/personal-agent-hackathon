@@ -38,6 +38,7 @@ import {
 } from "lucide-react";
 import type { Workspace, Task, Document, Stage, Status } from "@/lib/types";
 import Assistant from "./assistant";
+import BackgroundControls from "./background-controls";
 import { MODEL_LABEL } from "@/lib/model-config";
 import { addDays, replyPayload } from "@/lib/domain";
 const money = (n: number) =>
@@ -156,19 +157,10 @@ export default function Dashboard() {
     return () => clearInterval(t);
   }, [busy, load]);
   useEffect(() => {
-    if (!w?.inbox || busy) return;
-    const t = setInterval(async () => {
-      try {
-        const res = await fetch("/api/action", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ action: "sync" }),
-        });
-        if (res.ok) setW(await res.json());
-      } catch {}
-    }, 20000);
-    return () => clearInterval(t);
-  }, [w?.inbox, busy]);
+    if (!w?.background?.enabled || busy) return;
+    const timer = setInterval(load, 20000);
+    return () => clearInterval(timer);
+  }, [w?.background?.enabled, busy, load]);
   async function act(
     action: string,
     extra: Record<string, unknown> = {},
@@ -685,6 +677,7 @@ export default function Dashboard() {
           )}
           {page === "settings" && (
             <SettingsForm
+              onUpdate={setW}
               w={w}
               busy={busy}
               act={act}
@@ -1448,6 +1441,7 @@ function SettingsForm({
   busy,
   act,
   editDates,
+  onUpdate,
 }: {
   w: Workspace;
   busy: string;
@@ -1457,6 +1451,7 @@ function SettingsForm({
     m?: string,
   ) => Promise<Workspace | undefined>;
   editDates: () => void;
+  onUpdate: (w: Workspace) => void;
 }) {
   return (
     <div className="settings-grid">
@@ -1503,6 +1498,7 @@ function SettingsForm({
           <CalendarDays size={15} /> Edit transition dates
         </button>
       </form>
+      <BackgroundControls w={w} onUpdate={onUpdate} />
       <div className="settings-card">
         <h2>Connected to your next chapter</h2>
         <p className="muted">Live services powering this workspace.</p>
