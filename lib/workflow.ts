@@ -2,6 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { analyst, analysisSchema, context } from "./agent";
 import { activity, getWorkspace, mutate } from "./db";
 import { validEvidence } from "./domain";
+import { isReviewExample } from "./review-examples";
 import { MODEL_LABEL } from "./model-config";
 import { nextAgentStep } from "./automation";
 import { prepareClaim, syncMail } from "./services";
@@ -57,7 +58,10 @@ export async function analyzeWorkspace(id: string) {
         .filter(
           (t) =>
             !progressed.some(
-              (p) => p.category === t.category && p.stage === t.stage,
+              (p) =>
+                !isReviewExample(p) &&
+                p.category === t.category &&
+                p.stage === t.stage,
             ),
         )
         .map((t) => ({ ...t, id: randomUUID(), status: "todo" as const })),

@@ -23,6 +23,7 @@ import {
   syncMail,
   sendCertificate,
 } from "@/lib/services";
+import { loadReviewExamples } from "@/lib/review-examples";
 import { chooseOption, updateDates } from "@/lib/domain";
 import { completionCertificate } from "@/lib/fixtures";
 import { advanceAgent, analyzeWorkspace, workflowInput } from "@/lib/workflow";
@@ -62,6 +63,7 @@ const schema = z.object({
     "profile",
     "complete",
     "decide",
+    "review_examples",
     "research",
     "new_workspace",
   ]),
@@ -309,6 +311,17 @@ export async function POST(request: Request) {
                 ? "You marked a task complete"
                 : "You reopened a task",
               t.title,
+              "user",
+            );
+          });
+          break;
+        case "review_examples":
+          w = await mutate(id, (s) => {
+            loadReviewExamples(s);
+            activity(
+              s,
+              "Four review examples are ready",
+              "Fictional choices reset. Claims and other tasks are unchanged.",
               "user",
             );
           });
