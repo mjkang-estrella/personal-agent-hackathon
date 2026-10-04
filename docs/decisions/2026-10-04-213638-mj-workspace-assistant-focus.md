@@ -36,3 +36,7 @@ A status chip keeps the agent's controls one click away without competing with t
 - [Practice cases with proactive drafts](2026-10-04-205230-mj-practice-cases-proactive-drafts.md)
 - [Focus resolver](../../lib/focus.ts), [chat agent](../../lib/agent.ts), [assistant panel](../../components/assistant.tsx)
 - [Screenshots](../screenshots/assistant-focus/)
+
+## Subsequent presentation
+
+The dock placement, default visibility, and mobile auto-close behavior are superseded by the [chat-first workspace](2026-10-04-215622-codex-chat-first-workspace.md). Focus tools, personal decisions, and gateway compatibility remain unchanged.

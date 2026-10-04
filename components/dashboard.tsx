@@ -7,6 +7,8 @@ import {
   ArrowRight,
   ArrowLeftRight,
   LayoutDashboard,
+  MessageCircle,
+  ArrowLeft,
   Files,
   Activity,
   Settings,
@@ -42,6 +44,7 @@ import {
   Signpost,
 } from "lucide-react";
 import type { Workspace, Task, Document, Stage, Status } from "@/lib/types";
+import { orientation, type OrientationAction } from "@/lib/orientation";
 import type { WorkspaceFocus } from "@/lib/focus";
 import Assistant from "./assistant";
 import Modal, { ModalNotice } from "./modal";
@@ -126,12 +129,27 @@ const stages: {
 type Page = "board" | "documents" | "inbox" | "activity" | "settings";
 export default function Dashboard() {
   const [w, setW] = useState<Workspace | null>(null);
-  const [page, setPage] = useState<Page>("board");
+  const [page, setContextPage] = useState<Page>("board");
+  const [contextOpen, setContextOpen] = useState(false);
+  function setPage(next: Page) {
+    assistantMoved.current = false;
+    setContextPage(next);
+    setContextOpen(true);
+  }
+  function backToChat() {
+    setContextOpen(false);
+    requestAnimationFrame(() =>
+      window.document
+        .querySelector<HTMLTextAreaElement>(
+          '[aria-label="Message your assistant"]',
+        )
+        ?.focus(),
+    );
+  }
   const [selected, setSelected] = useState<string | null>(null);
   const [viewDoc, setViewDoc] = useState<{ id: string; page: number } | null>(
     null,
   );
-  const [chat, setChat] = useState(false);
   const [highlight, setHighlight] = useState<string | null>(null);
   const [reader, setReader] = useState<{ id: string; page: number } | null>(
     null,
@@ -152,22 +170,19 @@ export default function Dashboard() {
   const [search, setSearch] = useState("");
   const [taskSearch, setTaskSearch] = useState("");
   const [loadError, setLoadError] = useState("");
-  const previousPage = useRef(page);
+  const previousPage = useRef({ page, contextOpen });
   useEffect(() => {
-    if (previousPage.current === page) return;
-    previousPage.current = page;
+    if (
+      previousPage.current.page === page &&
+      previousPage.current.contextOpen === contextOpen
+    )
+      return;
+    previousPage.current = { page, contextOpen };
+    if (!contextOpen) return;
     // Keep the caret in the chat when the assistant changes the view.
     if (assistantMoved.current) assistantMoved.current = false;
     else window.document.getElementById("workspace-heading")?.focus();
-  }, [page]);
-  useEffect(() => {
-    const saved = window.localStorage.getItem("jobswitch.assistant");
-    setChat(
-      saved
-        ? saved === "open"
-        : window.matchMedia("(min-width: 1100px)").matches,
-    );
-  }, []);
+  }, [page, contextOpen]);
   useEffect(() => {
     if (!highlight) return;
     window.document
@@ -290,15 +305,17 @@ export default function Dashboard() {
       notify("Account status is unavailable. Please try again.", true);
     }
   }
+  function runOrientationAction(action: OrientationAction) {
+    if (action.kind === "task") openTask(action.id);
+    else if (action.kind === "upload") void openUpload();
+    else if (action.kind === "resume") void act("agent_resume");
+    else setPage(action.kind === "settings" ? "settings" : "board");
+  }
   function openTask(id: string) {
     setSelected(id);
     setCertificateId("");
   }
-  function toggleAssistant(open: boolean) {
-    setChat(open);
-    window.localStorage.setItem("jobswitch.assistant", open ? "open" : "closed");
-  }
-  function showFocus(f: WorkspaceFocus) {
+  function showFocus(f: WorkspaceFocus, automatic = false) {
     const target: Page =
       f.view === "document"
         ? "documents"
@@ -307,8 +324,11 @@ export default function Dashboard() {
           : f.view === "activity"
             ? "activity"
             : "board";
-    if (target !== page) assistantMoved.current = true;
-    setPage(target);
+    assistantMoved.current = automatic;
+    setContextPage(target);
+    // Automatic references never take a phone user away from a streaming answer.
+    if (!automatic || window.matchMedia("(min-width: 1100px)").matches)
+      setContextOpen(true);
     setSelected(null);
     setViewDoc(null);
     if (f.view === "task" && f.id) {
@@ -322,8 +342,6 @@ export default function Dashboard() {
     }
     if (f.view === "message" && f.id)
       setInboxFocus({ id: f.id, label: f.label, n: Date.now() });
-    // A narrow screen shows one pane, so reveal the content that changed.
-    if (!window.matchMedia("(min-width: 1100px)").matches) setChat(false);
   }
   const task = w?.tasks.find((t) => t.id === selected);
   const taskDraft = w && task ? openDraft(w, task.id) : undefined;
@@ -360,7 +378,7 @@ export default function Dashboard() {
             role={loadError ? "alert" : undefined}
           >
             {loadError ||
-              "Opening your workspace, so you can see your plan and what needs your attention."}
+              "Opening your conversation, with your plan and documents close at hand."}
           </p>
           {loadError ? (
             <button className="workspace-entry-retry" onClick={load}>
@@ -417,7 +435,7 @@ export default function Dashboard() {
       (certificateId || w.documents.find((d) => d.kind === "certificate")?.id),
   );
   const links: [Page, typeof LayoutDashboard, string][] = [
-    ["board", LayoutDashboard, "Transition board"],
+    ["board", LayoutDashboard, "Your plan"],
     ["documents", Files, "My documents"],
     ["inbox", Mail, "Inbox"],
     ["activity", Activity, "Agent activity"],
@@ -433,7 +451,9 @@ export default function Dashboard() {
           .includes(taskSearch.toLowerCase())),
   );
   return (
-    <div className={`app-shell ${chat ? "assistant-open" : ""}`}>
+    <div
+      className={`app-shell chat-first ${contextOpen ? "context-open" : ""}`}
+    >
       <a href="#workspace-main" className="skip-link">
         Skip to workspace content
       </a>
@@ -445,12 +465,21 @@ export default function Dashboard() {
           JobSwitch<span className="brand-dot">.</span>
         </a>
         <nav aria-label="Workspace navigation">
+          <button
+            className={`nav-item conversation-nav ${!contextOpen ? "active" : ""}`}
+            aria-label="Chat"
+            aria-current={!contextOpen ? "page" : undefined}
+            onClick={backToChat}
+          >
+            <MessageCircle size={19} /> Chat
+          </button>
+          <p className="nav-section-label">Your workspace</p>
           {links.map(([id, Icon, label]) => (
             <button
               key={id}
               aria-label={label}
-              aria-current={page === id ? "page" : undefined}
-              className={`nav-item ${page === id ? "active" : ""}`}
+              aria-current={contextOpen && page === id ? "page" : undefined}
+              className={`nav-item ${contextOpen && page === id ? "active" : ""}`}
               onClick={() => {
                 setPage(id);
                 setSelected(null);
@@ -467,21 +496,13 @@ export default function Dashboard() {
             </button>
           ))}
         </nav>
-        <button
-          aria-label="Ask JobSwitch"
-          className="sidebar-assistant"
-          aria-pressed={chat}
-          onClick={() => toggleAssistant(!chat)}
-        >
-          <Sparkles size={18} />
-          <span>Ask JobSwitch</span>
-          <span className="shortcut">{chat ? "On" : "↗"}</span>
-        </button>
         <div className="sidebar-bottom">
           <button
             aria-label="Workspace settings"
-            aria-current={page === "settings" ? "page" : undefined}
-            className={`nav-item ${page === "settings" ? "active" : ""}`}
+            aria-current={
+              contextOpen && page === "settings" ? "page" : undefined
+            }
+            className={`nav-item ${contextOpen && page === "settings" ? "active" : ""}`}
             onClick={() => setPage("settings")}
           >
             <Settings size={18} />
@@ -502,15 +523,17 @@ export default function Dashboard() {
           <div className="breadcrumbs">
             My workspace <ChevronRight size={13} />
             <span>
-              {page === "board"
-                ? "Transition board"
-                : page === "documents"
-                  ? "My documents"
-                  : page === "inbox"
-                    ? "Inbox"
-                    : page === "activity"
-                      ? "Agent activity"
-                      : "Settings"}
+              {!contextOpen
+                ? "Chat"
+                : page === "board"
+                  ? "Your plan"
+                  : page === "documents"
+                    ? "My documents"
+                    : page === "inbox"
+                      ? "Inbox"
+                      : page === "activity"
+                        ? "Agent activity"
+                        : "Settings"}
             </span>
           </div>
           <div className="topbar-right">
@@ -534,7 +557,9 @@ export default function Dashboard() {
                       : "Pause agent"
                 }
                 onClick={() =>
-                  act(agentPaused || agentError ? "agent_resume" : "agent_pause")
+                  act(
+                    agentPaused || agentError ? "agent_resume" : "agent_pause",
+                  )
                 }
               >
                 {agentPaused || agentError ? (
@@ -566,549 +591,630 @@ export default function Dashboard() {
               <CircleHelp size={19} />
             </button>
             <AccountControls compact />
-            <span className="avatar small">{initials}</span>
           </div>
         </header>
-        <main id="workspace-main" tabIndex={-1} className="main-content">
-          <div className="page-heading">
-            <div>
-              <h1 id="workspace-heading" tabIndex={-1}>
-                {page === "board" ? (
-                  <>
-                    A little clarity,{" "}
-                    <span>{w.profile.name.split(" ")[0]}.</span>
-                  </>
-                ) : page === "documents" ? (
-                  "Documents"
-                ) : page === "inbox" ? (
-                  "Inbox"
-                ) : page === "activity" ? (
-                  "Activity"
-                ) : (
-                  "Workspace settings"
-                )}
-              </h1>
-              <p>
-                {page === "board"
-                  ? `${w.profile.previousEmployer} → ${w.profile.nextEmployer} · Your agent prepares. You review.`
-                  : page === "documents"
-                    ? "The source of truth for your transition. Every recommendation starts here."
-                    : page === "inbox"
-                      ? "Read HR replies and keep track of the conversation."
-                      : page === "activity"
-                        ? "A clear record of what happened, what changed, and what comes next."
-                        : "Your dates and details keep every next step in sync."}
+        <main
+          id="workspace-main"
+          tabIndex={-1}
+          className="conversation-workspace"
+        >
+          <Assistant
+            onFocus={showFocus}
+            briefing={orientation(w, {
+              busy,
+              transportError: agentTransportError,
+            })}
+            transition={`${w.profile.previousEmployer || "Your current job"} → ${w.profile.nextEmployer || "Your next job"} · Last day ${date(w.profile.lastDay)}`}
+            busy={!!busy}
+            onAction={runOrientationAction}
+            contextOpen={contextOpen}
+            openPlan={() => setPage("board")}
+          />
+          {!contextOpen && (
+            <aside
+              className="transition-summary"
+              aria-label="Your transition summary"
+            >
+              <h2>Your transition</h2>
+              <p className="summary-employers">
+                {w.profile.previousEmployer}
+                <ArrowRight size={15} />
+                {w.profile.nextEmployer}
               </p>
-            </div>
-          </div>
-          {page === "inbox" && (
-            <Inbox
-              openTask={openTask}
-              openDocument={(id) => setViewDoc({ id, page: 1 })}
-              refreshKey={(w.mail || []).length}
-              focus={inboxFocus}
-            />
-          )}
-          {page === "board" && (
-            <>
-              {practice && (
-                <PracticeStrip
-                  w={w}
-                  busy={busy}
-                  act={act}
-                  openTask={openTask}
-                  chooseCase={() => setPage("settings")}
-                />
-              )}
-              {!w.documents.length && (
-                <section className="empty-start">
-                  <div>
-                    <h2>Let’s map out your transition.</h2>
-                    <p>
-                      Set your name and employers in Settings, then add a
-                      handbook from each company. Your agent will connect the
-                      dots.
-                    </p>
-                  </div>
-                  <button className="primary" onClick={openUpload}>
-                    <Upload size={16} /> Add your first document
-                  </button>
-                </section>
-              )}
-              {agentError && (
-                <div className="notice warning agent-alert" role="alert">
-                  <AlertCircle size={18} />
-                  <p>{agentError}</p>
-                  <button
-                    className="secondary small-button"
-                    disabled={!!busy}
-                    onClick={() => act("agent_resume")}
-                  >
-                    <RefreshCw size={14} /> Retry
-                  </button>
+              <dl className="summary-dates">
+                <div>
+                  <dt>Last day</dt>
+                  <dd>{date(w.profile.lastDay)}</dd>
                 </div>
-              )}
-              <section
-                className="transition-overview"
-                aria-label="Transition overview"
+                <div>
+                  <dt>First day</dt>
+                  <dd>{date(w.profile.startDay)}</dd>
+                </div>
+              </dl>
+              <button className="summary-link" onClick={() => setPage("board")}>
+                <LayoutDashboard size={17} />
+                <span>
+                  View your plan
+                  <small>{w.tasks.length} tasks across your transition</small>
+                </span>
+                <ChevronRight size={16} />
+              </button>
+              <button
+                className="summary-link"
+                onClick={() => setPage("documents")}
               >
-                <div className="transition-dates">
-                  <span>
-                    Last day <strong>{date(w.profile.lastDay)}</strong>
-                  </span>
-                  <ArrowRight size={15} aria-hidden="true" />
-                  <span>
-                    First day <strong>{date(w.profile.startDay)}</strong>
-                  </span>
-                  <button
-                    className="text-button"
-                    onClick={() => setDates(true)}
-                  >
-                    Edit dates
-                  </button>
+                <Files size={17} />
+                <span>
+                  Source documents
+                  <small>
+                    {w.documents.length} documents in this workspace
+                  </small>
+                </span>
+                <ChevronRight size={16} />
+              </button>
+              <button className="summary-link" onClick={() => setPage("inbox")}>
+                <Mail size={17} />
+                <span>
+                  Inbox<small>HR replies and updates</small>
+                </span>
+                <ChevronRight size={16} />
+              </button>
+              <p className="summary-note">
+                <ShieldCheck size={15} /> You approve every outgoing action.
+              </p>
+            </aside>
+          )}
+          <section
+            className="workspace-context"
+            aria-label="Supporting workspace"
+            hidden={!contextOpen}
+          >
+            <div className="context-toolbar">
+              <button className="text-button" onClick={backToChat}>
+                <ArrowLeft size={16} /> Back to chat
+              </button>
+              <span>Supporting context</span>
+            </div>
+            <div className="main-content">
+              <div className="page-heading">
+                <div>
+                  <h1 id="workspace-heading" tabIndex={-1}>
+                    {page === "board"
+                      ? "Your plan"
+                      : page === "documents"
+                        ? "Documents"
+                        : page === "inbox"
+                          ? "Inbox"
+                          : page === "activity"
+                            ? "Activity"
+                            : "Workspace settings"}
+                  </h1>
+                  <p>
+                    {page === "board"
+                      ? `${w.profile.previousEmployer} → ${w.profile.nextEmployer} · Your agent prepares. You review.`
+                      : page === "documents"
+                        ? "The source of truth for your transition. Every recommendation starts here."
+                        : page === "inbox"
+                          ? "Read HR replies and keep track of the conversation."
+                          : page === "activity"
+                            ? "A clear record of what happened, what changed, and what comes next."
+                            : "Your dates and details keep every next step in sync."}
+                  </p>
                 </div>
-              </section>
-              {w.dateProposal && (
-                <DateProposalNotice
-                  w={w}
-                  busy={busy}
-                  act={act}
-                  viewEvidence={(e) =>
-                    setViewDoc({ id: e.documentId, page: e.page })
-                  }
+              </div>
+              {page === "inbox" && (
+                <Inbox
+                  openTask={openTask}
+                  openDocument={(id) => setViewDoc({ id, page: 1 })}
+                  refreshKey={(w.mail || []).length}
+                  focus={inboxFocus}
                 />
               )}
-              <section className="review-inbox" aria-label="Review and decide">
-                  <div className="review-inbox-heading">
-                    <div>
-                      <h2>
-                        Review & decide <span>{reviews.length}</span>
-                      </h2>
-                    </div>
-                    <CheckCheck size={22} />
-                  </div>
-                  {reviews.length ? (
-                    reviews.map((t) => {
-                      const kind = reviewKind(t, w);
-                      const draft =
-                        kind === "draft" ? openDraft(w, t.id) : undefined;
-                      return (
-                        <button
-                          className="review-item"
-                          key={t.id}
-                          onClick={() => openTask(t.id)}
-                        >
-                          <span className="review-item-icon">
-                            {kind === "draft" ? (
-                              <PenLine size={20} />
-                            ) : kind === "reply" ? (
-                              <Mail size={20} />
-                            ) : kind === "decision" ? (
-                              <Signpost size={20} />
-                            ) : (
-                              <Wallet size={20} />
-                            )}
-                          </span>
-                          <span>
-                            <small>
-                              {draft
-                                ? draft.inReplyTo
-                                  ? "REPLY DRAFTED"
-                                  : "EMAIL DRAFTED"
-                                : kind === "reply"
-                                  ? "REPLY DRAFTED"
-                                  : kind === "decision"
-                                    ? "YOUR CALL"
-                                    : "CLAIM PREPARED"}
-                            </small>
-                            <strong>
-                              {draft?.subject ||
-                                t.decision?.question ||
-                                t.claim?.course ||
-                                t.title}
-                            </strong>
-                            <span>
-                              {draft
-                                ? `To ${draft.to.map(contactName).join(", ")} · Review & approve`
-                                : kind === "reply"
-                                  ? "Review message & attachment"
-                                  : kind === "decision"
-                                    ? `${t.decision!.options.length} options laid out · No recommendation`
-                                    : `${money(t.claim!.amount)} · Review claim & evidence`}
-                            </span>
-                          </span>
-                          <ArrowUpRight size={18} />
-                        </button>
-                      );
-                    })
-                  ) : (
-                    <div className="review-empty">
-                      <ShieldCheck size={27} />
-                      <strong>
-                        {agentWorking
-                          ? "Your agent is doing the prep."
-                          : "Nothing to approve or decide right now."}
-                      </strong>
-                      <p>
-                        {practice
-                          ? "Emails your agent drafts will appear here. You get the final say."
-                          : "Prepared claims, replies, and choices only you can make will appear here."}
-                      </p>
+              {page === "board" && (
+                <>
+                  {practice && (
+                    <PracticeStrip
+                      w={w}
+                      busy={busy}
+                      act={act}
+                      openTask={openTask}
+                      chooseCase={() => setPage("settings")}
+                    />
+                  )}
+                  {!w.documents.length && (
+                    <section className="empty-start">
+                      <div>
+                        <h2>Let’s map out your transition.</h2>
+                        <p>
+                          Set your name and employers in Settings, then add a
+                          handbook from each company. Your agent will connect
+                          the dots.
+                        </p>
+                      </div>
+                      <button className="primary" onClick={openUpload}>
+                        <Upload size={16} /> Add your first document
+                      </button>
+                    </section>
+                  )}
+                  {agentError && (
+                    <div className="notice warning agent-alert" role="alert">
+                      <AlertCircle size={18} />
+                      <p>{agentError}</p>
+                      <button
+                        className="secondary small-button"
+                        disabled={!!busy}
+                        onClick={() => act("agent_resume")}
+                      >
+                        <RefreshCw size={14} /> Retry
+                      </button>
                     </div>
                   )}
-                  <div className="review-safety">
-                    <ShieldCheck size={14} /> Review the exact contents before
-                    approving. Personal choices stay yours.
-                  </div>
-              </section>
-              <section
-                className="agent-handoff"
-                aria-label="Missing information"
-              >
-                <div>
-                  <span className="summary-icon lavender">
-                    <CircleHelp size={19} />
-                  </span>
-                  <div>
-                    <strong>
-                      {needsInput.length
-                        ? needsInput.length === 1
-                          ? "1 task needs information only you can provide"
-                          : `${needsInput.length} tasks need information only you can provide`
-                        : "Your agent has the information it needs for now"}
-                    </strong>
-                    <p>
-                      {needsInput.length
-                        ? "Eligibility, personal choices, and missing documents stay unconfirmed until there’s evidence."
-                        : "If a document or personal decision is missing, your agent will ask here."}
-                    </p>
-                  </div>
-                </div>
-                {needsInput.length > 0 && (
-                  <button
-                    className="text-button"
-                    onClick={() => {
-                      setFilter("attention");
-                      openTask(needsInput[0].id);
-                    }}
+                  <section
+                    className="transition-overview"
+                    aria-label="Transition overview"
                   >
-                    View requests <ArrowRight size={15} />
-                  </button>
-                )}
-              </section>
-              <div className="board-toolbar">
-                <div className="board-title">
-                  <h2>The plan your agent is tracking</h2>
-                  <span>{w.tasks.length}</span>
-                </div>
-                <div className="board-controls">
-                  <div className="segmented">
-                    <button
-                      aria-pressed={filter === "all"}
-                      className={filter === "all" ? "selected" : ""}
-                      onClick={() => setFilter("all")}
-                    >
-                      All tasks
-                    </button>
-                    <button
-                      aria-pressed={filter === "attention"}
-                      className={filter === "attention" ? "selected" : ""}
-                      onClick={() => setFilter("attention")}
-                    >
-                      Needs you{attention > 0 && <b>{attention}</b>}
-                    </button>
-                    <button
-                      aria-pressed={filter === "done"}
-                      className={filter === "done" ? "selected" : ""}
-                      onClick={() => setFilter("done")}
-                    >
-                      Resolved
-                    </button>
-                  </div>
-                  <button
-                    className="secondary small-button"
-                    onClick={openUpload}
-                  >
-                    <Plus size={15} /> Add documents
-                  </button>
-                </div>
-              </div>
-              <div className="plan-search">
-                <Search size={18} />
-                <input
-                  aria-label="Search your tasks"
-                  placeholder="Find a task in your plan…"
-                  value={taskSearch}
-                  onChange={(e) => setTaskSearch(e.target.value)}
-                />
-                {taskSearch && (
-                  <button
-                    className="icon-button"
-                    aria-label="Clear task search"
-                    onClick={() => setTaskSearch("")}
-                  >
-                    <X size={16} />
-                  </button>
-                )}
-              </div>
-              <section className="kanban">
-                {stages.map((stage) => {
-                  const tasks = visible.filter((t) => t.stage === stage.id);
-                  const Icon = stage.icon;
-                  return (
-                    <section
-                      className={`kanban-column stage-${stage.id}`}
-                      key={stage.id}
-                    >
-                      <header className="column-header">
-                        <div>
-                          <Icon size={16} />
-                          <h3>{stage.title}</h3>
-                          <span>{tasks.length}</span>
-                        </div>
-                        <p>{stage.caption}</p>
-                      </header>
-                      <div className="column-cards">
-                        {tasks.map((t) => (
-                          <TaskCard
-                            key={t.id}
-                            task={t}
-                            drafted={!!openDraft(w, t.id)}
-                            highlighted={highlight === t.id}
-                            open={() => openTask(t.id)}
-                          />
-                        ))}
-                        {!tasks.length && (
-                          <div className="empty-column">
-                            <CheckCircle2 size={24} />
-                            <p>
-                              {filter === "all" && !taskSearch
-                                ? "Nothing here yet."
-                                : "No matching tasks."}
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    </section>
-                  );
-                })}
-              </section>
-              <div className="board-footer">
-                <span>
-                  <ShieldCheck size={14} /> Every recommendation has a source.
-                  Sending always needs your approval.
-                </span>
-                <a href="/api/export">
-                  <Download size={14} /> Export plan
-                </a>
-              </div>
-            </>
-          )}
-          {page === "documents" && (
-            <>
-              <div className="section-toolbar">
-                <div className="search-field">
-                  <Search size={17} />
-                  <input
-                    placeholder="Search documents…"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    aria-label="Search documents"
-                  />
-                </div>
-                <button className="primary" onClick={openUpload}>
-                  <Upload size={16} /> Add document
-                </button>
-              </div>
-              {reader && (
-                <FocusedDocument
-                  w={w}
-                  reader={reader}
-                  setReader={setReader}
-                />
-              )}
-              {!practice && <CloudDocuments w={w} onUpdate={setW} />}
-              <div className="documents-list">
-                <div className="list-header">
-                  <span>DOCUMENT</span>
-                  <span>BELONGS TO</span>
-                  <span>PAGES</span>
-                  <span />
-                </div>
-                {!w.documents.some((d) =>
-                  d.name.toLowerCase().includes(search.toLowerCase()),
-                ) && (
-                  <div className="empty-state" role="status">
-                    <FileText size={28} aria-hidden="true" />
-                    <h2>
-                      {search
-                        ? "No matching documents"
-                        : "Your sources start here"}
-                    </h2>
-                    <p>
-                      {search
-                        ? "Try a different name or clear your search."
-                        : "Add a benefits handbook, receipt, or HR email to give your plan some context."}
-                    </p>
-                    {search && (
+                    <div className="transition-dates">
+                      <span>
+                        Last day <strong>{date(w.profile.lastDay)}</strong>
+                      </span>
+                      <ArrowRight size={15} aria-hidden="true" />
+                      <span>
+                        First day <strong>{date(w.profile.startDay)}</strong>
+                      </span>
                       <button
                         className="text-button"
-                        onClick={() => setSearch("")}
+                        onClick={() => setDates(true)}
                       >
-                        Clear search
+                        Edit dates
+                      </button>
+                    </div>
+                  </section>
+                  {w.dateProposal && (
+                    <DateProposalNotice
+                      w={w}
+                      busy={busy}
+                      act={act}
+                      viewEvidence={(e) =>
+                        setViewDoc({ id: e.documentId, page: e.page })
+                      }
+                    />
+                  )}
+                  <section
+                    className="review-inbox"
+                    aria-label="Review and decide"
+                  >
+                    <div className="review-inbox-heading">
+                      <div>
+                        <h2>
+                          Review & decide <span>{reviews.length}</span>
+                        </h2>
+                      </div>
+                      <CheckCheck size={22} />
+                    </div>
+                    {reviews.length ? (
+                      reviews.map((t) => {
+                        const kind = reviewKind(t, w);
+                        const draft =
+                          kind === "draft" ? openDraft(w, t.id) : undefined;
+                        return (
+                          <button
+                            className="review-item"
+                            key={t.id}
+                            onClick={() => openTask(t.id)}
+                          >
+                            <span className="review-item-icon">
+                              {kind === "draft" ? (
+                                <PenLine size={20} />
+                              ) : kind === "reply" ? (
+                                <Mail size={20} />
+                              ) : kind === "decision" ? (
+                                <Signpost size={20} />
+                              ) : (
+                                <Wallet size={20} />
+                              )}
+                            </span>
+                            <span>
+                              <small>
+                                {draft
+                                  ? draft.inReplyTo
+                                    ? "REPLY DRAFTED"
+                                    : "EMAIL DRAFTED"
+                                  : kind === "reply"
+                                    ? "REPLY DRAFTED"
+                                    : kind === "decision"
+                                      ? "YOUR CALL"
+                                      : "CLAIM PREPARED"}
+                              </small>
+                              <strong>
+                                {draft?.subject ||
+                                  t.decision?.question ||
+                                  t.claim?.course ||
+                                  t.title}
+                              </strong>
+                              <span>
+                                {draft
+                                  ? `To ${draft.to.map(contactName).join(", ")} · Review & approve`
+                                  : kind === "reply"
+                                    ? "Review message & attachment"
+                                    : kind === "decision"
+                                      ? `${t.decision!.options.length} options laid out · No recommendation`
+                                      : `${money(t.claim!.amount)} · Review claim & evidence`}
+                              </span>
+                            </span>
+                            <ArrowUpRight size={18} />
+                          </button>
+                        );
+                      })
+                    ) : (
+                      <div className="review-empty">
+                        <ShieldCheck size={27} />
+                        <strong>
+                          {agentWorking
+                            ? "Your agent is doing the prep."
+                            : "Nothing to approve or decide right now."}
+                        </strong>
+                        <p>
+                          {practice
+                            ? "Emails your agent drafts will appear here. You get the final say."
+                            : "Prepared claims, replies, and choices only you can make will appear here."}
+                        </p>
+                      </div>
+                    )}
+                    <div className="review-safety">
+                      <ShieldCheck size={14} /> Review the exact contents before
+                      approving. Personal choices stay yours.
+                    </div>
+                  </section>
+                  <section
+                    className="agent-handoff"
+                    aria-label="Missing information"
+                  >
+                    <div>
+                      <span className="summary-icon lavender">
+                        <CircleHelp size={19} />
+                      </span>
+                      <div>
+                        <strong>
+                          {needsInput.length
+                            ? needsInput.length === 1
+                              ? "1 task needs information only you can provide"
+                              : `${needsInput.length} tasks need information only you can provide`
+                            : "Your agent has the information it needs for now"}
+                        </strong>
+                        <p>
+                          {needsInput.length
+                            ? "Eligibility, personal choices, and missing documents stay unconfirmed until there’s evidence."
+                            : "If a document or personal decision is missing, your agent will ask here."}
+                        </p>
+                      </div>
+                    </div>
+                    {needsInput.length > 0 && (
+                      <button
+                        className="text-button"
+                        onClick={() => {
+                          setFilter("attention");
+                          openTask(needsInput[0].id);
+                        }}
+                      >
+                        View requests <ArrowRight size={15} />
+                      </button>
+                    )}
+                  </section>
+                  <div className="board-toolbar">
+                    <div className="board-title">
+                      <h2>Your plan</h2>
+                      <span>{w.tasks.length}</span>
+                    </div>
+                    <div className="board-controls">
+                      <div className="segmented">
+                        <button
+                          aria-pressed={filter === "all"}
+                          className={filter === "all" ? "selected" : ""}
+                          onClick={() => setFilter("all")}
+                        >
+                          All tasks
+                        </button>
+                        <button
+                          aria-pressed={filter === "attention"}
+                          className={filter === "attention" ? "selected" : ""}
+                          onClick={() => setFilter("attention")}
+                        >
+                          Needs you{attention > 0 && <b>{attention}</b>}
+                        </button>
+                        <button
+                          aria-pressed={filter === "done"}
+                          className={filter === "done" ? "selected" : ""}
+                          onClick={() => setFilter("done")}
+                        >
+                          Resolved
+                        </button>
+                      </div>
+                      <button
+                        className="secondary small-button"
+                        onClick={openUpload}
+                      >
+                        <Plus size={15} /> Add documents
+                      </button>
+                    </div>
+                  </div>
+                  <div className="plan-search">
+                    <Search size={18} />
+                    <input
+                      aria-label="Search your tasks"
+                      placeholder="Find a task in your plan…"
+                      value={taskSearch}
+                      onChange={(e) => setTaskSearch(e.target.value)}
+                    />
+                    {taskSearch && (
+                      <button
+                        className="icon-button"
+                        aria-label="Clear task search"
+                        onClick={() => setTaskSearch("")}
+                      >
+                        <X size={16} />
                       </button>
                     )}
                   </div>
-                )}
-                {w.documents
-                  .filter((d) =>
-                    d.name.toLowerCase().includes(search.toLowerCase()),
-                  )
-                  .map((d) => (
-                    <button
-                      className="document-row"
-                      key={d.id}
-                      onClick={() => setViewDoc({ id: d.id, page: 1 })}
-                    >
-                      <span>
-                        <span
-                          className={`document-icon ${d.employer === "previous" ? "peach" : d.employer === "next" ? "lavender" : "sage"}`}
+                  <section className="kanban">
+                    {stages.map((stage) => {
+                      const tasks = visible.filter((t) => t.stage === stage.id);
+                      const Icon = stage.icon;
+                      return (
+                        <section
+                          className={`kanban-column stage-${stage.id}`}
+                          key={stage.id}
                         >
-                          <FileText size={22} />
+                          <header className="column-header">
+                            <div>
+                              <Icon size={16} />
+                              <h3>{stage.title}</h3>
+                              <span>{tasks.length}</span>
+                            </div>
+                            <p>{stage.caption}</p>
+                          </header>
+                          <div className="column-cards">
+                            {tasks.map((t) => (
+                              <TaskCard
+                                key={t.id}
+                                task={t}
+                                drafted={!!openDraft(w, t.id)}
+                                highlighted={highlight === t.id}
+                                open={() => openTask(t.id)}
+                              />
+                            ))}
+                            {!tasks.length && (
+                              <div className="empty-column">
+                                <CheckCircle2 size={24} />
+                                <p>
+                                  {filter === "all" && !taskSearch
+                                    ? "Nothing here yet."
+                                    : "No matching tasks."}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        </section>
+                      );
+                    })}
+                  </section>
+                  <div className="board-footer">
+                    <span>
+                      <ShieldCheck size={14} /> Every recommendation has a
+                      source. Sending always needs your approval.
+                    </span>
+                    <a href="/api/export">
+                      <Download size={14} /> Export plan
+                    </a>
+                  </div>
+                </>
+              )}
+              {page === "documents" && (
+                <>
+                  <div className="section-toolbar">
+                    <div className="search-field">
+                      <Search size={17} />
+                      <input
+                        placeholder="Search documents…"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        aria-label="Search documents"
+                      />
+                    </div>
+                    <button className="primary" onClick={openUpload}>
+                      <Upload size={16} /> Add document
+                    </button>
+                  </div>
+                  {reader && (
+                    <FocusedDocument
+                      w={w}
+                      reader={reader}
+                      setReader={setReader}
+                    />
+                  )}
+                  {!practice && <CloudDocuments w={w} onUpdate={setW} />}
+                  <div className="documents-list">
+                    <div className="list-header">
+                      <span>DOCUMENT</span>
+                      <span>BELONGS TO</span>
+                      <span>PAGES</span>
+                      <span />
+                    </div>
+                    {!w.documents.some((d) =>
+                      d.name.toLowerCase().includes(search.toLowerCase()),
+                    ) && (
+                      <div className="empty-state" role="status">
+                        <FileText size={28} aria-hidden="true" />
+                        <h2>
+                          {search
+                            ? "No matching documents"
+                            : "Your sources start here"}
+                        </h2>
+                        <p>
+                          {search
+                            ? "Try a different name or clear your search."
+                            : "Add a benefits handbook, receipt, or HR email to give your plan some context."}
+                        </p>
+                        {search && (
+                          <button
+                            className="text-button"
+                            onClick={() => setSearch("")}
+                          >
+                            Clear search
+                          </button>
+                        )}
+                      </div>
+                    )}
+                    {w.documents
+                      .filter((d) =>
+                        d.name.toLowerCase().includes(search.toLowerCase()),
+                      )
+                      .map((d) => (
+                        <button
+                          className="document-row"
+                          key={d.id}
+                          onClick={() => setViewDoc({ id: d.id, page: 1 })}
+                        >
+                          <span>
+                            <span
+                              className={`document-icon ${d.employer === "previous" ? "peach" : d.employer === "next" ? "lavender" : "sage"}`}
+                            >
+                              <FileText size={22} />
+                            </span>
+                            <span>
+                              <strong>{d.name}</strong>
+                              <small>
+                                {d.cloudSource &&
+                                  `${d.cloudSource.service === "google-drive" ? "Google Drive" : "OneDrive"} copy · `}
+                                {d.kind.charAt(0).toUpperCase() +
+                                  d.kind.slice(1)}{" "}
+                                · Added{" "}
+                                {new Date(d.addedAt).toLocaleDateString(
+                                  "en-US",
+                                  {
+                                    month: "short",
+                                    day: "numeric",
+                                  },
+                                )}
+                              </small>
+                            </span>
+                          </span>
+                          <span className="ownership">
+                            {d.employer === "previous"
+                              ? w.profile.previousEmployer
+                              : d.employer === "next"
+                                ? w.profile.nextEmployer
+                                : "Personal"}
+                          </span>
+                          <span>{d.pages.length}</span>
+                          <ChevronRight size={18} />
+                        </button>
+                      ))}
+                  </div>
+                  <div className="document-help">
+                    <ShieldCheck size={20} />
+                    <div>
+                      <strong>Your documents stay in your workspace.</strong>
+                      <p>
+                        They are sent to the model only to analyze your
+                        transition. Public web searches never contain their
+                        text.
+                      </p>
+                    </div>
+                  </div>
+                </>
+              )}
+              {page === "activity" && (
+                <>
+                  <div className="section-toolbar">
+                    <div>
+                      <h2>Every step, accounted for</h2>
+                      <p className="muted">
+                        Approvals, discoveries, and follow-ups.
+                      </p>
+                    </div>
+                    <button
+                      className="secondary"
+                      disabled={!!busy}
+                      onClick={() =>
+                        act(
+                          "agent_resume",
+                          {},
+                          "Agent resumed. Replies are checked automatically.",
+                        )
+                      }
+                    >
+                      <RefreshCw
+                        size={16}
+                        className={busy === "sync" ? "spin" : ""}
+                      />{" "}
+                      Resume agent
+                    </button>
+                  </div>
+                  <div className="activity-feed">
+                    {!w.activity.length && (
+                      <div className="empty-state">
+                        <Activity size={28} aria-hidden="true" />
+                        <h2>A clear record, from the first step</h2>
+                        <p>
+                          Document updates, agent progress, and your decisions
+                          will appear here.
+                        </p>
+                      </div>
+                    )}
+                    {w.activity.map((a) => (
+                      <article className="activity-item" key={a.id}>
+                        <span
+                          className={`activity-icon ${a.type === "user" ? "sage" : a.type === "mail" ? "blue" : "peach"}`}
+                        >
+                          {a.type === "mail" ? (
+                            <Mail size={18} />
+                          ) : a.type === "user" ? (
+                            <Check size={18} />
+                          ) : a.type === "browser" ? (
+                            <Monitor size={18} />
+                          ) : (
+                            <Sparkles size={18} />
+                          )}
                         </span>
-                        <span>
-                          <strong>{d.name}</strong>
-                          <small>
-                            {d.cloudSource && `${d.cloudSource.service === "google-drive" ? "Google Drive" : "OneDrive"} copy · `}
-                            {d.kind.charAt(0).toUpperCase() + d.kind.slice(1)} ·
-                            Added{" "}
-                            {new Date(d.addedAt).toLocaleDateString("en-US", {
+                        <div>
+                          <strong>{a.title}</strong>
+                          <p>{a.detail}</p>
+                          <span>
+                            {new Date(a.at).toLocaleString("en-US", {
                               month: "short",
                               day: "numeric",
-                            })}
-                          </small>
-                        </span>
-                      </span>
-                      <span className="ownership">
-                        {d.employer === "previous"
-                          ? w.profile.previousEmployer
-                          : d.employer === "next"
-                            ? w.profile.nextEmployer
-                            : "Personal"}
-                      </span>
-                      <span>{d.pages.length}</span>
-                      <ChevronRight size={18} />
-                    </button>
-                  ))}
-              </div>
-              <div className="document-help">
-                <ShieldCheck size={20} />
-                <div>
-                  <strong>Your documents stay in your workspace.</strong>
-                  <p>
-                    They are sent to the model only to analyze your transition.
-                    Public web searches never contain their text.
-                  </p>
-                </div>
-              </div>
-            </>
-          )}
-          {page === "activity" && (
-            <>
-              <div className="section-toolbar">
-                <div>
-                  <h2>Every step, accounted for</h2>
-                  <p className="muted">
-                    Approvals, discoveries, and follow-ups.
-                  </p>
-                </div>
-                <button
-                  className="secondary"
-                  disabled={!!busy}
-                  onClick={() =>
-                    act(
-                      "agent_resume",
-                      {},
-                      "Agent resumed. Replies are checked automatically.",
-                    )
-                  }
-                >
-                  <RefreshCw
-                    size={16}
-                    className={busy === "sync" ? "spin" : ""}
-                  />{" "}
-                  Resume agent
-                </button>
-              </div>
-              <div className="activity-feed">
-                {!w.activity.length && (
-                  <div className="empty-state">
-                    <Activity size={28} aria-hidden="true" />
-                    <h2>A clear record, from the first step</h2>
-                    <p>
-                      Document updates, agent progress, and your decisions will
-                      appear here.
-                    </p>
+                              hour: "numeric",
+                              minute: "2-digit",
+                            })}{" "}
+                            ·{" "}
+                            {a.type === "user"
+                              ? "You"
+                              : a.type === "mail"
+                                ? practice
+                                  ? "Practice inbox"
+                                  : "AgentMail"
+                                : a.type === "browser"
+                                  ? "Kernel"
+                                  : "JobSwitch"}
+                          </span>
+                        </div>
+                      </article>
+                    ))}
                   </div>
-                )}
-                {w.activity.map((a) => (
-                  <article className="activity-item" key={a.id}>
-                    <span
-                      className={`activity-icon ${a.type === "user" ? "sage" : a.type === "mail" ? "blue" : "peach"}`}
-                    >
-                      {a.type === "mail" ? (
-                        <Mail size={18} />
-                      ) : a.type === "user" ? (
-                        <Check size={18} />
-                      ) : a.type === "browser" ? (
-                        <Monitor size={18} />
-                      ) : (
-                        <Sparkles size={18} />
-                      )}
-                    </span>
-                    <div>
-                      <strong>{a.title}</strong>
-                      <p>{a.detail}</p>
-                      <span>
-                        {new Date(a.at).toLocaleString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          hour: "numeric",
-                          minute: "2-digit",
-                        })}{" "}
-                        ·{" "}
-                        {a.type === "user"
-                          ? "You"
-                          : a.type === "mail"
-                            ? practice
-                              ? "Practice inbox"
-                              : "AgentMail"
-                            : a.type === "browser"
-                              ? "Kernel"
-                              : "JobSwitch"}
-                      </span>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </>
-          )}
-          {page === "settings" && (
-            <SettingsForm
-              onUpdate={setW}
-              w={w}
-              busy={busy}
-              act={act}
-              editDates={() => setDates(true)}
-            />
-          )}
+                </>
+              )}
+              {page === "settings" && (
+                <SettingsForm
+                  onUpdate={setW}
+                  w={w}
+                  busy={busy}
+                  act={act}
+                  editDates={() => setDates(true)}
+                />
+              )}
+            </div>
+          </section>
         </main>
-        <footer className="app-footer">
-          <span>Built for the space between.</span>
-          <span>
-            JobSwitch <span>✦</span>
-          </span>
-        </footer>
       </div>
       {toast && (
         <ModalNotice>
@@ -1131,7 +1237,7 @@ export default function Dashboard() {
           </div>
         </ModalNotice>
       )}
-      {busy && (
+      {busy && busy !== "advance" && (
         <div className="working-indicator" role="status">
           <LoaderCircle size={14} className="spin" />
           {busy === "advance"
@@ -1627,19 +1733,6 @@ export default function Dashboard() {
             )}
           </footer>
         </Modal>
-      )}
-      <Assistant
-        open={chat}
-        close={() => toggleAssistant(false)}
-        onFocus={showFocus}
-      />
-      {!chat && (
-        <button
-          className="assistant-launcher"
-          onClick={() => toggleAssistant(true)}
-        >
-          <Sparkles size={18} /> Ask JobSwitch
-        </button>
       )}
       {document && viewDoc && (
         <Modal
@@ -2171,8 +2264,8 @@ function SettingsForm({
             {confirmWorkspace.mode === "scenario" && (
               <p>
                 The case starts in a new workspace with fictional people. Your
-                agent reads the first email right away, and practice email
-                never leaves JobSwitch.
+                agent reads the first email right away, and practice email never
+                leaves JobSwitch.
               </p>
             )}
             <p>

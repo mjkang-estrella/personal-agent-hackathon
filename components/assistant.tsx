@@ -13,17 +13,22 @@ import {
   ArrowUp,
   Sparkles,
   Square,
-  PanelRightClose,
+  LayoutDashboard,
   Eye,
   LoaderCircle,
   Search,
   CircleAlert,
+  ArrowRight,
+  FileText,
+  SquarePen,
+  ShieldCheck,
 } from "lucide-react";
-import { createContext, useContext, useEffect, useRef } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
+import type { Orientation, OrientationAction } from "@/lib/orientation";
 import type { WorkspaceFocus } from "@/lib/focus";
 
 const FocusContext = createContext<{
-  apply: (focus: WorkspaceFocus) => void;
+  apply: (focus: WorkspaceFocus, automatic?: boolean) => void;
   applied: Set<string>;
 }>({ apply: () => {}, applied: new Set() });
 
@@ -55,7 +60,7 @@ function ToolPart({ toolCallId, result, isError }: ToolCallMessagePartProps) {
   useEffect(() => {
     if (!focus || applied.has(toolCallId)) return;
     applied.add(toolCallId);
-    apply(focus);
+    apply(focus, true);
   }, [focus, toolCallId, apply, applied]);
   if (result === undefined)
     return (
@@ -100,15 +105,35 @@ function AssistantMessage() {
     </MessagePrimitive.Root>
   );
 }
-export default function Assistant({
-  open,
-  close,
+type AssistantProps = {
+  briefing: Orientation;
+  transition: string;
+  busy: boolean;
+  contextOpen: boolean;
+  openPlan: () => void;
+  onAction: (action: OrientationAction) => void;
+  onFocus: (focus: WorkspaceFocus, automatic?: boolean) => void;
+};
+export default function Assistant(props: AssistantProps) {
+  const [conversation, setConversation] = useState(0);
+  return (
+    <AssistantConversation
+      key={conversation}
+      {...props}
+      newChat={() => setConversation((n) => n + 1)}
+    />
+  );
+}
+function AssistantConversation({
+  briefing,
+  transition,
+  busy,
+  contextOpen,
+  openPlan,
+  onAction,
   onFocus,
-}: {
-  open: boolean;
-  close: () => void;
-  onFocus: (focus: WorkspaceFocus) => void;
-}) {
+  newChat,
+}: AssistantProps & { newChat: () => void }) {
   const runtime = useChatRuntime({
     transport: new DefaultChatTransport({ api: "/api/chat" }),
   });
@@ -117,73 +142,139 @@ export default function Assistant({
   useEffect(() => {
     onFocusRef.current = onFocus;
   }, [onFocus]);
-  const apply = useRef((f: WorkspaceFocus) => onFocusRef.current(f)).current;
+  const apply = useRef((f: WorkspaceFocus, automatic?: boolean) =>
+    onFocusRef.current(f, automatic),
+  ).current;
   return (
-    <aside
-      className="assistant-dock"
-      aria-label="JobSwitch assistant"
-      hidden={!open}
-    >
+    <section className="assistant-primary" aria-label="Chat with JobSwitch">
       <header>
-        <div className="assistant-heading">
-          <span className="icon-bubble peach">
-            <Sparkles size={19} />
-          </span>
-          <div>
-            <strong>Your transition assistant</strong>
-            <small>Ask, and your workspace follows along.</small>
-          </div>
+        <span className="conversation-title">
+          <Sparkles size={18} /> JobSwitch
+        </span>
+        <div className="assistant-actions">
+          <button
+            className="text-button"
+            onClick={() => {
+              runtime.thread.cancelRun();
+              newChat();
+            }}
+            aria-label="New chat"
+          >
+            <SquarePen size={16} /> New chat
+          </button>
+          <button
+            className="text-button chat-plan-toggle"
+            onClick={openPlan}
+            aria-expanded={contextOpen}
+          >
+            <LayoutDashboard size={16} /> Your plan
+          </button>
         </div>
-        <button
-          className="icon-button"
-          onClick={close}
-          aria-label="Hide assistant"
-        >
-          <PanelRightClose size={20} />
-        </button>
       </header>
       <FocusContext.Provider value={{ apply, applied }}>
         <AssistantRuntimeProvider runtime={runtime}>
           <ThreadPrimitive.Root className="chat-thread">
             <ThreadPrimitive.Viewport className="chat-viewport">
               <ThreadPrimitive.Empty>
-                <div className="chat-welcome">
-                  <Sparkles size={30} />
-                  <h3>How can I help?</h3>
-                  <p>
-                    Ask about your documents, emails, or deadlines. What you ask
-                    about opens in your workspace.
+                <div className="arrival-briefing">
+                  <p className="briefing-transition">{transition}</p>
+                  <h1>{briefing.primary.title}</h1>
+                  <p className="briefing-reason">{briefing.primary.reason}</p>
+                  <p className="briefing-body">{briefing.primary.body}</p>
+                  {briefing.primary.evidence && (
+                    <button
+                      className="briefing-source"
+                      onClick={() =>
+                        onFocus({
+                          view: "document",
+                          id: briefing.primary.evidence!.documentId,
+                          page: briefing.primary.evidence!.page,
+                          label: briefing.primary.evidence!.name,
+                        })
+                      }
+                    >
+                      <FileText size={15} />
+                      <span>
+                        {briefing.primary.evidence.name} · p.{" "}
+                        {briefing.primary.evidence.page}
+                        <q>{briefing.primary.evidence.quote}</q>
+                      </span>
+                    </button>
+                  )}
+                  {briefing.primary.action && (
+                    <button
+                      className="primary briefing-action"
+                      disabled={
+                        busy && briefing.primary.action.kind === "resume"
+                      }
+                      onClick={() => onAction(briefing.primary.action!)}
+                    >
+                      {briefing.primary.action.label}
+                      <ArrowRight size={17} />
+                    </button>
+                  )}
+                  <p className="briefing-status" role="status">
+                    <ShieldCheck size={15} />
+                    {briefing.status}
                   </p>
-                  <ThreadPrimitive.Suggestion
-                    prompt="What should I prioritize before my last day?"
-                    autoSend
-                    className="suggestion"
-                  >
-                    What should I prioritize? <ArrowUp size={14} />
-                  </ThreadPrimitive.Suggestion>
-                  <ThreadPrimitive.Suggestion
-                    prompt="Show me the most recent email from HR."
-                    autoSend
-                    className="suggestion"
-                  >
-                    Show me the latest HR email <ArrowUp size={14} />
-                  </ThreadPrimitive.Suggestion>
-                  <ThreadPrimitive.Suggestion
-                    prompt="Show me what my documents say about my 401(k) options."
-                    autoSend
-                    className="suggestion"
-                  >
-                    What are my 401(k) options? <ArrowUp size={14} />
-                  </ThreadPrimitive.Suggestion>
+                  {briefing.later.length > 0 && (
+                    <section
+                      className="briefing-later"
+                      aria-label="Also on your plan"
+                    >
+                      <h2>Also on your plan</h2>
+                      {briefing.later.map((step, i) => (
+                        <button
+                          key={i}
+                          onClick={() => step.action && onAction(step.action)}
+                        >
+                          <span>
+                            {step.title}
+                            <small>{step.reason}</small>
+                          </span>
+                          <ArrowRight size={15} />
+                        </button>
+                      ))}
+                    </section>
+                  )}
+                  <div className="briefing-prompts">
+                    {briefing.prompts.map((p) => (
+                      <ThreadPrimitive.Suggestion
+                        key={p.label}
+                        prompt={p.prompt}
+                        autoSend
+                        className="suggestion"
+                      >
+                        {p.label}
+                        <ArrowUp size={14} />
+                      </ThreadPrimitive.Suggestion>
+                    ))}
+                  </div>
                 </div>
               </ThreadPrimitive.Empty>
               <ThreadPrimitive.Messages
                 components={{ UserMessage, AssistantMessage }}
               />
             </ThreadPrimitive.Viewport>
+            <ThreadPrimitive.If empty={false}>
+              <div className="next-step-strip" role="status">
+                <span>{briefing.primary.reason}</span>
+                {briefing.primary.action ? (
+                  <button
+                    disabled={busy && briefing.primary.action.kind === "resume"}
+                    onClick={() => onAction(briefing.primary.action!)}
+                  >
+                    {briefing.primary.action.label}
+                    <ArrowRight size={14} />
+                  </button>
+                ) : (
+                  <small>{briefing.primary.title}</small>
+                )}
+              </div>
+            </ThreadPrimitive.If>
             <ComposerPrimitive.Root className="chat-composer">
               <ComposerPrimitive.Input
-                placeholder="Ask anything about your transition…"
+                placeholder={briefing.placeholder}
                 aria-label="Message your assistant"
               />
               <ThreadPrimitive.If running={false}>
@@ -209,6 +300,6 @@ export default function Assistant({
           </ThreadPrimitive.Root>
         </AssistantRuntimeProvider>
       </FocusContext.Provider>
-    </aside>
+    </section>
   );
 }
