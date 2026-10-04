@@ -41,3 +41,5 @@ Four extra preference tasks appear on the demo board. They remain local planning
 - [Desktop](../screenshots/review-examples/desktop.png)
 - [Mobile queue](../screenshots/review-examples/mobile-queue.png)
 - [Mobile saved choice](../screenshots/review-examples/mobile-choice.png)
+
+The visible example labels and replay controls are superseded by [Present review choices as regular tasks](2026-10-04-221921-mj-natural-review-tasks.md); the original fixture and decision mechanics remain.
