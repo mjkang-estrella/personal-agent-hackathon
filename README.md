@@ -91,9 +91,9 @@ Setup:
 
 The user-authorized OAuth client has callbacks for the personal Vercel deployment and localhost ports 3000/3001. Its credentials are stored in ignored local configuration and the team's existing keys document, never in Git. Production environment configuration and a real-user consent/reply test are separate from the automated tests.
 
-Disconnect removes local access and tracked-thread bindings and attempts Google revocation. Previously imported evidence remains. If revocation fails, remove JobSwitch from your Google Account's third-party permissions. Returning to another workspace disconnects the previous one. OAuth state expires after ten minutes and cannot be replayed or transferred to another workspace.
+Disconnect removes local access and tracked-thread bindings. Previously imported evidence remains. To revoke the entire app grant, remove JobSwitch from your Google Account's third-party permissions; this also disconnects other JobSwitch services using that Google account. Returning to another workspace disconnects the previous one. OAuth state expires after ten minutes and cannot be replayed or transferred to another workspace.
 
-Validation: `npm test` covers encryption, scope, sender/date filtering, and quote boundaries. `node --env-file=.env --import tsx scripts/gmail-smoke.ts` exercises the configured development database using disposable workspaces and mocked Google HTTP responses, including refresh/revocation, replay/expiry, wrong-workspace callbacks, and disconnect races; it never accesses a real mailbox or sends email.
+Validation: `npm test` covers encryption, scope, sender/date filtering, and quote boundaries. `node --env-file=.env --import tsx scripts/gmail-smoke.ts` exercises the configured development database using disposable workspaces and mocked Google HTTP responses, including refresh/reconnect and local disconnect, replay/expiry, wrong-workspace callbacks, and disconnect races; it never accesses a real mailbox or sends email.
 
 ### Google accounts
 

@@ -113,6 +113,7 @@ try {
     "002_gmail.sql",
     "003_outlook.sql",
     "004_accounts.sql",
+    "004_connections_calendar.sql",
   ])
     await admin.query(await readFile(`migrations/${file}`, "utf8"));
   const db = new URL(process.env.DATABASE_URL_UNPOOLED!);
@@ -173,6 +174,14 @@ try {
     assert.ok(
       (await request(guest, path, {})).status >= 400,
       `Guest denied: ${path}`,
+    );
+  }
+  for (const service of ["google-calendar", "microsoft-calendar"]) {
+    const path = `/api/connections/${service}`;
+    assert.equal((await request(guest, path)).status, 401);
+    assert.equal(
+      (await request(guest, path, { action: "connect" })).status,
+      401,
     );
   }
   assert.equal(

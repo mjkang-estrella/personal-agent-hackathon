@@ -77,7 +77,10 @@ export default function GmailControls({
     }
   }
   const availableTasks = w.tasks.filter(
-    (t) => !t.gmail && !t.outlook && !["approved", "done", "submitting"].includes(t.status),
+    (t) =>
+      !t.gmail &&
+      !t.outlook &&
+      !["approved", "done", "submitting"].includes(t.status),
   );
   return (
     <section
@@ -150,7 +153,7 @@ export default function GmailControls({
                   setNotice(
                     result.revoked
                       ? "Gmail disconnected. Previously imported evidence is retained."
-                      : "Disconnected locally. Remove JobSwitch access in your Google Account permissions too. Imported evidence is retained.",
+                      : "Disconnected locally. Removing JobSwitch from Google Account permissions also revokes your other Google connections. Imported evidence is retained.",
                   );
                 })
               }
