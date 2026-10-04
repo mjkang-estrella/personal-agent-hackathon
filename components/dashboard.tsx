@@ -139,8 +139,27 @@ export default function Dashboard() {
   const [w, setW] = useState<Workspace | null>(null);
   const [page, setPage] = useState<Page>("chat");
   const isChat = page === "chat";
+  const [dockOpen, setDockOpen] = useState(false);
+  function navigatePage(next: Page) {
+    setPage(next);
+    if (next !== "chat" && !window.matchMedia("(min-width: 1100px)").matches) {
+      setDockOpen(false);
+    }
+  }
+  useEffect(() => {
+    const saved = window.localStorage.getItem("jobswitch.assistant");
+    setDockOpen(saved ? saved === "open" : window.matchMedia("(min-width: 1100px)").matches);
+  }, []);
+  function toggleDock(open: boolean) {
+    setDockOpen(open);
+    window.localStorage.setItem("jobswitch.assistant", open ? "open" : "closed");
+    requestAnimationFrame(() => {
+      const selector = open ? '[aria-label="Message your assistant"]' : '[aria-label="Open chat panel"]';
+      window.document.querySelector<HTMLElement>(selector)?.focus({ preventScroll: true });
+    });
+  }
   function backToChat() {
-    setPage("chat");
+    navigatePage("chat");
     requestAnimationFrame(() =>
       window.document
         .querySelector<HTMLTextAreaElement>(
@@ -218,7 +237,7 @@ export default function Dashboard() {
       new URLSearchParams(window.location.search).has("outlook") ||
       new URLSearchParams(window.location.search).has("connection")
     )
-      setPage("settings");
+      navigatePage("settings");
   }, [load]);
   useEffect(() => {
     if (!toast) return;
@@ -275,7 +294,7 @@ export default function Dashboard() {
       setW(json);
       setAgentTransportError(false);
       if (action === "new_workspace") {
-        setPage("board");
+        navigatePage("board");
         setSelected(null);
       }
       if (message) notify(message);
@@ -305,7 +324,7 @@ export default function Dashboard() {
     if (action.kind === "task") openTask(action.id);
     else if (action.kind === "upload") void openUpload();
     else if (action.kind === "resume") void act("agent_resume");
-    else setPage(action.kind === "settings" ? "settings" : "board");
+    else navigatePage(action.kind === "settings" ? "settings" : "board");
   }
   function openTask(id: string) {
     setSelected(id);
@@ -322,7 +341,7 @@ export default function Dashboard() {
           : f.view === "activity"
             ? "activity"
             : "board";
-    setPage(target);
+    navigatePage(target);
     setSelected(null);
     setViewDoc(null);
     if (f.view === "task" && f.id) {
@@ -446,7 +465,7 @@ export default function Dashboard() {
           .includes(taskSearch.toLowerCase())),
   );
   return (
-    <div className={`app-shell ${isChat ? "chat-first" : ""}`}>
+    <div className={`app-shell ${isChat ? "chat-first" : dockOpen ? "assistant-open" : ""}`}>
       <a href="#workspace-main" className="skip-link">
         Skip to workspace content
       </a>
@@ -473,7 +492,7 @@ export default function Dashboard() {
               aria-current={page === id ? "page" : undefined}
               className={`nav-item ${page === id ? "active" : ""}`}
               onClick={() => {
-                setPage(id);
+                navigatePage(id);
                 setSelected(null);
               }}
             >
@@ -493,7 +512,7 @@ export default function Dashboard() {
             aria-label="Workspace settings"
             aria-current={page === "settings" ? "page" : undefined}
             className={`nav-item ${page === "settings" ? "active" : ""}`}
-            onClick={() => setPage("settings")}
+            onClick={() => navigatePage("settings")}
           >
             <Settings size={18} />
             Workspace settings
@@ -564,7 +583,7 @@ export default function Dashboard() {
                 </span>
               </button>
             </div>
-            <button className="demo-pill" onClick={() => setPage("settings")}>
+            <button className="demo-pill" onClick={() => navigatePage("settings")}>
               {practice
                 ? "Practice case"
                 : w.demo
@@ -599,8 +618,11 @@ export default function Dashboard() {
             transition={`${w.profile.previousEmployer || "Your current job"} → ${w.profile.nextEmployer || "Your next job"} · Last day ${date(w.profile.lastDay)}`}
             busy={!!busy}
             onAction={runOrientationAction}
-            visible={isChat}
-            openPlan={() => setPage("board")}
+            visible={isChat || dockOpen}
+            docked={!isChat}
+            close={() => toggleDock(false)}
+            expand={backToChat}
+            openPlan={() => navigatePage("board")}
           />
           {isChat && (
             <aside
@@ -623,7 +645,7 @@ export default function Dashboard() {
                   <dd>{date(w.profile.startDay)}</dd>
                 </div>
               </dl>
-              <button className="summary-link" onClick={() => setPage("board")}>
+              <button className="summary-link" onClick={() => navigatePage("board")}>
                 <LayoutDashboard size={17} />
                 <span>
                   View your plan
@@ -633,7 +655,7 @@ export default function Dashboard() {
               </button>
               <button
                 className="summary-link"
-                onClick={() => setPage("documents")}
+                onClick={() => navigatePage("documents")}
               >
                 <Files size={17} />
                 <span>
@@ -644,7 +666,7 @@ export default function Dashboard() {
                 </span>
                 <ChevronRight size={16} />
               </button>
-              <button className="summary-link" onClick={() => setPage("inbox")}>
+              <button className="summary-link" onClick={() => navigatePage("inbox")}>
                 <Mail size={17} />
                 <span>
                   Inbox<small>HR replies and updates</small>
@@ -714,7 +736,7 @@ export default function Dashboard() {
                       busy={busy}
                       act={act}
                       openTask={openTask}
-                      chooseCase={() => setPage("settings")}
+                      chooseCase={() => navigatePage("settings")}
                     />
                   )}
                   {!w.documents.length && (
@@ -1218,6 +1240,17 @@ export default function Dashboard() {
           </section>
         </main>
       </div>
+      {!isChat && !dockOpen && (
+        <button
+          className="assistant-launcher"
+          aria-label="Open chat panel"
+          aria-controls="workspace-assistant"
+          aria-expanded={false}
+          onClick={() => toggleDock(true)}
+        >
+          <MessageCircle size={19} /> Ask JobSwitch
+        </button>
+      )}
       {toast && (
         <ModalNotice>
           <div

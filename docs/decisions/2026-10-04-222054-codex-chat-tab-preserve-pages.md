@@ -32,3 +32,7 @@ Typecheck, all 87 unit tests, and production build passed. T3 inspection at 1280
 
 - [PR #25](https://github.com/mjkang-estrella/personal-agent-hackathon/pull/25)
 - [UI guide](../ui-development.md)
+
+## Subsequent correction
+
+The hidden-chat-on-other-pages behavior is superseded by [chat on every page](2026-10-04-223335-codex-chat-on-every-page.md): the right-hand assistant remains available alongside the full Chat tab.

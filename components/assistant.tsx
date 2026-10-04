@@ -23,6 +23,8 @@ import {
   FileText,
   SquarePen,
   ShieldCheck,
+  X,
+  Maximize2,
 } from "lucide-react";
 import {
   createContext,
@@ -132,6 +134,9 @@ type AssistantProps = {
   transition: string;
   busy: boolean;
   visible: boolean;
+  docked: boolean;
+  close: () => void;
+  expand: () => void;
   openPlan: () => void;
   onAction: (action: OrientationAction) => void;
   onFocus: (focus: WorkspaceFocus, automatic?: boolean) => void;
@@ -151,6 +156,9 @@ function AssistantConversation({
   transition,
   busy,
   visible,
+  docked,
+  close,
+  expand,
   openPlan,
   onAction,
   onFocus,
@@ -169,7 +177,14 @@ function AssistantConversation({
   ).current;
   return (
     <section
-      className="assistant-primary"
+      id="workspace-assistant"
+      className={`assistant-primary ${docked ? "assistant-dock" : ""}`}
+      onKeyDown={(event) => {
+        if (docked && event.key === "Escape") {
+          event.stopPropagation();
+          close();
+        }
+      }}
       aria-label="Chat with JobSwitch"
       hidden={!visible}
     >
@@ -195,9 +210,20 @@ function AssistantConversation({
           >
             <SquarePen size={16} /> New chat
           </button>
-          <button className="text-button chat-plan-toggle" onClick={openPlan}>
-            <LayoutDashboard size={16} /> Your plan
-          </button>
+          {docked ? (
+            <>
+              <button className="icon-button" aria-label="Open full Chat tab" onClick={expand}>
+                <Maximize2 size={17} />
+              </button>
+              <button className="icon-button" aria-label="Close chat panel" onClick={close}>
+                <X size={18} />
+              </button>
+            </>
+          ) : (
+            <button className="text-button chat-plan-toggle" onClick={openPlan}>
+              <LayoutDashboard size={16} /> Your plan
+            </button>
+          )}
         </div>
       </header>
       <FocusContext.Provider value={{ apply, applied }}>
@@ -207,7 +233,7 @@ function AssistantConversation({
               <ThreadPrimitive.Empty>
                 <div className="arrival-briefing">
                   <p className="briefing-transition">{transition}</p>
-                  <h1>{briefing.primary.title}</h1>
+                  {docked ? <h2 className="briefing-title">{briefing.primary.title}</h2> : <h1>{briefing.primary.title}</h1>}
                   <p className="briefing-reason">{briefing.primary.reason}</p>
                   <p className="briefing-body">{briefing.primary.body}</p>
                   {briefing.primary.evidence && (
