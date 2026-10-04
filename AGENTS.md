@@ -56,3 +56,25 @@ If checks fail, fix them before treating the task as complete. A necessary work-
 ## Integration policy
 
 Pull requests need review by another teammate before merging to `main`, unless the user explicitly authorizes an exception. Repository administrators should enforce this with GitHub branch protection or a ruleset, required checks once CI exists, and blocked force pushes. This file guides agents; it cannot enforce GitHub permissions or schedule agents to run on its own.
+
+## Implementation requirements
+
+# JobSwitch
+
+Next.js/TypeScript app. Mastra + OpenAI gpt-6-luna, Exa, Kernel, AgentMail, and Neon Postgres.
+Use the authorized .env keys without printing secrets. Never commit .env or .neon.
+Keep public sources distinct from employer policy. Cite exact document pages and verbatim supporting quotes. Missing evidence means unknown, never assumed eligibility.
+Only explicitly approved payloads may be submitted. Changed payloads invalidate approval. Never duplicate submissions on retries. Distinguish submitted, approved, and paid.
+Use fictional employers and a clearly labeled test HR portal for the demo. Only demo-owned email inboxes may receive automated messages. Personal documents must never become Exa search queries.
+Preserve tenant isolation by the random HttpOnly workspace cookie. Do not expose provider keys, portal capability tokens, or raw server errors.
+Use npm run typecheck, npm test, and npm run build. Use the T3 preview browser for UI inspection.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
