@@ -1,0 +1,490 @@
+/* Workspace styling shares the landing palette while keeping dense evidence readable. */
+.app-shell {
+  --paper: #f8f6f1;
+  --ink: #222a35;
+  --muted: #646970;
+  --green: #0866ff;
+  --line: #e5dfd7;
+  background: var(--paper);
+  color: var(--ink);
+}
+.app-shell .sidebar {
+  background: var(--paper);
+  border-right: 0;
+  padding-top: 28px;
+}
+.app-shell .brand {
+  color: var(--green);
+  font-weight: 550;
+  letter-spacing: -1px;
+}
+.app-shell .brand-mark {
+  border-radius: 50%;
+  background: var(--green);
+}
+.app-shell .brand-dot {
+  display: none;
+}
+.app-shell .sidebar nav {
+  margin-top: 44px;
+}
+.app-shell .nav-item {
+  border-radius: 12px;
+  margin-bottom: 8px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  color: #62676e;
+}
+.app-shell .nav-item.active {
+  background: #e4eaff;
+  color: var(--green);
+  font-weight: 500;
+}
+.app-shell .nav-item:hover {
+  background: #eae6df;
+}
+.app-shell .nav-item.active:hover {
+  background: #dce5ff;
+}
+.app-shell .nav-count {
+  background: #d4e1ff;
+  color: #225cbe;
+}
+.app-shell .sidebar-assistant {
+  border: none;
+  border-radius: 14px;
+  background: #fffdf9;
+  color: var(--green);
+}
+.app-shell .profile {
+  border-color: var(--line);
+}
+.app-shell .topbar {
+  border-bottom: 0;
+  background: var(--paper);
+}
+.app-shell .topbar .demo-pill {
+  background: #fffdf9;
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  color: #646970;
+}
+.app-shell .main-content {
+  max-width: 1400px;
+  padding-top: 28px;
+}
+.app-shell .page-heading {
+  margin-bottom: 32px;
+}
+.app-shell .page-heading h1 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(34px, 3.6vw, 54px);
+  font-weight: 400;
+  letter-spacing: -1.7px;
+  line-height: 1.15;
+}
+.app-shell .page-heading h1 span {
+  color: var(--green);
+}
+.app-shell .page-heading p {
+  font-size: 14px;
+  margin-top: 14px;
+  color: var(--muted);
+}
+.workspace-shortcuts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.workspace-shortcuts button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  padding: 24px;
+  background: #fffdf9;
+  color: var(--green);
+}
+.workspace-shortcuts button:hover {
+  border-color: #b6cdff;
+  transform: translateY(-2px);
+}
+.workspace-shortcuts strong {
+  font-weight: 500;
+  font-size: 16px;
+  margin-top: 10px;
+}
+.workspace-shortcuts span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.app-shell .transition-overview {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 0 0 24px;
+}
+.app-shell .transition-summary {
+  margin: 0;
+  gap: 16px;
+}
+.app-shell .transition-dates {
+  gap: 14px;
+}
+.app-shell .transition-dates button {
+  font-size: 12px;
+}
+.next-step {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  justify-content: space-between;
+  background: #fffdf9;
+  border-radius: 22px;
+  padding: 28px;
+  margin-top: 28px;
+}
+.next-step-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+}
+.next-step-icon {
+  display: grid;
+  place-items: center;
+  width: 43px;
+  height: 43px;
+  background: #eaf0ff;
+  color: var(--green);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.next-step-eyebrow {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: #5b72a0;
+}
+.next-step h2 {
+  font-size: 21px;
+  font-weight: 500;
+  line-height: 1.35;
+  margin: 8px 0;
+  letter-spacing: -0.5px;
+}
+.next-step p {
+  font-size: 13px;
+  color: var(--muted);
+  max-width: 650px;
+}
+.next-step > button {
+  flex-shrink: 0;
+}
+.analysis-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin: 18px 5px 36px;
+}
+.analysis-row p {
+  font-size: 12px;
+  color: var(--muted);
+  max-width: 600px;
+}
+.analysis-row button {
+  flex-shrink: 0;
+  color: var(--green);
+}
+.app-shell .primary {
+  border-radius: 30px;
+  background: var(--green);
+  border-color: var(--green);
+  padding: 12px 21px;
+  box-shadow: none;
+}
+.app-shell .primary:hover {
+  background: #0055df;
+}
+.app-shell .secondary {
+  border-radius: 30px;
+  border-color: #b6c8e9;
+  color: #225cbe;
+  background: transparent;
+}
+.app-shell .text-button {
+  color: var(--green);
+}
+.app-shell .board-title h2 {
+  font-size: 23px;
+  font-weight: 500;
+  letter-spacing: -0.7px;
+}
+.app-shell .board-toolbar {
+  margin-bottom: 20px;
+}
+.app-shell .segmented {
+  background: #e9e5de;
+  border-radius: 30px;
+  padding: 4px;
+}
+.app-shell .segmented button {
+  border-radius: 25px;
+}
+.app-shell .segmented button.selected {
+  color: var(--green);
+  background: #fffdf9;
+  box-shadow: none;
+}
+.plan-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #e9e5de;
+  color: #72767c;
+  border-radius: 30px;
+  padding: 0 17px;
+  max-width: 390px;
+  margin-bottom: 26px;
+  min-height: 43px;
+}
+.plan-search input {
+  border: 0;
+  background: transparent;
+  width: 100%;
+  min-width: 0;
+  color: var(--ink);
+  font-size: 13px;
+  padding: 12px 0;
+}
+.app-shell .column-header h3 {
+  font-size: 14px;
+  color: var(--ink);
+}
+.app-shell .task-card {
+  border: 1px solid #ede8e1;
+  background: #fffdf9;
+  border-radius: 18px;
+  padding: 22px;
+}
+.app-shell .task-card:hover {
+  border-color: #a9c4f8;
+  box-shadow: 0 5px 18px #5265830a;
+}
+.app-shell .task-card h4 {
+  color: var(--ink);
+  font-size: 16px;
+}
+.app-shell .card-category {
+  color: #6c7279;
+  font-size: 11px;
+}
+.app-shell .card-category svg {
+  color: #4e7bcb;
+}
+.app-shell .card-evidence,
+.app-shell .card-date {
+  color: var(--muted);
+}
+.app-shell .status-ready {
+  background: #e4ecff;
+  color: #245bbc;
+}
+.app-shell .status-todo {
+  background: #f0ece5;
+  color: #68665f;
+}
+.app-shell .task-panel,
+.app-shell .assistant-panel {
+  background: #fffdf9;
+}
+.app-shell .task-description,
+.app-shell .evidence-card blockquote,
+.app-shell .email-preview p,
+.app-shell .claim-review dd,
+.app-shell .document-paper pre,
+.app-shell .assistant-message {
+  color: #4b535c;
+}
+.app-shell .evidence-card {
+  background: #f5f2ed;
+  border-color: #e7e1d7;
+}
+.app-shell .peach,
+.app-shell .lavender,
+.app-shell .sage,
+.app-shell .blue {
+  background: #e8efff;
+  color: var(--green);
+}
+.app-shell .documents-list,
+.app-shell .settings-card,
+.app-shell .activity-item {
+  border-radius: 20px;
+  background: #fffdf9;
+}
+.app-shell .board-footer {
+  margin-top: 26px;
+}
+.app-shell .chat-welcome h3 {
+  color: var(--ink);
+}
+.app-shell .suggestion {
+  color: #5b6572;
+}
+.app-shell .chat-avatar,
+.app-shell .send-button {
+  background: var(--green);
+}
+.app-shell .empty-start {
+  background: #e7edfb;
+  border-color: #cbd9f5;
+}
+@media (max-width: 1100px) {
+  .workspace-shortcuts button {
+    padding: 20px;
+  }
+  .workspace-shortcuts strong {
+    font-size: 14px;
+  }
+  .next-step {
+    padding: 22px;
+  }
+  .next-step h2 {
+    font-size: 19px;
+  }
+}
+@media (max-width: 960px) {
+  .app-shell .brand {
+    font-size: 0;
+  }
+  .app-shell .sidebar {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .app-shell .nav-item {
+    font-size: 0;
+  }
+  .next-step {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .next-step > button {
+    margin-left: 61px;
+  }
+  .analysis-row {
+    align-items: flex-start;
+  }
+}
+@media (max-width: 720px) {
+  .app-shell .main-content {
+    padding: 22px 18px;
+  }
+  .app-shell .page-heading h1 {
+    font-size: 35px;
+    letter-spacing: -1px;
+  }
+  .app-shell .page-heading {
+    margin-bottom: 24px;
+  }
+  .workspace-shortcuts {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+  .workspace-shortcuts button {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    column-gap: 14px;
+    padding: 17px;
+    border-radius: 16px;
+  }
+  .workspace-shortcuts svg {
+    grid-row: 1/3;
+    align-self: center;
+  }
+  .workspace-shortcuts strong {
+    margin: 0;
+    font-size: 14px;
+  }
+  .workspace-shortcuts span {
+    font-size: 11px;
+  }
+  .app-shell .transition-summary {
+    gap: 10px;
+    font-size: 11px;
+  }
+  .next-step {
+    border-radius: 18px;
+    padding: 20px;
+    margin-top: 22px;
+  }
+  .next-step-heading {
+    gap: 0;
+  }
+  .next-step-icon {
+    display: none;
+  }
+  .next-step h2 {
+    font-size: 20px;
+  }
+  .next-step > button {
+    margin-left: 0;
+  }
+  .analysis-row {
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 26px;
+  }
+  .app-shell .board-title h2 {
+    font-size: 21px;
+  }
+  .app-shell .task-card {
+    padding: 20px;
+  }
+  .plan-search {
+    max-width: none;
+  }
+}
+
+/* Keep the integrated agent desk in the same editorial palette. */
+.app-shell .agent-overview {
+  background: #243b61;
+  border-radius: 24px;
+}
+.app-shell .agent-mode,
+.app-shell .agent-capabilities > div {
+  color: #dbe7ff;
+}
+.app-shell .agent-mode > span {
+  background: #b7ceff;
+}
+.app-shell .agent-overview > p,
+.app-shell .agent-capabilities small,
+.app-shell .agent-scope {
+  color: #d5deed;
+}
+.app-shell .review-inbox {
+  background: #fffefa;
+  border-color: #e6e3dd;
+  border-radius: 24px;
+}
+.app-shell .agent-handoff {
+  background: #edf2fa;
+  border-color: #dce5f3;
+  border-radius: 18px;
+}
+.app-shell .agent-handoff strong,
+.app-shell .review-inbox h2,
+.app-shell .review-empty strong {
+  color: var(--ink);
+}
+.app-shell .agent-handoff p,
+.app-shell .review-empty p {
+  color: var(--muted);
+}

@@ -14,7 +14,7 @@ npm run db:migrate
 npm run dev
 ```
 
-Open http://localhost:3000. For a production preview, run `npm run build` and `npm start`.
+Open http://localhost:3000 for the landing page, or http://localhost:3000/workspace for the transition workspace. For a production preview, run `npm run build` and `npm start`.
 
 The workspace is linked to the `jobswitch-dev` branch of the configured Neon project. The production branch's original starter endpoint is separate. `neon.ts` deploys the test HR portal; use `neon functions deploy api --src lib/portal.ts` to deploy portal code and `neon deploy` to reconcile infrastructure.
 
