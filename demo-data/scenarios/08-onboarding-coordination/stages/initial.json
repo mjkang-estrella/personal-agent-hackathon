@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0",
+  "scenarioId": "08-onboarding-coordination",
+  "stage": "initial",
+  "initialProfile": {
+    "name": "Alex Morgan",
+    "previousEmployer": "Northstar Studio",
+    "nextEmployer": "Orbit Labs",
+    "lastDay": "2026-10-16",
+    "startDay": "2026-10-19"
+  },
+  "visibleMessageIds": [
+    "s08-m01",
+    "s08-m02"
+  ],
+  "documents": [
+    {
+      "id": "s08-m01",
+      "name": "Welcome to Orbit - your onboarding checklist.txt",
+      "employer": "next",
+      "kind": "other",
+      "pages": [
+        "From: Jordan Lee | Orbit People Team <people@orbit.example>\nTo: Alex Morgan <alex.morgan@personal.example>\nDate: 2026-10-12T09:00:00-07:00\nSubject: Welcome to Orbit - your onboarding checklist\nMessage-ID: <s08-m01@jobswitch.example>\nAttachments: attachments/s08-checklist.pdf\n\nHi Alex,\n\nWe look forward to your October 19 start. Please complete your People Portal profile by October 15; that releases your screening invitation. Your payroll payment preference is due October 20 and should be entered directly in the secure portal.\n\nThe attached checklist separates each task. We are still confirming the laptop appointment.\n\nBest,\nJordan\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n"
+      ],
+      "addedAt": "2026-10-12T09:00:00-07:00"
+    },
+    {
+      "id": "s08-checklist",
+      "name": "s08-checklist.pdf",
+      "employer": "next",
+      "kind": "other",
+      "pages": [
+        "ORBIT LABS\nJOBSWITCH / SYNTHETIC ATTACHMENT\nFICTIONAL DEMO DATA - NOT A REAL EMPLOYMENT RECORD\ns08-checklist | 08-onboarding-coordination\nPage 1\nFirst-week onboarding checklist\nIssued 2026-10-12 | Alex Morgan | Document s08-checklist\nSchedule\nAlex Morgan | First working day October 19, 2026. Complete the People Portal profile by October 15. Payroll\npayment preference is due October 20; the employee enters it directly in the secure portal.\nDependencies\nProfile verification releases the screening invitation. Laptop setup must finish before the virtual welcome\nsession. Do not mark downstream tasks complete merely because the prerequisite is complete.\nSeparate work items\nProfile verification, screening clearance, employment-verification paperwork, payroll preference, laptop setup\nand orientation attendance are separate tasks. The same task may be mentioned in several reminder emails.\nUnknown details\nThe laptop appointment time and location are not yet assigned. Ask Orbit IT to confirm them. Benefits\nelection remains a separate task due November 17.\n"
+      ],
+      "addedAt": "2026-10-04T20:00:00Z"
+    },
+    {
+      "id": "s08-m02",
+      "name": "Laptop setup before your Orbit welcome session.txt",
+      "employer": "next",
+      "kind": "other",
+      "pages": [
+        "From: Orbit IT Welcome Team <it@orbit.example>\nTo: Alex Morgan <alex.morgan@personal.example>\nDate: 2026-10-12T10:00:00-07:00\nSubject: Laptop setup before your Orbit welcome session\nMessage-ID: <s08-m02@jobswitch.example>\nAttachments: (none)\n\nHi Alex,\n\nYour laptop setup is planned for your first day, October 19, before the virtual welcome session. The appointment time and pickup location are not assigned yet. Please do not travel to an assumed location.\n\nOrbit IT Welcome Team\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n"
+      ],
+      "addedAt": "2026-10-12T10:00:00-07:00"
+    }
+  ]
+}

@@ -1,0 +1,148 @@
+{
+  "id": "05-post-exit-expense",
+  "title": "An unclaimed expense after company access is disabled",
+  "summary": "Find an alternative claim channel, obtain a missing itemized receipt, and distinguish submission, approval and payment.",
+  "inspiration": "A departure packet described an alternative expense route after access loss. The amount, merchant, deadline and correspondence here are fictional.",
+  "initialClock": "2026-10-19T09:30:00-07:00",
+  "profile": {
+    "name": "Alex Morgan",
+    "previousEmployer": "Northstar Studio",
+    "nextEmployer": "Orbit Labs",
+    "lastDay": "2026-10-16",
+    "startDay": "2026-10-19"
+  },
+  "schemaVersion": "1.0",
+  "fictional": true,
+  "independentScenario": true,
+  "documents": [
+    {
+      "id": "s05-policy",
+      "title": "Northstar Studio | Post-departure expense route",
+      "path": "attachments/s05-policy.pdf",
+      "mimeType": "application/pdf",
+      "bytes": 2743,
+      "sha256": "ebd6145ff0fd67c4343c5533cdeeaab9c42201e202a42ad025a4e04f21f5dbd7",
+      "pages": 1
+    },
+    {
+      "id": "s05-receipt",
+      "title": "Harbor Learning | Itemized workshop receipt",
+      "path": "attachments/s05-receipt.pdf",
+      "mimeType": "application/pdf",
+      "bytes": 2609,
+      "sha256": "5eb35773cef092caaafdca1353c13310ccdf2c5f4e1dcf487b9fb31e56cd3d62",
+      "pages": 1
+    }
+  ],
+  "messagesFile": "messages.json",
+  "steps": [
+    {
+      "id": "initial",
+      "title": "Find the alternative route",
+      "trigger": "Load post-exit request.",
+      "expected": "Create $240 claim task with October 30 deadline and missing receipt.",
+      "mustNot": "Do not reuse the separate $850 learning claim or infer eligibility.",
+      "evidence": [
+        {
+          "sourceId": "s05-policy",
+          "quote": "A card authorization alone is not an itemized receipt."
+        }
+      ],
+      "releaseMessageIds": [
+        "s05-m01"
+      ],
+      "releaseDocumentIds": [
+        "s05-m01",
+        "s05-policy"
+      ],
+      "inputBundle": "stages/initial.json",
+      "requiresUserApproval": false
+    },
+    {
+      "id": "receipt-available",
+      "title": "Validate the receipt",
+      "trigger": "Deliver the itemized receipt.",
+      "expected": "Match Alex, amount, dates and purpose; prepare for user review.",
+      "mustNot": "Do not treat receipt as manager approval.",
+      "evidence": [
+        {
+          "sourceId": "s05-m02",
+          "quote": "This email does not approve the reimbursement."
+        }
+      ],
+      "releaseMessageIds": [
+        "s05-m02"
+      ],
+      "releaseDocumentIds": [
+        "s05-m02",
+        "s05-receipt"
+      ],
+      "inputBundle": "stages/receipt-available.json",
+      "requiresUserApproval": false
+    },
+    {
+      "id": "approved-submission",
+      "title": "Submit after approval",
+      "trigger": "User approves exact recipient, body and PDF attachment.",
+      "expected": "Record submission and await receipt.",
+      "mustNot": "Do not send automatically without approval.",
+      "evidence": [
+        {
+          "sourceId": "s05-m03",
+          "quote": "Please route this claim for manager review"
+        }
+      ],
+      "releaseMessageIds": [
+        "s05-m03"
+      ],
+      "releaseDocumentIds": [
+        "s05-m03"
+      ],
+      "inputBundle": "stages/approved-submission.json",
+      "requiresUserApproval": true
+    },
+    {
+      "id": "received",
+      "title": "Track review",
+      "trigger": "Deliver acknowledgment.",
+      "expected": "Mark submitted and awaiting review.",
+      "mustNot": "Do not mark approved or paid.",
+      "evidence": [
+        {
+          "sourceId": "s05-m04",
+          "quote": "Manager review is pending."
+        }
+      ],
+      "releaseMessageIds": [
+        "s05-m04"
+      ],
+      "releaseDocumentIds": [
+        "s05-m04"
+      ],
+      "inputBundle": "stages/received.json",
+      "requiresUserApproval": false
+    },
+    {
+      "id": "approved-unpaid",
+      "title": "Record approval only",
+      "trigger": "Deliver approval.",
+      "expected": "Mark approved, unpaid.",
+      "mustNot": "Never infer money was deposited.",
+      "evidence": [
+        {
+          "sourceId": "s05-m05",
+          "quote": "Payment has not been issued."
+        }
+      ],
+      "releaseMessageIds": [
+        "s05-m05"
+      ],
+      "releaseDocumentIds": [
+        "s05-m05"
+      ],
+      "inputBundle": "stages/approved-unpaid.json",
+      "requiresUserApproval": false
+    }
+  ],
+  "initialBundle": "stages/initial.json"
+}

@@ -1,0 +1,44 @@
+From: Northstar Expense Operations <expenses@northstar.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Subject: Re: Expense claim DEMO-EXP-042 - $240 workshop
+Date: Tue, 20 Oct 2026 15:00:00 -0700
+Message-ID: <s05-m04@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 05-post-exit-expense
+X-JobSwitch-Stage: received
+In-Reply-To: <s05-m03@jobswitch.example>
+References: <s05-m03@jobswitch.example>
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="jobswitch-s05-m04-0"
+
+--jobswitch-s05-m04-0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Alex,
+
+Claim DEMO-EXP-042 and its itemized receipt have been received before the dea=
+dline. Manager review is pending. No reimbursement approval or payment has be=
+en issued.
+
+Northstar Expense Operations
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s05-m04-0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+i Alex,</p><p>Claim DEMO-EXP-042 and its itemized receipt have been received =
+before the deadline. Manager review is pending. No reimbursement approval or =
+payment has been issued.</p><p>Northstar Expense Operations</p><p>---<br>Fict=
+ional JobSwitch demo. All people, policies and events in this message are syn=
+thetic. Addresses use reserved .example domains. Do not deliver to real peopl=
+e.<br></p></div></body></html>
+
+--jobswitch-s05-m04-0--

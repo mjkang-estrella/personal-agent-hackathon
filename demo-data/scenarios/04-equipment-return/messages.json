@@ -1,0 +1,162 @@
+[
+  {
+    "id": "s04-m01",
+    "stage": "initial",
+    "date": "2026-10-14T09:00:00-07:00",
+    "sender": "it",
+    "to": [
+      "alex"
+    ],
+    "subject": "Your Northstar equipment return checklist",
+    "body": "Hi Alex,\n\nYour last working day is October 16. Attached are the return instructions for your laptop and accessories. Please confirm whether you will use office drop-off or the prepaid collection.\n\nWe need an IT inventory receipt to close the return task.\n\nThanks,\nElliot\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [
+      {
+        "id": "s04-instructions",
+        "title": "Northstar Studio | Equipment return instructions",
+        "path": "attachments/s04-instructions.pdf",
+        "mimeType": "application/pdf",
+        "bytes": 2718,
+        "sha256": "994af41ad4e271fc3f384d43f45f63a313ada956d1d27290ad03df3e9e8e2757",
+        "pages": 1
+      }
+    ],
+    "inReplyTo": null,
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Elliot Reed | Northstar IT",
+      "address": "it@northstar.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s04-m01@jobswitch.example>",
+    "emlPath": "emails/s04-m01.eml",
+    "textPath": "emails/s04-m01.txt"
+  },
+  {
+    "id": "s04-m02",
+    "stage": "form-signed",
+    "date": "2026-10-16T10:00:00-07:00",
+    "sender": "it",
+    "to": [
+      "alex"
+    ],
+    "subject": "Return form acknowledged - collection booked",
+    "body": "Hi Alex,\n\nYour return form has been acknowledged. We approved prepaid collection on October 19 because a pickup was unavailable on your final day. Your return remains open until the equipment is checked in by IT.\n\nThanks,\nElliot\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [],
+    "inReplyTo": "s04-m01",
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Elliot Reed | Northstar IT",
+      "address": "it@northstar.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s04-m02@jobswitch.example>",
+    "emlPath": "emails/s04-m02.eml",
+    "textPath": "emails/s04-m02.txt"
+  },
+  {
+    "id": "s04-m03",
+    "stage": "carrier-delivered",
+    "date": "2026-10-20T09:00:00-07:00",
+    "sender": "it",
+    "to": [
+      "alex"
+    ],
+    "subject": "Carrier update for demo shipment NS-SHIP-042",
+    "body": "Hi Alex,\n\nThe demo carrier marked shipment NS-SHIP-042 delivered this morning. Our asset team has not yet checked the contents. Please keep the task open until you receive an IT inventory receipt.\n\nThanks,\nElliot\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [],
+    "inReplyTo": "s04-m02",
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Elliot Reed | Northstar IT",
+      "address": "it@northstar.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s04-m03@jobswitch.example>",
+    "emlPath": "emails/s04-m03.eml",
+    "textPath": "emails/s04-m03.txt"
+  },
+  {
+    "id": "s04-m04",
+    "stage": "approved-followup",
+    "date": "2026-10-20T11:00:00-07:00",
+    "sender": "alex",
+    "to": [
+      "it"
+    ],
+    "subject": "Re: Carrier update for demo shipment NS-SHIP-042",
+    "body": "Hi Elliot,\n\nThe shipment is marked delivered. Could you confirm whether the laptop, charger, badge and security key have all been checked in and send the inventory receipt?\n\nThanks,\nAlex\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [],
+    "inReplyTo": "s04-m03",
+    "direction": "outbound",
+    "delivery": "approved-action-fixture",
+    "from": {
+      "name": "Alex Morgan",
+      "address": "alex.morgan@personal.example"
+    },
+    "recipients": [
+      {
+        "name": "Elliot Reed | Northstar IT",
+        "address": "it@northstar.example"
+      }
+    ],
+    "messageId": "<s04-m04@jobswitch.example>",
+    "emlPath": "emails/s04-m04.eml",
+    "textPath": "emails/s04-m04.txt"
+  },
+  {
+    "id": "s04-m05",
+    "stage": "it-received",
+    "date": "2026-10-20T15:00:00-07:00",
+    "sender": "it",
+    "to": [
+      "alex"
+    ],
+    "subject": "Re: Carrier update for demo shipment NS-SHIP-042",
+    "body": "Hi Alex,\n\nIT has checked in all four assigned items. Your equipment return is complete. The inventory receipt is attached.\n\nThanks for returning everything,\nElliot\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [
+      {
+        "id": "s04-receipt",
+        "title": "Northstar Studio | IT equipment receipt",
+        "path": "attachments/s04-receipt.pdf",
+        "mimeType": "application/pdf",
+        "bytes": 2438,
+        "sha256": "1406446dbceed76fa6cd63e4a2eadbf153c8ccb30d1138b98e131606535c71e9",
+        "pages": 1
+      }
+    ],
+    "inReplyTo": "s04-m04",
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Elliot Reed | Northstar IT",
+      "address": "it@northstar.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s04-m05@jobswitch.example>",
+    "emlPath": "emails/s04-m05.eml",
+    "textPath": "emails/s04-m05.txt"
+  }
+]

@@ -1,0 +1,45 @@
+From: Alex Morgan <alex.morgan@personal.example>
+To: Elliot Reed | Northstar IT <it@northstar.example>
+Subject: Re: Carrier update for demo shipment NS-SHIP-042
+Date: Tue, 20 Oct 2026 11:00:00 -0700
+Message-ID: <s04-m04@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 04-equipment-return
+X-JobSwitch-Stage: approved-followup
+In-Reply-To: <s04-m03@jobswitch.example>
+References: <s04-m03@jobswitch.example>
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="jobswitch-s04-m04-0"
+
+--jobswitch-s04-m04-0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Elliot,
+
+The shipment is marked delivered. Could you confirm whether the laptop, charg=
+er, badge and security key have all been checked in and send the inventory re=
+ceipt?
+
+Thanks,
+Alex
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s04-m04-0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+i Elliot,</p><p>The shipment is marked delivered. Could you confirm whether t=
+he laptop, charger, badge and security key have all been checked in and send =
+the inventory receipt?</p><p>Thanks,<br>Alex</p><p>---<br>Fictional JobSwitch=
+ demo. All people, policies and events in this message are synthetic. Address=
+es use reserved .example domains. Do not deliver to real people.<br></p></div=
+></body></html>
+
+--jobswitch-s04-m04-0--

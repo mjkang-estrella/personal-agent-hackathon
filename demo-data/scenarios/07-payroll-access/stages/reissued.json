@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "1.0",
+  "scenarioId": "07-payroll-access",
+  "stage": "reissued",
+  "initialProfile": {
+    "name": "Alex Morgan",
+    "previousEmployer": "Northstar Studio",
+    "nextEmployer": "Orbit Labs",
+    "lastDay": "2026-10-16",
+    "startDay": "2026-10-19"
+  },
+  "visibleMessageIds": [
+    "s07-m01",
+    "s07-m02",
+    "s07-m03"
+  ],
+  "documents": [
+    {
+      "id": "s07-m01",
+      "name": "Keep access to your Northstar pay statements.txt",
+      "employer": "previous",
+      "kind": "other",
+      "pages": [
+        "From: Northstar Payroll <payroll@northstar.example>\nTo: Alex Morgan <alex.morgan@personal.example>\nDate: 2026-10-20T09:00:00-07:00\nSubject: Keep access to your Northstar pay statements\nMessage-ID: <s07-m01@jobswitch.example>\nAttachments: attachments/s07-guide.pdf\n\nHi Alex,\n\nYour company sign-in is disabled, but your pay records are available through Northstar Pay Archive. The attached guide explains personal registration. Our records show you have not finished registration.\n\nThe October 1 invitation expired on October 16. Please request a new invitation rather than reusing it.\n\nNorthstar Payroll\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n"
+      ],
+      "addedAt": "2026-10-20T09:00:00-07:00"
+    },
+    {
+      "id": "s07-guide",
+      "name": "s07-guide.pdf",
+      "employer": "previous",
+      "kind": "other",
+      "pages": [
+        "NORTHSTAR STUDIO\nJOBSWITCH / SYNTHETIC ATTACHMENT\nFICTIONAL DEMO DATA - NOT A REAL EMPLOYMENT RECORD\ns07-guide | 07-payroll-access\nPage 1\nFormer-employee payroll access\nIssued 2026-10-20 | Alex Morgan | Document s07-guide\nPersonal access\nUse Northstar Pay Archive, a fictional former-employee portal, for pay statements and tax documents. Your\nwork single sign-on ends at departure; the archive uses a separate personal registration.\nRegistration window\nA demo registration invitation was issued October 1, 2026 and expired October 16 at 5:00 p.m. Pacific.\nContact payroll@northstar.example for a fresh invitation. No working code is included.\nRecords and contact details\nPay statements remain available for three years after the last statement in this fictional policy. Tax\ndocuments follow the annual publication schedule. Review your contact information in the secure portal.\nBoundary\nAccess to a pay statement does not prove a bank deposit. Never email a password, bank information or a\ngovernment identifier.\n"
+      ],
+      "addedAt": "2026-10-04T20:00:00Z"
+    },
+    {
+      "id": "s07-m02",
+      "name": "Replacement Pay Archive registration invitation.txt",
+      "employer": "personal",
+      "kind": "other",
+      "pages": [
+        "From: Alex Morgan <alex.morgan@personal.example>\nTo: Northstar Payroll <payroll@northstar.example>\nDate: 2026-10-20T11:00:00-07:00\nSubject: Replacement Pay Archive registration invitation\nMessage-ID: <s07-m02@jobswitch.example>\nAttachments: (none)\n\nHello Payroll,\n\nMy October 1 registration invitation has expired. Please send a replacement through the approved registration channel so I can access my pay statements after leaving. Please do not include any password or tax identifier in your email reply.\n\nThank you,\nAlex\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n"
+      ],
+      "addedAt": "2026-10-20T11:00:00-07:00"
+    },
+    {
+      "id": "s07-m03",
+      "name": "Re: Replacement Pay Archive registration invitation.txt",
+      "employer": "previous",
+      "kind": "other",
+      "pages": [
+        "From: Northstar Payroll <payroll@northstar.example>\nTo: Alex Morgan <alex.morgan@personal.example>\nDate: 2026-10-21T09:00:00-07:00\nSubject: Re: Replacement Pay Archive registration invitation\nMessage-ID: <s07-m03@jobswitch.example>\nAttachments: (none)\n\nHi Alex,\n\nA replacement invitation has been issued through the secure registration channel. It expires November 5 at 5 p.m. Pacific. This notice does not contain the invitation or a usable access code.\n\nComplete registration yourself, then confirm whether you can view your statements.\n\nNorthstar Payroll\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n"
+      ],
+      "addedAt": "2026-10-21T09:00:00-07:00"
+    }
+  ]
+}

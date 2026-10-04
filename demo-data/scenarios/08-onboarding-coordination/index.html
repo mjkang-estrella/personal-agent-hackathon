@@ -1,0 +1,70 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>One onboarding plan across multiple systems</title><style>
+:root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:#F3F5F7;color:#172B37;font:16px/1.6 system-ui,-apple-system,sans-serif}main{max-width:1160px;margin:auto;padding:36px 24px 70px}a{color:#2859A0;text-decoration:none}a:hover{text-decoration:underline}header.hero{background:#152E3E;color:#fff;padding:36px;border-radius:16px;margin-bottom:24px}.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8ED6C4}h1{font-size:34px;line-height:1.2;margin:10px 0 16px}h2{font-size:24px;margin:34px 0 12px}h3{font-size:19px;margin:8px 0}p{margin:10px 0}.sub{color:#596D79;font-size:14px}.hero .sub{color:#CAD9E2}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.card,article,.note{background:white;border:1px solid #D8E1E7;padding:24px;border-radius:12px}.pill{display:inline-block;background:#EDF2F7;border-radius:20px;padding:3px 10px;font-size:12px;margin:2px 6px 2px 0}.mailhead{background:#F0F4F7;border-radius:8px;padding:14px;font-size:13px;overflow-wrap:anywhere}.body{white-space:pre-wrap;font:15px/1.7 system-ui,sans-serif;overflow-wrap:anywhere}.attachment{display:inline-block;border:1px solid #CFDBE4;border-radius:6px;padding:8px 12px;margin:5px 8px 5px 0;font-size:13px}details{margin-top:14px}summary{cursor:pointer;font-weight:600}blockquote{margin:12px 0;padding:10px 15px;border-left:3px solid #649283;background:#F4F8F6;font-size:14px}nav{display:flex;gap:14px;flex-wrap:wrap;margin:20px 0}.timeline article{margin:18px 0}.expect{border-left:4px solid #2D7564;padding:10px 16px;margin:15px 0;background:#F2F8F5}.warning{border-left-color:#BB8A30;background:#FFF9ED}code{font-size:13px;overflow-wrap:anywhere}ul{padding-left:20px}footer{margin-top:30px;color:#667D8A;font-size:12px}button{padding:8px 14px;border:1px solid #CCD7DF;border-radius:8px;background:white;color:#213F54;cursor:pointer}button[aria-pressed=true]{background:#213F54;color:white}.hidden{display:none!important}@media(max-width:720px){.grid{grid-template-columns:1fr}main{padding:18px 12px}.hero{padding:24px!important}h1{font-size:28px}article,.card{padding:18px}}
+</style></head><body><main><nav><a href="../../index.html">All scenarios</a><a href="README.md">Replay guide</a><a href="scenario.json">Scenario JSON</a></nav><header class="hero"><div class="eyebrow">08-onboarding-coordination / Synthetic case</div><h1>One onboarding plan across multiple systems</h1><p>Merge overlapping HR and IT messages, respect dependencies, and ask only about missing appointment details.</p><p class="sub">Alex Morgan · Northstar Studio → Orbit Labs · Independent replay</p></header><div class="note"><strong>Start with the initial stage.</strong> Future messages and attachments are hidden below until you select a later stage. The full dataset is on disk for developers; the agent must receive only the chosen input bundle.</div><nav id="stage-controls"><button data-stage="0" aria-pressed="true">0. Build one plan</button><button data-stage="1" aria-pressed="false">1. Advance one dependency</button><button data-stage="2" aria-pressed="false">2. Deduplicate stale reminders</button><button data-stage="3" aria-pressed="false">3. Ask only for missing details</button><button data-stage="4" aria-pressed="false">4. Record an appointment</button><button data-stage="5" aria-pressed="false">5. Keep remaining work visible</button></nav><div class="timeline"><section data-release="0" class=""><h2>0. Build one plan</h2><div class="expect"><strong>Expected:</strong> Create distinct tasks with deadlines, dependencies and missing appointment details.<br><strong>Do not:</strong> Do not duplicate laptop setup or invent a location.<br><a href="stages/initial.json">Developer input for this stage</a></div><article><span class="pill">inbound</span><span class="pill">2026-10-12T09:00:00-07:00</span><h3>Welcome to Orbit - your onboarding checklist</h3><div class="mailhead">From: Jordan Lee | Orbit People Team &lt;people@orbit.example&gt;<br>To: Alex Morgan &lt;alex.morgan@personal.example&gt;</div><pre class="body">Hi Alex,
+
+We look forward to your October 19 start. Please complete your People Portal profile by October 15; that releases your screening invitation. Your payroll payment preference is due October 20 and should be entered directly in the secure portal.
+
+The attached checklist separates each task. We are still confirming the laptop appointment.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.
+</pre><a class="attachment" href="attachments/s08-checklist.pdf">PDF · Orbit Labs | First-week onboarding checklist</a><p><a href="emails/s08-m01.eml" download>Download email with attachments (.eml)</a> · <a href="emails/s08-m01.txt">Plain text</a></p></article><article><span class="pill">inbound</span><span class="pill">2026-10-12T10:00:00-07:00</span><h3>Laptop setup before your Orbit welcome session</h3><div class="mailhead">From: Orbit IT Welcome Team &lt;it@orbit.example&gt;<br>To: Alex Morgan &lt;alex.morgan@personal.example&gt;</div><pre class="body">Hi Alex,
+
+Your laptop setup is planned for your first day, October 19, before the virtual welcome session. The appointment time and pickup location are not assigned yet. Please do not travel to an assumed location.
+
+Orbit IT Welcome Team
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.
+</pre><p><a href="emails/s08-m02.eml" download>Download email with attachments (.eml)</a> · <a href="emails/s08-m02.txt">Plain text</a></p></article></section><section data-release="1" class="hidden"><h2>1. Advance one dependency</h2><div class="expect"><strong>Expected:</strong> Complete profile; release screening task without marking screening cleared.<br><strong>Do not:</strong> Do not complete downstream tasks.<br><a href="stages/profile-verified.json">Developer input for this stage</a></div><article><span class="pill">inbound</span><span class="pill">2026-10-14T09:00:00-07:00</span><h3>Profile verified - screening invitation released</h3><div class="mailhead">From: Jordan Lee | Orbit People Team &lt;people@orbit.example&gt;<br>To: Alex Morgan &lt;alex.morgan@personal.example&gt;</div><pre class="body">Hi Alex,
+
+Your People Portal profile is verified. We have released the screening invitation; the screening itself is not yet cleared. Payroll preference and employment-verification paperwork remain separate open tasks.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.
+</pre><p><a href="emails/s08-m03.eml" download>Download email with attachments (.eml)</a> · <a href="emails/s08-m03.txt">Plain text</a></p></article></section><section data-release="2" class="hidden"><h2>2. Deduplicate stale reminders</h2><div class="expect"><strong>Expected:</strong> Keep profile complete; associate reminder with existing task.<br><strong>Do not:</strong> Do not reopen the profile without a substantive correction request.<br><a href="stages/duplicate-reminder.json">Developer input for this stage</a></div><article><span class="pill">inbound</span><span class="pill">2026-10-14T10:00:00-07:00</span><h3>Reminder: complete your profile before October 15</h3><div class="mailhead">From: Jordan Lee | Orbit People Team &lt;people@orbit.example&gt;<br>To: Alex Morgan &lt;alex.morgan@personal.example&gt;</div><pre class="body">Hi Alex,
+
+This scheduled reminder concerns the same People Portal profile task in your welcome checklist. If you already received a profile verification confirmation, no additional profile is required. This reminder does not reverse that confirmation.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.
+</pre><p><a href="emails/s08-m04.eml" download>Download email with attachments (.eml)</a> · <a href="emails/s08-m04.txt">Plain text</a></p></article></section><section data-release="3" class="hidden"><h2>3. Ask only for missing details</h2><div class="expect"><strong>Expected:</strong> Ask IT for time and location.<br><strong>Do not:</strong> Do not ask HR to repeat already confirmed profile status.<br><a href="stages/approved-it-inquiry.json">Developer input for this stage</a></div><article><span class="pill">outbound</span><span class="pill">2026-10-15T09:00:00-07:00</span><h3>Please confirm my October 19 laptop appointment</h3><div class="mailhead">From: Alex Morgan &lt;alex.morgan@personal.example&gt;<br>To: Orbit IT Welcome Team &lt;it@orbit.example&gt;</div><pre class="body">Hello Orbit IT,
+
+Could you confirm the time and location for my October 19 laptop setup and the start time of the welcome session? I want to complete setup before joining.
+
+Thanks,
+Alex
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.
+</pre><p><a href="emails/s08-m05.eml" download>Download email with attachments (.eml)</a> · <a href="emails/s08-m05.txt">Plain text</a></p></article></section><section data-release="4" class="hidden"><h2>4. Record an appointment</h2><div class="expect"><strong>Expected:</strong> Record 9 a.m. setup and 10 a.m. orientation on October 19.<br><strong>Do not:</strong> Do not equate scheduling with attendance.<br><a href="stages/appointment-confirmed.json">Developer input for this stage</a></div><article><span class="pill">inbound</span><span class="pill">2026-10-15T13:00:00-07:00</span><h3>Re: Please confirm my October 19 laptop appointment</h3><div class="mailhead">From: Orbit IT Welcome Team &lt;it@orbit.example&gt;<br>To: Alex Morgan &lt;alex.morgan@personal.example&gt;</div><pre class="body">Hi Alex,
+
+Your laptop appointment is October 19 at 9 a.m. Pacific in the fictional Orbit Welcome Room A. The virtual welcome session begins at 10 a.m. Pacific. An access link will be provided through the secure portal.
+
+This confirms the schedule, not attendance or completed setup.
+
+Orbit IT Welcome Team
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.
+</pre><p><a href="emails/s08-m06.eml" download>Download email with attachments (.eml)</a> · <a href="emails/s08-m06.txt">Plain text</a></p></article></section><section data-release="5" class="hidden"><h2>5. Keep remaining work visible</h2><div class="expect"><strong>Expected:</strong> Close four confirmed items and retain payroll, paperwork and benefits tasks.<br><strong>Do not:</strong> Do not mark all onboarding complete.<br><a href="stages/partial-completion.json">Developer input for this stage</a></div><article><span class="pill">inbound</span><span class="pill">2026-10-19T16:00:00-07:00</span><h3>First-day status - two paperwork items remain open</h3><div class="mailhead">From: Jordan Lee | Orbit People Team &lt;people@orbit.example&gt;<br>To: Alex Morgan &lt;alex.morgan@personal.example&gt;</div><pre class="body">Hi Alex,
+
+Your profile and screening are complete; IT confirmed laptop setup and the welcome team confirmed attendance. The attached status receipt lists the evidence.
+
+Payroll preference remains unconfirmed, due October 20. Employment-verification paperwork is still under review. Benefits election is also open, due November 17.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.
+</pre><a class="attachment" href="attachments/s08-status.pdf">PDF · Orbit Labs | Onboarding status receipt</a><p><a href="emails/s08-m07.eml" download>Download email with attachments (.eml)</a> · <a href="emails/s08-m07.txt">Plain text</a></p></article></section></div><footer>FICTIONAL DEMO DATA - NOT A REAL EMPLOYMENT RECORD</footer><script>document.querySelectorAll("[data-stage]").forEach(b=>b.addEventListener("click",()=>{const n=Number(b.dataset.stage);document.querySelectorAll("[data-release]").forEach(e=>e.classList.toggle("hidden",Number(e.dataset.release)>n));document.querySelectorAll("[data-stage]").forEach(e=>e.setAttribute("aria-pressed",String(e===b)));}));</script></main></body></html>

@@ -1,0 +1,16 @@
+From: Jordan Lee | Orbit People Team <people@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-23T14:00:00-07:00
+Subject: Correction accepted - no further action on this form
+Message-ID: <s03-m05@jobswitch.example>
+Attachments: attachments/s03-correction-receipt.pdf
+
+Hi Alex,
+
+We reviewed the corrected record and accepted the representative title update. This task is now complete. Attached is the correction receipt for your records.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

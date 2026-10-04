@@ -1,0 +1,45 @@
+From: Maya Chen | Northstar People Team <people@northstar.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Subject: Re: Please confirm my active coverage end date
+Date: Fri, 09 Oct 2026 09:00:00 -0700
+Message-ID: <s06-m04@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 06-coverage-gap
+X-JobSwitch-Stage: old-coverage-confirmed
+In-Reply-To: <s06-m03@jobswitch.example>
+References: <s06-m03@jobswitch.example>
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="jobswitch-s06-m04-0"
+
+--jobswitch-s06-m04-0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Alex,
+
+We confirm your currently enrolled employee medical coverage ends October 16 =
+at 11:59 p.m. Pacific. No continuation election has been received. We will pr=
+ovide continuation materials separately; this email does not enroll you.
+
+Best,
+Maya
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s06-m04-0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+i Alex,</p><p>We confirm your currently enrolled employee medical coverage en=
+ds October 16 at 11:59 p.m. Pacific. No continuation election has been receiv=
+ed. We will provide continuation materials separately; this email does not en=
+roll you.</p><p>Best,<br>Maya</p><p>---<br>Fictional JobSwitch demo. All peop=
+le, policies and events in this message are synthetic. Addresses use reserved=
+ .example domains. Do not deliver to real people.<br></p></div></body></html>
+
+--jobswitch-s06-m04-0--

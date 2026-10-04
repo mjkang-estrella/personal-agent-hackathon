@@ -1,0 +1,45 @@
+From: Elliot Reed | Northstar IT <it@northstar.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Subject: Return form acknowledged - collection booked
+Date: Fri, 16 Oct 2026 10:00:00 -0700
+Message-ID: <s04-m02@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 04-equipment-return
+X-JobSwitch-Stage: form-signed
+In-Reply-To: <s04-m01@jobswitch.example>
+References: <s04-m01@jobswitch.example>
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="jobswitch-s04-m02-0"
+
+--jobswitch-s04-m02-0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Alex,
+
+Your return form has been acknowledged. We approved prepaid collection on Oct=
+ober 19 because a pickup was unavailable on your final day. Your return remai=
+ns open until the equipment is checked in by IT.
+
+Thanks,
+Elliot
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s04-m02-0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+i Alex,</p><p>Your return form has been acknowledged. We approved prepaid col=
+lection on October 19 because a pickup was unavailable on your final day. You=
+r return remains open until the equipment is checked in by IT.</p><p>Thanks,<=
+br>Elliot</p><p>---<br>Fictional JobSwitch demo. All people, policies and eve=
+nts in this message are synthetic. Addresses use reserved .example domains. D=
+o not deliver to real people.<br></p></div></body></html>
+
+--jobswitch-s04-m02-0--

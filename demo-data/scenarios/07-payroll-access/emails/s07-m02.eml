@@ -1,0 +1,45 @@
+From: Alex Morgan <alex.morgan@personal.example>
+To: Northstar Payroll <payroll@northstar.example>
+Subject: Replacement Pay Archive registration invitation
+Date: Tue, 20 Oct 2026 11:00:00 -0700
+Message-ID: <s07-m02@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 07-payroll-access
+X-JobSwitch-Stage: approved-request
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="jobswitch-s07-m02-0"
+
+--jobswitch-s07-m02-0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hello Payroll,
+
+My October 1 registration invitation has expired. Please send a replacement t=
+hrough the approved registration channel so I can access my pay statements af=
+ter leaving. Please do not include any password or tax identifier in your ema=
+il reply.
+
+Thank you,
+Alex
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s07-m02-0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+ello Payroll,</p><p>My October 1 registration invitation has expired. Please =
+send a replacement through the approved registration channel so I can access =
+my pay statements after leaving. Please do not include any password or tax id=
+entifier in your email reply.</p><p>Thank you,<br>Alex</p><p>---<br>Fictional=
+ JobSwitch demo. All people, policies and events in this message are syntheti=
+c. Addresses use reserved .example domains. Do not deliver to real people.<br=
+></p></div></body></html>
+
+--jobswitch-s07-m02-0--

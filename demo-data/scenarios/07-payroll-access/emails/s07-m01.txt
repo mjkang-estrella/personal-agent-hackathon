@@ -1,0 +1,17 @@
+From: Northstar Payroll <payroll@northstar.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-20T09:00:00-07:00
+Subject: Keep access to your Northstar pay statements
+Message-ID: <s07-m01@jobswitch.example>
+Attachments: attachments/s07-guide.pdf
+
+Hi Alex,
+
+Your company sign-in is disabled, but your pay records are available through Northstar Pay Archive. The attached guide explains personal registration. Our records show you have not finished registration.
+
+The October 1 invitation expired on October 16. Please request a new invitation rather than reusing it.
+
+Northstar Payroll
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

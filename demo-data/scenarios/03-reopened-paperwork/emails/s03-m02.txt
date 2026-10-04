@@ -1,0 +1,18 @@
+From: Jordan Lee | Orbit People Team <people@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-22T10:00:00-07:00
+Subject: Action required: correction to your submitted form
+Message-ID: <s03-m02@jobswitch.example>
+Attachments: (none)
+
+Hi Alex,
+
+During quality review we found that the representative title says Friend. It must say Authorized Representative in this demo form. Your previously completed task is reopened.
+
+Please ask your representative to correct that field in the secure portal by October 23. Do not email identity documents.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

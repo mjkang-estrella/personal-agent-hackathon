@@ -1,0 +1,104 @@
+From: Orbit Screening Desk <screening@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Subject: Action needed: two items for your Orbit background check
+Date: Mon, 05 Oct 2026 09:00:00 -0700
+Message-ID: <s02-m01@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 02-background-check
+X-JobSwitch-Stage: initial
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="jobswitch-s02-m01-0"
+
+--jobswitch-s02-m01-0
+Content-Type: multipart/alternative; boundary="jobswitch-s02-m01-1"
+
+--jobswitch-s02-m01-1
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Alex,
+
+We need an education-completion attestation and a Northstar employment statem=
+ent to continue your screening. Please follow the attached checklist and uplo=
+ad through the secure portal by October 8.
+
+Your review is pending. There is no clearance decision yet.
+
+Orbit Screening Desk
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s02-m01-1
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+i Alex,</p><p>We need an education-completion attestation and a Northstar emp=
+loyment statement to continue your screening. Please follow the attached chec=
+klist and upload through the secure portal by October 8.</p><p>Your review is=
+ pending. There is no clearance decision yet.</p><p>Orbit Screening Desk</p><=
+p>---<br>Fictional JobSwitch demo. All people, policies and events in this me=
+ssage are synthetic. Addresses use reserved .example domains. Do not deliver =
+to real people.<br></p></div></body></html>
+
+--jobswitch-s02-m01-1--
+
+--jobswitch-s02-m01-0
+Content-Type: application/pdf
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="s02-checklist.pdf"
+MIME-Version: 1.0
+
+JVBERi0xLjQKJZOMi54gUmVwb3J0TGFiIEdlbmVyYXRlZCBQREYgZG9jdW1lbnQgKG9wZW5zb3Vy
+Y2UpCjEgMCBvYmoKPDwKL0YxIDIgMCBSIC9GMiAzIDAgUgo+PgplbmRvYmoKMiAwIG9iago8PAov
+QmFzZUZvbnQgL0hlbHZldGljYSAvRW5jb2RpbmcgL1dpbkFuc2lFbmNvZGluZyAvTmFtZSAvRjEg
+L1N1YnR5cGUgL1R5cGUxIC9UeXBlIC9Gb250Cj4+CmVuZG9iagozIDAgb2JqCjw8Ci9CYXNlRm9u
+dCAvSGVsdmV0aWNhLUJvbGQgL0VuY29kaW5nIC9XaW5BbnNpRW5jb2RpbmcgL05hbWUgL0YyIC9T
+dWJ0eXBlIC9UeXBlMSAvVHlwZSAvRm9udAo+PgplbmRvYmoKNCAwIG9iago8PAovQ29udGVudHMg
+OCAwIFIgL01lZGlhQm94IFsgMCAwIDYxMiA3OTIgXSAvUGFyZW50IDcgMCBSIC9SZXNvdXJjZXMg
+PDwKL0ZvbnQgMSAwIFIgL1Byb2NTZXQgWyAvUERGIC9UZXh0IC9JbWFnZUIgL0ltYWdlQyAvSW1h
+Z2VJIF0KPj4gL1JvdGF0ZSAwIC9UcmFucyA8PAoKPj4gCiAgL1R5cGUgL1BhZ2UKPj4KZW5kb2Jq
+CjUgMCBvYmoKPDwKL1BhZ2VNb2RlIC9Vc2VOb25lIC9QYWdlcyA3IDAgUiAvVHlwZSAvQ2F0YWxv
+Zwo+PgplbmRvYmoKNiAwIG9iago8PAovQXV0aG9yIChKb2JTd2l0Y2ggU3ludGhldGljIERlbW8p
+IC9DcmVhdGlvbkRhdGUgKEQ6MjAwMDAxMDEwMDAwMDArMDAnMDAnKSAvQ3JlYXRvciAoSm9iU3dp
+dGNoIGRlbW8tZGF0YS9idWlsZC5weSkgL0tleXdvcmRzICgpIC9Nb2REYXRlIChEOjIwMDAwMTAx
+MDAwMDAwKzAwJzAwJykgL1Byb2R1Y2VyIChSZXBvcnRMYWIgUERGIExpYnJhcnkgLSBcKG9wZW5z
+b3VyY2VcKSkgCiAgL1N1YmplY3QgKEZJQ1RJT05BTCBERU1PIERBVEEgLSBOT1QgQSBSRUFMIEVN
+UExPWU1FTlQgUkVDT1JEKSAvVGl0bGUgKE9yYml0IExhYnMgfCBTY3JlZW5pbmcgZXZpZGVuY2Ug
+Y2hlY2tsaXN0KSAvVHJhcHBlZCAvRmFsc2UKPj4KZW5kb2JqCjcgMCBvYmoKPDwKL0NvdW50IDEg
+L0tpZHMgWyA0IDAgUiBdIC9UeXBlIC9QYWdlcwo+PgplbmRvYmoKOCAwIG9iago8PAovRmlsdGVy
+IFsgL0FTQ0lJODVEZWNvZGUgL0ZsYXRlRGVjb2RlIF0gL0xlbmd0aCAxMTUxCj4+CnN0cmVhbQpH
+YXRtOWdRJiRnJjpNbCtlNzdzR19kSHRsTzFFTVk8cEB1I1laZjtIQGslZEg+Vl1cVmUnYFhBUUBb
+RGwqTWg1bUsidVBlM290RVgpJFcidD1GNCswXmNbQDRULDk2bG5JXy5tIk4yNl1gS1JKPU1xXyJK
+M0VWPGQ2Qj9dWktgUztARmRhJDpaTEBcS2Q7LXNbJEs6YmdkVW80NkNHUnNkbWtgP1BsVG1yPl4y
+UDQ/aT9tOidmLmgpUm9ETlM9cnJfZUg1MUM4W1FqZlxNb2EqL3MmLlRAXSQuZlhoSEEkbVRec3Ft
+OltJJTEsYUc5XEM3Ll5CN2xaZENTKyg+MXApcklkV29gQWBGNEJwVXNZSTxzVzwlRG9WQltdRydK
+MzBvJGNZZk1paGVBaWJaNnBiIlFnU3MsWWVQKSoyY1UlYUA1IyldUWA4dW5INGQ/VW07KW1KZVU3
+U0Q9Wmg8Y0NuaGhaWVpvTkdsTWIzKkk1VjhWSGtHYjNEcVB1SEVTTT4tW2VXbW47MTZSNz4vTGxE
+a3M7PSZWbEZRalYjMD1kaWJKbSYwSXBRMTI6JG47K2c+VVFKIShEOEBfcVhyXF0xI1NtXlpldW0w
+QkVyQj9eLCo9Lys/b1ZEVzEwYSkkQTVBZiFDUTw/VyxsRTw/JygtPE1bTFUmI1NgWU1ocSZfYE9D
+IT86XEJWWSVaQDROQFssJCMlP104KDNqLTolNDhsLW1TMCo0WzlfZCxRSm0ldDA8OjlmQlhUSGxQ
+QEw8RiJmN3RfWiJtMyREal5SKU4qPTNnUl1cNVorYCFsSzNhdVtxKF4ibFojcyg/NnB0VHVzbmgn
+OW1LdUk3Li9HRGFAWmQiayZnWkgoTUBVPVhBYU8sQWtoKE5yUGVUUFs4cmU/X0A8W1QualsmYylQ
+OHNdZGFKOyhIYVEuQldWSzRUTGdTZk44c1lndClWZU08bm1qUUhQMyZTRj5pa2IwSTgrcVA5UDFl
+UiY/Lz5mR2swLF4zJTg/SmpGZm86bW0sY0lSYSZiUWhlVkw3YWM2aWtyI05iJkNLWkkzQyctMSNj
+PFV1YWwiYm9FIWI4PDFgciFEMkhoWGpcaFIvZUtHPkQlWVlZVyFqN0U/Ol4nMVUoVScuR3NlXWA1
+ZmkhZTFXKi01Rzctaj1UZUA3SEVPImtTbmFhQ1NqQ3FtPTdhdFFWIl9NODtAVzlEbE10SWt1LShk
+OiRxRmpFO2t0Rm5MN10iN2AsVnVBcik7PUI3KHFQZU9bIW02Pl1ILVhxVj88T1JZPT1dKyxoOGxD
+Kjk5YGdlIlIlRVBzWGI4VnIrXz40L1EtMS03QHEyYnEocEhsU05OOEJzZDEsLm9fbUIxbyoiWWMm
+aT8sWTg1TXU+ImJlVzgrZE0zSF5EKSVhaiFoTE5IVVUpKjpkRUYpKCxxTy02OmkkUDBvOCQ6TENC
+cCRYb0UjKSxiNXEoLj9bcmVhUyk4KCNSXVo8Q3RWazNlTVl1RkQ+MEZtPD5FWU5iT2NmbUo8OFRS
+L0A+QCktaWF+PmVuZHN0cmVhbQplbmRvYmoKeHJlZgowIDkKMDAwMDAwMDAwMCA2NTUzNSBmIAow
+MDAwMDAwMDYxIDAwMDAwIG4gCjAwMDAwMDAxMDIgMDAwMDAgbiAKMDAwMDAwMDIwOSAwMDAwMCBu
+IAowMDAwMDAwMzIxIDAwMDAwIG4gCjAwMDAwMDA1MTQgMDAwMDAgbiAKMDAwMDAwMDU4MiAwMDAw
+MCBuIAowMDAwMDAwOTQ5IDAwMDAwIG4gCjAwMDAwMDEwMDggMDAwMDAgbiAKdHJhaWxlcgo8PAov
+SUQgCls8MzAyYjc4ODI3ODg0Nzg1MTlhNjY2Y2VhM2U4OWU4NmU+PDMwMmI3ODgyNzg4NDc4NTE5
+YTY2NmNlYTNlODllODZlPl0KJSBSZXBvcnRMYWIgZ2VuZXJhdGVkIFBERiBkb2N1bWVudCAtLSBk
+aWdlc3QgKG9wZW5zb3VyY2UpCgovSW5mbyA2IDAgUgovUm9vdCA1IDAgUgovU2l6ZSA5Cj4+CnN0
+YXJ0eHJlZgoyMjUwCiUlRU9GCg==
+
+--jobswitch-s02-m01-0--

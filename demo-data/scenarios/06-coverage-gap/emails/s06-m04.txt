@@ -1,0 +1,16 @@
+From: Maya Chen | Northstar People Team <people@northstar.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-09T09:00:00-07:00
+Subject: Re: Please confirm my active coverage end date
+Message-ID: <s06-m04@jobswitch.example>
+Attachments: (none)
+
+Hi Alex,
+
+We confirm your currently enrolled employee medical coverage ends October 16 at 11:59 p.m. Pacific. No continuation election has been received. We will provide continuation materials separately; this email does not enroll you.
+
+Best,
+Maya
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

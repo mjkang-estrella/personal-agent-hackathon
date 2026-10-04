@@ -1,0 +1,16 @@
+From: Elliot Reed | Northstar IT <it@northstar.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-20T15:00:00-07:00
+Subject: Re: Carrier update for demo shipment NS-SHIP-042
+Message-ID: <s04-m05@jobswitch.example>
+Attachments: attachments/s04-receipt.pdf
+
+Hi Alex,
+
+IT has checked in all four assigned items. Your equipment return is complete. The inventory receipt is attached.
+
+Thanks for returning everything,
+Elliot
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

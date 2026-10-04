@@ -1,0 +1,110 @@
+From: Jordan Lee | Orbit People Team <people@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Subject: Welcome to Orbit - your onboarding checklist
+Date: Mon, 12 Oct 2026 09:00:00 -0700
+Message-ID: <s08-m01@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 08-onboarding-coordination
+X-JobSwitch-Stage: initial
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="jobswitch-s08-m01-0"
+
+--jobswitch-s08-m01-0
+Content-Type: multipart/alternative; boundary="jobswitch-s08-m01-1"
+
+--jobswitch-s08-m01-1
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Alex,
+
+We look forward to your October 19 start. Please complete your People Portal =
+profile by October 15; that releases your screening invitation. Your payroll =
+payment preference is due October 20 and should be entered directly in the se=
+cure portal.
+
+The attached checklist separates each task. We are still confirming the lapto=
+p appointment.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s08-m01-1
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+i Alex,</p><p>We look forward to your October 19 start. Please complete your =
+People Portal profile by October 15; that releases your screening invitation.=
+ Your payroll payment preference is due October 20 and should be entered dire=
+ctly in the secure portal.</p><p>The attached checklist separates each task. =
+We are still confirming the laptop appointment.</p><p>Best,<br>Jordan</p><p>-=
+--<br>Fictional JobSwitch demo. All people, policies and events in this messa=
+ge are synthetic. Addresses use reserved .example domains. Do not deliver to =
+real people.<br></p></div></body></html>
+
+--jobswitch-s08-m01-1--
+
+--jobswitch-s08-m01-0
+Content-Type: application/pdf
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="s08-checklist.pdf"
+MIME-Version: 1.0
+
+JVBERi0xLjQKJZOMi54gUmVwb3J0TGFiIEdlbmVyYXRlZCBQREYgZG9jdW1lbnQgKG9wZW5zb3Vy
+Y2UpCjEgMCBvYmoKPDwKL0YxIDIgMCBSIC9GMiAzIDAgUgo+PgplbmRvYmoKMiAwIG9iago8PAov
+QmFzZUZvbnQgL0hlbHZldGljYSAvRW5jb2RpbmcgL1dpbkFuc2lFbmNvZGluZyAvTmFtZSAvRjEg
+L1N1YnR5cGUgL1R5cGUxIC9UeXBlIC9Gb250Cj4+CmVuZG9iagozIDAgb2JqCjw8Ci9CYXNlRm9u
+dCAvSGVsdmV0aWNhLUJvbGQgL0VuY29kaW5nIC9XaW5BbnNpRW5jb2RpbmcgL05hbWUgL0YyIC9T
+dWJ0eXBlIC9UeXBlMSAvVHlwZSAvRm9udAo+PgplbmRvYmoKNCAwIG9iago8PAovQ29udGVudHMg
+OCAwIFIgL01lZGlhQm94IFsgMCAwIDYxMiA3OTIgXSAvUGFyZW50IDcgMCBSIC9SZXNvdXJjZXMg
+PDwKL0ZvbnQgMSAwIFIgL1Byb2NTZXQgWyAvUERGIC9UZXh0IC9JbWFnZUIgL0ltYWdlQyAvSW1h
+Z2VJIF0KPj4gL1JvdGF0ZSAwIC9UcmFucyA8PAoKPj4gCiAgL1R5cGUgL1BhZ2UKPj4KZW5kb2Jq
+CjUgMCBvYmoKPDwKL1BhZ2VNb2RlIC9Vc2VOb25lIC9QYWdlcyA3IDAgUiAvVHlwZSAvQ2F0YWxv
+Zwo+PgplbmRvYmoKNiAwIG9iago8PAovQXV0aG9yIChKb2JTd2l0Y2ggU3ludGhldGljIERlbW8p
+IC9DcmVhdGlvbkRhdGUgKEQ6MjAwMDAxMDEwMDAwMDArMDAnMDAnKSAvQ3JlYXRvciAoSm9iU3dp
+dGNoIGRlbW8tZGF0YS9idWlsZC5weSkgL0tleXdvcmRzICgpIC9Nb2REYXRlIChEOjIwMDAwMTAx
+MDAwMDAwKzAwJzAwJykgL1Byb2R1Y2VyIChSZXBvcnRMYWIgUERGIExpYnJhcnkgLSBcKG9wZW5z
+b3VyY2VcKSkgCiAgL1N1YmplY3QgKEZJQ1RJT05BTCBERU1PIERBVEEgLSBOT1QgQSBSRUFMIEVN
+UExPWU1FTlQgUkVDT1JEKSAvVGl0bGUgKE9yYml0IExhYnMgfCBGaXJzdC13ZWVrIG9uYm9hcmRp
+bmcgY2hlY2tsaXN0KSAvVHJhcHBlZCAvRmFsc2UKPj4KZW5kb2JqCjcgMCBvYmoKPDwKL0NvdW50
+IDEgL0tpZHMgWyA0IDAgUiBdIC9UeXBlIC9QYWdlcwo+PgplbmRvYmoKOCAwIG9iago8PAovRmls
+dGVyIFsgL0FTQ0lJODVEZWNvZGUgL0ZsYXRlRGVjb2RlIF0gL0xlbmd0aCAxMjgwCj4+CnN0cmVh
+bQpHYXRtOjk2OSlQJkFJPS9vVD5bTylUclktZjpFODAqT18tSC1KbUlGVUcsRTpgS2lXbDg7PS8/
+bl80XDJKUDtBJjtHXmMzalIwNGRMT19gVzBDRCdKKVc3V0djZHMuXSNmUi1xYltNdTw/ckM2V10z
+byVZal5BRUckQCJibV5dbydSR0pIPUkuIWRqSTtdKmtrNDk6KT1xSzFbSGRAMHIpJklaM0NGSiFi
+T2lzYT9xSnRlIlZtL0NhJ15zMkI2aUFXMWFMI1ElP2VVYmhJS3EmVWAhXERMUkxyWzxqLGZoZTxi
+JSZeUUxaPm1kT0twdFomLCNzbT5zOCpBL09qKyoxSF4mdS8mIl03a20zIzQwY1lWUFNfT3JNPyEz
+SzNHc0khbz1WckZzSUlAQlJzKzpNJWFGYj1FOEVjOG8nZzFnZjljX0NDNWhQPWdvUURYY1ZrW11e
+XSxUVkJHXUdsdW5aV2lzKzc8X0UlLGxZJVtqU1pWUyhVakpMdDg/U3JWMEdQY00hKS1oa3BwaEll
+ZVpZXHJzMUwrJGBLJCgwWyolPDAtdVVDTmdyJ2VFWEY/Xi8+U2JRTFQnKERDdXRCcHNJWy1hOkNO
+MF9COTwwNE8sMDs3aTxCT0Jncl9oUz5WIyNQcjhbPFpBdTpHRW1vXTApbEBnMjlsJ1ZaTGhsZEIo
+KFBEVW9SRGlDYzh1LythSEpuYlkmT0MwM2tmSlFuIVw9PUdMI2lvVmVzJl4tJW5RRGtqdEhDN2ZF
+RyskR1hLXDJOTDJQQzk1VFFOUVQqRVxTIjR1NGZKQ0FjPEpAPDFyMWVuKm5nXVI+QWJvUWYuK285
+JExmR1FQTjlNQSRQVGdjcihGKVBaWGhBYSYpOSY4bypPYFJOcFQ4ZChOJV91TjI+MURYTCo7KSMn
+YlVdcS1sJitGXTR1JllZUE9HZT9qYjoySEVmKChxbCo+PlQ+bm4wVVJkI2Q4ZFJyV1Jscy5rSSor
+VDZBKTorTz1gIkJHXihcSEllVnJkPjNSV2VLc0dBcU87PS8xP3RsWW44RUk9Zj1EbT0yQy0yUUBR
+Rjo+biZJT04mNisldWYnJjBiWyVZZjVDOShTKHFCL0ZXVDktN2IsR3EwUlxbUT5DIks7YjtUO0Vb
+XD1HOy1OPU5SXEpYQTJhdEkpcSZtVVEjKigjSkxiU1wmakFydTJeSTVmPGkpcjBgcDZMYGVlXTM+
+OnRlNWZiU2xmRDdDQ14+VzU0QDdoKlNZcjZWVTE5LkxSZkhWVlA2IUkxOllbYUF1S0puOidoL1Ev
+WHEmTztxW1JOMWRvMWJpQl9FY1xgR1pdXl1tRXE+Z3NqcUFqcy8+SU1eIldDZGZNI2tKIixrQiVN
+dXJlXF5VQltGNywwJ1VnKWtVOD9VOmBUa1RULmIvcyNtSEEwK0coY2QnIiFkI0hXTy1KOStILG41
+bz5yXU5baDRcSz5ROzVlQFJUW21SLjU2TjFRa0VQQiw4IUAzaiM1WDxnPE8mOixNI1FDVC5DUE5G
+OmcjXV1sRkNJTF5HLSFKcHBTP1VEVzpAQ3VQLEdsXGoxbFtnRHFJQGBBaWxaN0drdFgoVVdmLCg6
+L0k0dHIsT3JjXTg4UVNxSyRIKEhvNCdZczYqNnJePnVZUEM9L14nYW05dUEnVjdaKTc6QCt0cmAy
+UVo2XnFBLkI9U20udElAVmp0cF5jdSNWWlp+PmVuZHN0cmVhbQplbmRvYmoKeHJlZgowIDkKMDAw
+MDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDYxIDAwMDAwIG4gCjAwMDAwMDAxMDIgMDAwMDAgbiAK
+MDAwMDAwMDIwOSAwMDAwMCBuIAowMDAwMDAwMzIxIDAwMDAwIG4gCjAwMDAwMDA1MTQgMDAwMDAg
+biAKMDAwMDAwMDU4MiAwMDAwMCBuIAowMDAwMDAwOTUyIDAwMDAwIG4gCjAwMDAwMDEwMTEgMDAw
+MDAgbiAKdHJhaWxlcgo8PAovSUQgCls8ZTRhMWE2ZmY1YzNhNGFkYzFhMDBlNzkwY2MwZDljYTc+
+PGU0YTFhNmZmNWMzYTRhZGMxYTAwZTc5MGNjMGQ5Y2E3Pl0KJSBSZXBvcnRMYWIgZ2VuZXJhdGVk
+IFBERiBkb2N1bWVudCAtLSBkaWdlc3QgKG9wZW5zb3VyY2UpCgovSW5mbyA2IDAgUgovUm9vdCA1
+IDAgUgovU2l6ZSA5Cj4+CnN0YXJ0eHJlZgoyMzgyCiUlRU9GCg==
+
+--jobswitch-s08-m01-0--

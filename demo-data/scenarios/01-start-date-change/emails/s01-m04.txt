@@ -1,0 +1,18 @@
+From: Jordan Lee | Orbit People Team <people@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-09T10:00:00-07:00
+Subject: Re: Update: your start date is moving to November 2
+Message-ID: <s01-m04@jobswitch.example>
+Attachments: attachments/s01-offer-v2.pdf
+
+Hi Alex,
+
+Attached is version 2, which supersedes the October 19 schedule. Your onboarding profile is due November 2. Subject to eligibility and election, your health coverage would begin December 1; your election deadline is also December 1.
+
+Please review and acknowledge version 2 in the secure portal. Receipt of this email is not acknowledgment.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

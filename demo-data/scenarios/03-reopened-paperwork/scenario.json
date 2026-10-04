@@ -1,0 +1,148 @@
+{
+  "id": "03-reopened-paperwork",
+  "title": "A completed onboarding form is reopened",
+  "summary": "A later correction request overrides an earlier receipt without erasing the original history.",
+  "inspiration": "A submitted employment-verification form later received a correction request. This dataset uses a fictional non-government employment-verification record.",
+  "initialClock": "2026-10-20T09:30:00-07:00",
+  "profile": {
+    "name": "Alex Morgan",
+    "previousEmployer": "Northstar Studio",
+    "nextEmployer": "Orbit Labs",
+    "lastDay": "2026-10-16",
+    "startDay": "2026-10-19"
+  },
+  "schemaVersion": "1.0",
+  "fictional": true,
+  "independentScenario": true,
+  "documents": [
+    {
+      "id": "s03-original-receipt",
+      "title": "Orbit Labs | Employment-verification submission receipt",
+      "path": "attachments/s03-original-receipt.pdf",
+      "mimeType": "application/pdf",
+      "bytes": 2521,
+      "sha256": "b7c08b3d01b79901070706e697278da4a0be70faa1609fc62e01a8228615bf04",
+      "pages": 1
+    },
+    {
+      "id": "s03-correction-receipt",
+      "title": "Orbit Labs | Correction acceptance receipt",
+      "path": "attachments/s03-correction-receipt.pdf",
+      "mimeType": "application/pdf",
+      "bytes": 2445,
+      "sha256": "16a7e556f967a3118a5035e898a7dd4e16f752e877146120aff38cbd274c12be",
+      "pages": 1
+    }
+  ],
+  "messagesFile": "messages.json",
+  "steps": [
+    {
+      "id": "initial",
+      "title": "Record a completion receipt",
+      "trigger": "Load the first receipt.",
+      "expected": "Record submission completion with a quality-review caveat.",
+      "mustNot": "Do not infer legal work authorization.",
+      "evidence": [
+        {
+          "sourceId": "s03-original-receipt",
+          "quote": "Later quality review may reopen the task."
+        }
+      ],
+      "releaseMessageIds": [
+        "s03-m01"
+      ],
+      "releaseDocumentIds": [
+        "s03-m01",
+        "s03-original-receipt"
+      ],
+      "inputBundle": "stages/initial.json",
+      "requiresUserApproval": false
+    },
+    {
+      "id": "correction-request",
+      "title": "Reopen the task",
+      "trigger": "Deliver the later correction request.",
+      "expected": "Move the task to needs_info and show the October 23 correction deadline.",
+      "mustNot": "Do not let the older receipt override the newer request.",
+      "evidence": [
+        {
+          "sourceId": "s03-m02",
+          "quote": "Your previously completed task is reopened."
+        }
+      ],
+      "releaseMessageIds": [
+        "s03-m02"
+      ],
+      "releaseDocumentIds": [
+        "s03-m02"
+      ],
+      "inputBundle": "stages/correction-request.json",
+      "requiresUserApproval": false
+    },
+    {
+      "id": "approved-clarification",
+      "title": "Clarify the scope",
+      "trigger": "User approves the clarification email.",
+      "expected": "Ask only about the requested correction.",
+      "mustNot": "Do not send identity documents.",
+      "evidence": [
+        {
+          "sourceId": "s03-m03",
+          "quote": "only the representative title requires an update."
+        }
+      ],
+      "releaseMessageIds": [
+        "s03-m03"
+      ],
+      "releaseDocumentIds": [
+        "s03-m03"
+      ],
+      "inputBundle": "stages/approved-clarification.json",
+      "requiresUserApproval": true
+    },
+    {
+      "id": "scope-confirmed",
+      "title": "Keep the correction open",
+      "trigger": "Deliver HR clarification.",
+      "expected": "Keep pending until secure-portal correction and review occur.",
+      "mustNot": "Do not treat clarification as completion.",
+      "evidence": [
+        {
+          "sourceId": "s03-m04",
+          "quote": "The correction is still pending"
+        }
+      ],
+      "releaseMessageIds": [
+        "s03-m04"
+      ],
+      "releaseDocumentIds": [
+        "s03-m04"
+      ],
+      "inputBundle": "stages/scope-confirmed.json",
+      "requiresUserApproval": false
+    },
+    {
+      "id": "correction-accepted",
+      "title": "Close after confirmation",
+      "trigger": "Simulate the portal correction; deliver the acceptance receipt.",
+      "expected": "Mark the correction complete and retain both receipts.",
+      "mustNot": "Do not delete the reopening history.",
+      "evidence": [
+        {
+          "sourceId": "s03-correction-receipt",
+          "quote": "Orbit People has accepted the correction."
+        }
+      ],
+      "releaseMessageIds": [
+        "s03-m05"
+      ],
+      "releaseDocumentIds": [
+        "s03-m05",
+        "s03-correction-receipt"
+      ],
+      "inputBundle": "stages/correction-accepted.json",
+      "requiresUserApproval": false
+    }
+  ],
+  "initialBundle": "stages/initial.json"
+}

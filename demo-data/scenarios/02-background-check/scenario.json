@@ -1,0 +1,148 @@
+{
+  "id": "02-background-check",
+  "title": "Background screening needs additional evidence",
+  "summary": "Track a screening request across two employers and distinguish uploaded evidence from a cleared check.",
+  "inspiration": "A screening provider requested education and prior-employment evidence before the employer confirmed clearance. No real education records are reproduced.",
+  "initialClock": "2026-10-05T10:00:00-07:00",
+  "profile": {
+    "name": "Alex Morgan",
+    "previousEmployer": "Northstar Studio",
+    "nextEmployer": "Orbit Labs",
+    "lastDay": "2026-10-16",
+    "startDay": "2026-10-19"
+  },
+  "schemaVersion": "1.0",
+  "fictional": true,
+  "independentScenario": true,
+  "documents": [
+    {
+      "id": "s02-checklist",
+      "title": "Orbit Labs | Screening evidence checklist",
+      "path": "attachments/s02-checklist.pdf",
+      "mimeType": "application/pdf",
+      "bytes": 2641,
+      "sha256": "61cad9aa9366995d14e7b94a094181305ccf3d7f90eb945e7525f616293a834c",
+      "pages": 1
+    },
+    {
+      "id": "s02-employment",
+      "title": "Northstar Studio | Employment status statement",
+      "path": "attachments/s02-employment.pdf",
+      "mimeType": "application/pdf",
+      "bytes": 2516,
+      "sha256": "b393f01467ef65c211d123939852da3e5fd724c319d7df4fc2d2771d830a932c",
+      "pages": 1
+    }
+  ],
+  "messagesFile": "messages.json",
+  "steps": [
+    {
+      "id": "initial",
+      "title": "Identify missing evidence",
+      "trigger": "Load the checklist.",
+      "expected": "Create two evidence requests with the October 8 due date.",
+      "mustNot": "Do not assume the applicant failed screening.",
+      "evidence": [
+        {
+          "sourceId": "s02-m01",
+          "quote": "Your review is pending."
+        }
+      ],
+      "releaseMessageIds": [
+        "s02-m01"
+      ],
+      "releaseDocumentIds": [
+        "s02-m01",
+        "s02-checklist"
+      ],
+      "inputBundle": "stages/initial.json",
+      "requiresUserApproval": false
+    },
+    {
+      "id": "approved-inquiry",
+      "title": "Ask the prior employer",
+      "trigger": "User approves the employment statement inquiry.",
+      "expected": "Track the request to Northstar.",
+      "mustNot": "Do not attach real identity records.",
+      "evidence": [
+        {
+          "sourceId": "s02-m02",
+          "quote": "Please label October 16 as my expected final day"
+        }
+      ],
+      "releaseMessageIds": [
+        "s02-m02"
+      ],
+      "releaseDocumentIds": [
+        "s02-m02"
+      ],
+      "inputBundle": "stages/approved-inquiry.json",
+      "requiresUserApproval": true
+    },
+    {
+      "id": "employment-proof",
+      "title": "One item is ready",
+      "trigger": "Deliver the Northstar statement.",
+      "expected": "Mark employment evidence available and keep education evidence unverified until receipt.",
+      "mustNot": "Do not infer both items are uploaded.",
+      "evidence": [
+        {
+          "sourceId": "s02-employment",
+          "quote": "remains employed as of October 6, 2026."
+        }
+      ],
+      "releaseMessageIds": [
+        "s02-m03"
+      ],
+      "releaseDocumentIds": [
+        "s02-m03",
+        "s02-employment"
+      ],
+      "inputBundle": "stages/employment-proof.json",
+      "requiresUserApproval": false
+    },
+    {
+      "id": "evidence-received",
+      "title": "Wait for clearance",
+      "trigger": "Simulate a secure portal upload outside the email system; deliver its confirmation.",
+      "expected": "Mark evidence received, screening pending.",
+      "mustNot": "Do not mark cleared.",
+      "evidence": [
+        {
+          "sourceId": "s02-m04",
+          "quote": "this receipt is not clearance."
+        }
+      ],
+      "releaseMessageIds": [
+        "s02-m04"
+      ],
+      "releaseDocumentIds": [
+        "s02-m04"
+      ],
+      "inputBundle": "stages/evidence-received.json",
+      "requiresUserApproval": false
+    },
+    {
+      "id": "cleared",
+      "title": "Close screening only",
+      "trigger": "Deliver the employer clearance email.",
+      "expected": "Complete screening; retain unrelated onboarding tasks.",
+      "mustNot": "Do not complete all onboarding.",
+      "evidence": [
+        {
+          "sourceId": "s02-m05",
+          "quote": "Your background screening has been cleared"
+        }
+      ],
+      "releaseMessageIds": [
+        "s02-m05"
+      ],
+      "releaseDocumentIds": [
+        "s02-m05"
+      ],
+      "inputBundle": "stages/cleared.json",
+      "requiresUserApproval": false
+    }
+  ],
+  "initialBundle": "stages/initial.json"
+}

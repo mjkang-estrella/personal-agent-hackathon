@@ -1,0 +1,18 @@
+From: Jordan Lee | Orbit People Team <people@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-19T16:00:00-07:00
+Subject: First-day status - two paperwork items remain open
+Message-ID: <s08-m07@jobswitch.example>
+Attachments: attachments/s08-status.pdf
+
+Hi Alex,
+
+Your profile and screening are complete; IT confirmed laptop setup and the welcome team confirmed attendance. The attached status receipt lists the evidence.
+
+Payroll preference remains unconfirmed, due October 20. Employment-verification paperwork is still under review. Benefits election is also open, due November 17.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

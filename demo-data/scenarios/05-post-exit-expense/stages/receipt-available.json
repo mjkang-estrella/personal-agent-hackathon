@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "1.0",
+  "scenarioId": "05-post-exit-expense",
+  "stage": "receipt-available",
+  "initialProfile": {
+    "name": "Alex Morgan",
+    "previousEmployer": "Northstar Studio",
+    "nextEmployer": "Orbit Labs",
+    "lastDay": "2026-10-16",
+    "startDay": "2026-10-19"
+  },
+  "visibleMessageIds": [
+    "s05-m01",
+    "s05-m02"
+  ],
+  "documents": [
+    {
+      "id": "s05-m01",
+      "name": "Your $240 workshop expense still needs a claim.txt",
+      "employer": "previous",
+      "kind": "other",
+      "pages": [
+        "From: Northstar Expense Operations <expenses@northstar.example>\nTo: Alex Morgan <alex.morgan@personal.example>\nDate: 2026-10-19T09:00:00-07:00\nSubject: Your $240 workshop expense still needs a claim\nMessage-ID: <s05-m01@jobswitch.example>\nAttachments: attachments/s05-policy.pdf\n\nHi Alex,\n\nWe noticed an unsubmitted $240 workshop expense from October 12. Your employee portal is now disabled. Use the alternative route in the attached policy; your deadline is October 30 at 5 p.m. Pacific.\n\nWe currently have only a card authorization, not an itemized receipt. Please obtain the receipt before submitting.\n\nNorthstar Expense Operations\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n"
+      ],
+      "addedAt": "2026-10-19T09:00:00-07:00"
+    },
+    {
+      "id": "s05-policy",
+      "name": "s05-policy.pdf",
+      "employer": "previous",
+      "kind": "policy",
+      "pages": [
+        "NORTHSTAR STUDIO\nJOBSWITCH / SYNTHETIC ATTACHMENT\nFICTIONAL DEMO DATA - NOT A REAL EMPLOYMENT RECORD\ns05-policy | 05-post-exit-expense\nPage 1\nPost-departure expense route\nIssued 2026-10-14 | Alex Morgan | Document s05-policy\nWho this applies to\nAlex Morgan has a final working day of October 16, 2026. Expenses must have been incurred for approved\ncompany business before that date.\nAlternative route\nIf the company expense portal is unavailable, submit the expense summary and receipt to\nexpenses@northstar.example and request manager review. For this fictional case, the confirmed submission\ndeadline is October 30, 2026 at 5:00 p.m. Pacific.\nRequired evidence\nInclude business purpose, purchase date, merchant, amount and itemized receipt. A card authorization\nalone is not an itemized receipt. Do not email bank account details.\nStatus rules\nReceipt of a claim means submitted, not approved. An approval email is not payment evidence. A payroll\npayment record is required to mark paid.\n"
+      ],
+      "addedAt": "2026-10-04T20:00:00Z"
+    },
+    {
+      "id": "s05-m02",
+      "name": "Itemized workshop receipt recovered.txt",
+      "employer": "previous",
+      "kind": "other",
+      "pages": [
+        "From: Maya Chen | Northstar People Team <people@northstar.example>\nTo: Alex Morgan <alex.morgan@personal.example>\nDate: 2026-10-20T10:00:00-07:00\nSubject: Itemized workshop receipt recovered\nMessage-ID: <s05-m02@jobswitch.example>\nAttachments: attachments/s05-receipt.pdf\n\nHi Alex,\n\nOur events coordinator recovered the itemized receipt from Harbor Learning and shared the attached demo copy with you. Please check the merchant, date and amount before using it in your claim. This email does not approve the reimbursement.\n\nBest,\nMaya\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n"
+      ],
+      "addedAt": "2026-10-20T10:00:00-07:00"
+    },
+    {
+      "id": "s05-receipt",
+      "name": "s05-receipt.pdf",
+      "employer": "personal",
+      "kind": "receipt",
+      "pages": [
+        "PERSONAL RECORDS\nJOBSWITCH / SYNTHETIC ATTACHMENT\nFICTIONAL DEMO DATA - NOT A REAL EMPLOYMENT RECORD\ns05-receipt | 05-post-exit-expense\nPage 1\nItemized workshop receipt\nIssued 2026-10-20 | Alex Morgan | Document s05-receipt\nMerchant and customer\nHarbor Learning, fictional merchant | Customer: Alex Morgan | Receipt DEMO-EXP-042.\nPurchase\nProduct Discovery Workshop, one seat. Purchase date October 12, 2026. Service date October 14, 2026.\nLine item $240.00 USD; tax $0.00; total $240.00 USD.\nPayment\nPaid in full on October 12, 2026. No card or bank identifiers are included. This receipt is newly generated\ndemo data.\nBusiness context\nWorkshop attendance supported the Northstar product planning project. Employer approval is a separate\ndecision; this receipt does not establish reimbursement eligibility.\n"
+      ],
+      "addedAt": "2026-10-04T20:00:00Z"
+    }
+  ]
+}

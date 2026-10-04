@@ -1,0 +1,15 @@
+From: Orbit Screening Desk <screening@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-07T15:00:00-07:00
+Subject: Evidence received - review remains pending
+Message-ID: <s02-m04@jobswitch.example>
+Attachments: (none)
+
+Hi Alex,
+
+The demo screening portal confirms receipt of your education attestation and Northstar statement. No further documents are requested today. Your background check is still under review; this receipt is not clearance.
+
+Orbit Screening Desk
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

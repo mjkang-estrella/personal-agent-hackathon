@@ -1,0 +1,15 @@
+From: Northstar Expense Operations <expenses@northstar.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-22T14:00:00-07:00
+Subject: Re: Expense claim DEMO-EXP-042 - $240 workshop
+Message-ID: <s05-m05@jobswitch.example>
+Attachments: (none)
+
+Hi Alex,
+
+Your manager has approved the $240.00 claim DEMO-EXP-042. It is queued for a future payroll run. Payment has not been issued. We will send a separate payment notice when processing completes.
+
+Northstar Expense Operations
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

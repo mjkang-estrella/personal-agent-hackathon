@@ -1,0 +1,45 @@
+From: Jordan Lee | Orbit People Team <people@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Subject: Re: Action required: correction to your submitted form
+Date: Thu, 22 Oct 2026 13:00:00 -0700
+Message-ID: <s03-m04@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 03-reopened-paperwork
+X-JobSwitch-Stage: scope-confirmed
+In-Reply-To: <s03-m03@jobswitch.example>
+References: <s03-m03@jobswitch.example>
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="jobswitch-s03-m04-0"
+
+--jobswitch-s03-m04-0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Alex,
+
+Correct: only the representative title field needs an update. We do not need =
+another identity-document copy. The correction is still pending until it is s=
+aved and reviewed.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s03-m04-0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+i Alex,</p><p>Correct: only the representative title field needs an update. W=
+e do not need another identity-document copy. The correction is still pending=
+ until it is saved and reviewed.</p><p>Best,<br>Jordan</p><p>---<br>Fictional=
+ JobSwitch demo. All people, policies and events in this message are syntheti=
+c. Addresses use reserved .example domains. Do not deliver to real people.<br=
+></p></div></body></html>
+
+--jobswitch-s03-m04-0--

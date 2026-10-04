@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "1.0",
+  "fictional": true,
+  "profile": {
+    "name": "Alex Morgan",
+    "previousEmployer": "Northstar Studio",
+    "nextEmployer": "Orbit Labs",
+    "lastDay": "2026-10-16",
+    "startDay": "2026-10-19"
+  },
+  "reviewedBase": "fcc9eff",
+  "scenarios": [
+    {
+      "id": "01-start-date-change",
+      "title": "A changed start date leaves an old offer in circulation",
+      "summary": "Find conflicting dates, request a corrected offer, and review downstream deadlines without silently overwriting the signed version.",
+      "path": "scenarios/01-start-date-change",
+      "messageCount": 5,
+      "pdfCount": 2,
+      "stageCount": 5
+    },
+    {
+      "id": "02-background-check",
+      "title": "Background screening needs additional evidence",
+      "summary": "Track a screening request across two employers and distinguish uploaded evidence from a cleared check.",
+      "path": "scenarios/02-background-check",
+      "messageCount": 5,
+      "pdfCount": 2,
+      "stageCount": 5
+    },
+    {
+      "id": "03-reopened-paperwork",
+      "title": "A completed onboarding form is reopened",
+      "summary": "A later correction request overrides an earlier receipt without erasing the original history.",
+      "path": "scenarios/03-reopened-paperwork",
+      "messageCount": 5,
+      "pdfCount": 2,
+      "stageCount": 5
+    },
+    {
+      "id": "04-equipment-return",
+      "title": "A signed return form is not a returned laptop",
+      "summary": "Follow equipment from instructions through signed paperwork and shipping to a named IT receipt.",
+      "path": "scenarios/04-equipment-return",
+      "messageCount": 5,
+      "pdfCount": 2,
+      "stageCount": 5
+    },
+    {
+      "id": "05-post-exit-expense",
+      "title": "An unclaimed expense after company access is disabled",
+      "summary": "Find an alternative claim channel, obtain a missing itemized receipt, and distinguish submission, approval and payment.",
+      "path": "scenarios/05-post-exit-expense",
+      "messageCount": 5,
+      "pdfCount": 2,
+      "stageCount": 5
+    },
+    {
+      "id": "06-coverage-gap",
+      "title": "Compare coverage dates across two employers",
+      "summary": "Separate policy timing from individual enrollment and expose an unresolved gap without choosing insurance for the user.",
+      "path": "scenarios/06-coverage-gap",
+      "messageCount": 5,
+      "pdfCount": 2,
+      "stageCount": 4
+    },
+    {
+      "id": "07-payroll-access",
+      "title": "Recover access to pay and tax records after leaving",
+      "summary": "A registration link has expired; obtain a replacement and verify document access without moving credentials through email.",
+      "path": "scenarios/07-payroll-access",
+      "messageCount": 5,
+      "pdfCount": 2,
+      "stageCount": 5
+    },
+    {
+      "id": "08-onboarding-coordination",
+      "title": "One onboarding plan across multiple systems",
+      "summary": "Merge overlapping HR and IT messages, respect dependencies, and ask only about missing appointment details.",
+      "path": "scenarios/08-onboarding-coordination",
+      "messageCount": 7,
+      "pdfCount": 2,
+      "stageCount": 6
+    }
+  ]
+}

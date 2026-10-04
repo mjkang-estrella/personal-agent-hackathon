@@ -1,0 +1,45 @@
+From: Alex Morgan <alex.morgan@personal.example>
+To: Jordan Lee | Orbit People Team <people@orbit.example>
+Subject: Re: Update: your start date is moving to November 2
+Date: Thu, 08 Oct 2026 14:30:00 -0700
+Message-ID: <s01-m03@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 01-start-date-change
+X-JobSwitch-Stage: approved-inquiry
+In-Reply-To: <s01-m02@jobswitch.example>
+References: <s01-m02@jobswitch.example>
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="jobswitch-s01-m03-0"
+
+--jobswitch-s01-m03-0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Jordan,
+
+My saved offer still shows October 19. Please send the revised November 2 sch=
+edule and confirm my onboarding deadline, projected insurance start, and bene=
+fit election deadline. My last Northstar day is October 16.
+
+Thank you,
+Alex
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s01-m03-0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+i Jordan,</p><p>My saved offer still shows October 19. Please send the revise=
+d November 2 schedule and confirm my onboarding deadline, projected insurance=
+ start, and benefit election deadline. My last Northstar day is October 16.</=
+p><p>Thank you,<br>Alex</p><p>---<br>Fictional JobSwitch demo. All people, po=
+licies and events in this message are synthetic. Addresses use reserved .exam=
+ple domains. Do not deliver to real people.<br></p></div></body></html>
+
+--jobswitch-s01-m03-0--

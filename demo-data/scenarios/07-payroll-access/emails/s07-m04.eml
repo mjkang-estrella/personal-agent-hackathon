@@ -1,0 +1,100 @@
+From: Northstar Payroll <payroll@northstar.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Subject: Pay Archive registration complete
+Date: Thu, 22 Oct 2026 10:00:00 -0700
+Message-ID: <s07-m04@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 07-payroll-access
+X-JobSwitch-Stage: registered
+In-Reply-To: <s07-m03@jobswitch.example>
+References: <s07-m03@jobswitch.example>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="jobswitch-s07-m04-0"
+
+--jobswitch-s07-m04-0
+Content-Type: multipart/alternative; boundary="jobswitch-s07-m04-1"
+
+--jobswitch-s07-m04-1
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Alex,
+
+Your personal registration is complete and access to the October 16 pay state=
+ment is verified. The access confirmation is attached. This does not confirm =
+a bank deposit, and the 2026 tax document is not yet published.
+
+Northstar Payroll
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s07-m04-1
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+i Alex,</p><p>Your personal registration is complete and access to the Octobe=
+r 16 pay statement is verified. The access confirmation is attached. This doe=
+s not confirm a bank deposit, and the 2026 tax document is not yet published.=
+</p><p>Northstar Payroll</p><p>---<br>Fictional JobSwitch demo. All people, p=
+olicies and events in this message are synthetic. Addresses use reserved .exa=
+mple domains. Do not deliver to real people.<br></p></div></body></html>
+
+--jobswitch-s07-m04-1--
+
+--jobswitch-s07-m04-0
+Content-Type: application/pdf
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="s07-access-receipt.pdf"
+MIME-Version: 1.0
+
+JVBERi0xLjQKJZOMi54gUmVwb3J0TGFiIEdlbmVyYXRlZCBQREYgZG9jdW1lbnQgKG9wZW5zb3Vy
+Y2UpCjEgMCBvYmoKPDwKL0YxIDIgMCBSIC9GMiAzIDAgUgo+PgplbmRvYmoKMiAwIG9iago8PAov
+QmFzZUZvbnQgL0hlbHZldGljYSAvRW5jb2RpbmcgL1dpbkFuc2lFbmNvZGluZyAvTmFtZSAvRjEg
+L1N1YnR5cGUgL1R5cGUxIC9UeXBlIC9Gb250Cj4+CmVuZG9iagozIDAgb2JqCjw8Ci9CYXNlRm9u
+dCAvSGVsdmV0aWNhLUJvbGQgL0VuY29kaW5nIC9XaW5BbnNpRW5jb2RpbmcgL05hbWUgL0YyIC9T
+dWJ0eXBlIC9UeXBlMSAvVHlwZSAvRm9udAo+PgplbmRvYmoKNCAwIG9iago8PAovQ29udGVudHMg
+OCAwIFIgL01lZGlhQm94IFsgMCAwIDYxMiA3OTIgXSAvUGFyZW50IDcgMCBSIC9SZXNvdXJjZXMg
+PDwKL0ZvbnQgMSAwIFIgL1Byb2NTZXQgWyAvUERGIC9UZXh0IC9JbWFnZUIgL0ltYWdlQyAvSW1h
+Z2VJIF0KPj4gL1JvdGF0ZSAwIC9UcmFucyA8PAoKPj4gCiAgL1R5cGUgL1BhZ2UKPj4KZW5kb2Jq
+CjUgMCBvYmoKPDwKL1BhZ2VNb2RlIC9Vc2VOb25lIC9QYWdlcyA3IDAgUiAvVHlwZSAvQ2F0YWxv
+Zwo+PgplbmRvYmoKNiAwIG9iago8PAovQXV0aG9yIChKb2JTd2l0Y2ggU3ludGhldGljIERlbW8p
+IC9DcmVhdGlvbkRhdGUgKEQ6MjAwMDAxMDEwMDAwMDArMDAnMDAnKSAvQ3JlYXRvciAoSm9iU3dp
+dGNoIGRlbW8tZGF0YS9idWlsZC5weSkgL0tleXdvcmRzICgpIC9Nb2REYXRlIChEOjIwMDAwMTAx
+MDAwMDAwKzAwJzAwJykgL1Byb2R1Y2VyIChSZXBvcnRMYWIgUERGIExpYnJhcnkgLSBcKG9wZW5z
+b3VyY2VcKSkgCiAgL1N1YmplY3QgKEZJQ1RJT05BTCBERU1PIERBVEEgLSBOT1QgQSBSRUFMIEVN
+UExPWU1FTlQgUkVDT1JEKSAvVGl0bGUgKE5vcnRoc3RhciBQYXkgQXJjaGl2ZSB8IEFjY291bnQg
+YWNjZXNzIGNvbmZpcm1hdGlvbikgL1RyYXBwZWQgL0ZhbHNlCj4+CmVuZG9iago3IDAgb2JqCjw8
+Ci9Db3VudCAxIC9LaWRzIFsgNCAwIFIgXSAvVHlwZSAvUGFnZXMKPj4KZW5kb2JqCjggMCBvYmoK
+PDwKL0ZpbHRlciBbIC9BU0NJSTg1RGVjb2RlIC9GbGF0ZURlY29kZSBdIC9MZW5ndGggOTY1Cj4+
+CnN0cmVhbQpHYXRtOD8jdUgiJ1JmXldTQiV1TSQra1JMO1JNTFQ2ck1qTGUmTXAjTCdDY2dCVGVl
+X3B0ZUZuKyNaa1VtRHNmL2I7bmFXSFMsXmJyRSssOT0yNm5LWmhGbGU2Uy0jWGJEIUlBOEclQicv
+M0BraSRYbCcwKko/JU5SMWpOTWpnJXQ3YjxaXVRWcTJjZi1uTzZLKUMybiwlP2I1ayg1XlVGOUJx
+Njs+UitfbFA9W01FazsqXUcwYl4xN2o1XlpmR0ROYHEkViIkLUUkRUpEQDRXZEoqQ19laGNdMVBd
+XTJNNDdTZUJcLCdoKk1ybmhHREtxYDVMRkYuP1w0RCdJN3FAUVpuLDZwKkhEKik0P2I8XCpndGFR
+Ql9ETz85JSRmLW4icyNoJztgL2RfOFhYUGhLb05aPkMuZ3FdaXNwVTM0PFE0QlxMckhLSSlhWCJV
+OUUtLkxVKGxLNVo5RzJtbmRoKzBtMCE/bWpEYWs7byYhSDJIZCNGZV9ObjxjIkcwbFJpV2lFKCtX
+YDNRcSlGJE4nQ1xeZmw0RSRpVGE2bGJkUVdZST4zaUZSPjwrJk0xSVxLNG1tWSlhJU1HS0chZWg1
+T05LSk9EPWhNXSwjQk9IZy5nYkcpYGNrTEw1VmxBTWUyMFItKGw9LG1ALnA2TXJHZktdRmgyUFRd
+TEdSODstay5MPjomZU40XS9zSlZCVT9uc0c/ZSxlMiReViRoZS4sKUYjIzVqZU5HTy1cV2Q5UiU8
+XTZiLj9camZsOzssbzt0ZyhbcihcPFhOUDFnczdjLiVFWm5dT2VGLFxEPjhfREVKa2hiMEZNZ0xb
+dXBUUCptZkQzNyFvOklIMD5xO00yVEJhcmY9I0UiRjxiOCo4UkZAKkpaYDVYSWVtUDFFOVFYRnA8
+NCs4cyxwKlxia3RTVGRUU0gqQmxZQkxQb0AoXWVsWSQ8WzNWalEsXjhOZWtBPkpyQmllTkpXbkB1
+OGZaV0I6JzJbWmptXVprPkpSTUlzcUJISVsqYUpOLHVCaEhNJ0NQP1cmbWFVIzknNixVXj5La1ck
+PSc6TUU9XmcoOUBfb2khI0o1Ik9BNVIwQShVXm9yXVpYcWdVIVBZPCdNWnRVQiI+UyJlVCZlInJ0
+PF9JPlVdTmQ3KEUrKHJzdWxEZy1xPHImMm9zM0lIOEtHPiVXSUNVKVAhYlJoW2c9UGpHVFI0J2ct
+LWMjLTg0NStwSzlXXTVdcUFXW14jIjFbLU5XV0lsODJrQTFjMT5AOy06QGJLcklIYCwqXkFwVCZk
+R3R+PmVuZHN0cmVhbQplbmRvYmoKeHJlZgowIDkKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAw
+MDYxIDAwMDAwIG4gCjAwMDAwMDAxMDIgMDAwMDAgbiAKMDAwMDAwMDIwOSAwMDAwMCBuIAowMDAw
+MDAwMzIxIDAwMDAwIG4gCjAwMDAwMDA1MTQgMDAwMDAgbiAKMDAwMDAwMDU4MiAwMDAwMCBuIAow
+MDAwMDAwOTU5IDAwMDAwIG4gCjAwMDAwMDEwMTggMDAwMDAgbiAKdHJhaWxlcgo8PAovSUQgCls8
+Y2EyYWRiNjg1MWRhZTE1ZjMzMmZmZmRmNGVlOTlmMDM+PGNhMmFkYjY4NTFkYWUxNWYzMzJmZmZk
+ZjRlZTk5ZjAzPl0KJSBSZXBvcnRMYWIgZ2VuZXJhdGVkIFBERiBkb2N1bWVudCAtLSBkaWdlc3Qg
+KG9wZW5zb3VyY2UpCgovSW5mbyA2IDAgUgovUm9vdCA1IDAgUgovU2l6ZSA5Cj4+CnN0YXJ0eHJl
+ZgoyMDczCiUlRU9GCg==
+
+--jobswitch-s07-m04-0--
