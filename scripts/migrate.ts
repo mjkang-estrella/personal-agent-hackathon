@@ -6,7 +6,11 @@ const client = new pg.Client({
 await client.connect();
 try {
   await client.query("BEGIN");
-  await client.query(await fs.readFile("migrations/001_jobswitch.sql", "utf8"));
+  for (const file of (await fs.readdir("migrations"))
+    .filter((f) => /^\d+.*\.sql$/.test(f))
+    .sort()) {
+    await client.query(await fs.readFile(`migrations/${file}`, "utf8"));
+  }
   await client.query("COMMIT");
   console.log("JobSwitch migration applied.");
 } catch (e) {

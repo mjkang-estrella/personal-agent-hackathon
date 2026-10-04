@@ -74,3 +74,21 @@ A local integration check creates its own fictional workspace, verifies backgrou
 ```sh
 TEST_BASE_URL=http://localhost:3001 node --env-file=.env --import tsx scripts/background-smoke.ts
 ```
+
+## Optional Gmail connection
+
+AgentMail powers the fictional demo's dedicated inboxes. Gmail is a separate, optional read-only connection to a user's existing inbox. In a personal workspace, open Settings, connect Gmail, enter the exact HR sender, choose a thread and task, and confirm that the request has already been sent. Use **Check replies now**, or enable the existing seven-day background monitor. Selected replies are analyzed by the configured AI provider and stored as evidence; no Gmail messages are sent. HR approval is never treated as payment.
+
+Setup:
+
+1. Run `npm run db:migrate` to apply the additive Gmail tables.
+2. Create a Google web OAuth client and enable Gmail API. Configure a callback ending in `/api/gmail/callback` for each intended deployment; set `GOOGLE_REDIRECT_URI` to the exact callback for that environment. Local development supports `http://localhost:3000/api/gmail/callback` or port 3001; production requires HTTPS.
+3. Set server-only `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and a stable independent `GMAIL_TOKEN_ENCRYPTION_KEY` (32 random bytes encoded as base64). Generate the encryption key with `openssl rand -base64 32` and save it securely. Do not change it while stored connections must remain usable.
+4. Configure `https://www.googleapis.com/auth/gmail.readonly` and add allowed test accounts in the Google consent screen while the app is in Testing. Each user grants their own consent. Google production verification is outside this hackathon setup.
+5. Configure the existing database, session secret and Neon AI Gateway values. Missing Gmail configuration leaves the connector disabled. Deploy the Workflow-enabled build for checks to continue with the browser closed.
+
+The user-authorized OAuth client has callbacks for the personal Vercel deployment and localhost ports 3000/3001. Its credentials are stored in ignored local configuration and the team's existing keys document, never in Git. Production environment configuration and a real-user consent/reply test are separate from the automated tests.
+
+Disconnect removes local access and tracked-thread bindings and attempts Google revocation. Previously imported evidence remains. If revocation fails, remove JobSwitch from your Google Account's third-party permissions. Returning to another workspace disconnects the previous one. OAuth state expires after ten minutes and cannot be replayed or transferred to another workspace.
+
+Validation: `npm test` covers encryption, scope, sender/date filtering, and quote boundaries. `node --env-file=.env --import tsx scripts/gmail-smoke.ts` exercises the configured development database using disposable workspaces and mocked Google HTTP responses, including refresh/revocation, replay/expiry, wrong-workspace callbacks, and disconnect races; it never accesses a real mailbox or sends email.

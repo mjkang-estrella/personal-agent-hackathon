@@ -39,6 +39,7 @@ import {
 import type { Workspace, Task, Document, Stage, Status } from "@/lib/types";
 import Assistant from "./assistant";
 import BackgroundControls from "./background-controls";
+import GmailControls from "./gmail-controls";
 import { MODEL_LABEL } from "@/lib/model-config";
 import { addDays, replyPayload } from "@/lib/domain";
 const money = (n: number) =>
@@ -132,6 +133,8 @@ export default function Dashboard() {
   }, []);
   useEffect(() => {
     load();
+    if (new URLSearchParams(window.location.search).has("gmail"))
+      setPage("settings");
   }, [load]);
   useEffect(() => {
     if (!toast) return;
@@ -1498,6 +1501,7 @@ function SettingsForm({
           <CalendarDays size={15} /> Edit transition dates
         </button>
       </form>
+      <GmailControls w={w} onUpdate={onUpdate} />
       <BackgroundControls w={w} onUpdate={onUpdate} />
       <div className="settings-card">
         <h2>Connected to your next chapter</h2>

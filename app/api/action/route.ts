@@ -55,6 +55,9 @@ export async function POST(request: Request) {
     let w = await getWorkspace(id);
     switch (data.action) {
       case "new_workspace": {
+        const { disconnect } = await import("@/lib/gmail/oauth");
+        const { gmailConfigured } = await import("@/lib/gmail/security");
+        if (gmailConfigured()) await disconnect(id);
         if (w.background?.enabled) await setBackground(id, false);
         const next = await newSessionId();
         w = await getWorkspace(next);
