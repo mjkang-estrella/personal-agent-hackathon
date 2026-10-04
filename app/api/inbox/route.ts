@@ -3,12 +3,24 @@ import { AgentMailClient } from "agentmail";
 import { sessionId } from "@/lib/session";
 import { getWorkspace, pool } from "@/lib/db";
 import { readInbox } from "@/lib/inbox";
+import { scenarioInbox } from "@/lib/mail-agent";
 
 export async function GET(request: Request) {
   const headers = { "cache-control": "private, no-store" };
   try {
     const id = await sessionId();
     const w = await getWorkspace(id);
+    if (w.scenario) {
+      const messageId =
+        new URL(request.url).searchParams.get("messageId") || undefined;
+      const snapshot = scenarioInbox(w, messageId);
+      if (messageId && !snapshot.message)
+        return Response.json(
+          { error: "Message not found in this workspace." },
+          { status: 404, headers },
+        );
+      return Response.json(snapshot, { headers });
+    }
     if (!w.demo) {
       const messageId =
         new URL(request.url).searchParams.get("messageId") || undefined;
