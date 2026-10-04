@@ -300,6 +300,33 @@ export function makeWorkspace(): Workspace {
     analysisSummary: "A little planning now. A smoother start next.",
   };
 }
+// A signed-in account starts blank; fictional demo data never becomes personal data.
+export function makePersonalWorkspace(): Workspace {
+  const w = makeWorkspace();
+  return {
+    ...w,
+    demo: false,
+    documents: [],
+    tasks: [],
+    profile: {
+      ...w.profile,
+      name: "Your name",
+      previousEmployer: "Previous employer",
+      nextEmployer: "New employer",
+    },
+    activity: [
+      {
+        id: randomUUID(),
+        at: new Date().toISOString(),
+        title: "Your personal workspace is ready",
+        detail:
+          "Add your dates, both employer handbooks, and any supporting documents.",
+        type: "agent",
+      },
+    ],
+    analysisSummary: "Add your handbooks and dates to begin.",
+  };
+}
 export function completionCertificate(): Document {
   return {
     id: "course-certificate",
