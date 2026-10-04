@@ -5,6 +5,7 @@ import {
   MessagePrimitive,
   ComposerPrimitive,
   type ToolCallMessagePartProps,
+  useAuiState,
 } from "@assistant-ui/react";
 import { useChatRuntime } from "@assistant-ui/ai-sdk";
 import { DefaultChatTransport } from "ai";
@@ -23,7 +24,14 @@ import {
   SquarePen,
   ShieldCheck,
 } from "lucide-react";
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import type { Orientation, OrientationAction } from "@/lib/orientation";
 import type { WorkspaceFocus } from "@/lib/focus";
 
@@ -31,6 +39,20 @@ const FocusContext = createContext<{
   apply: (focus: WorkspaceFocus, automatic?: boolean) => void;
   applied: Set<string>;
 }>({ apply: () => {}, applied: new Set() });
+
+function ConversationViewport({ children }: { children: ReactNode }) {
+  const empty = useAuiState((s) => s.thread.isEmpty);
+  return (
+    <ThreadPrimitive.Viewport
+      className="chat-viewport"
+      autoScroll={!empty}
+      scrollToBottomOnInitialize={false}
+      scrollToBottomOnThreadSwitch={false}
+    >
+      {children}
+    </ThreadPrimitive.Viewport>
+  );
+}
 
 function MarkdownText({ text }: { text: string }) {
   return <ReactMarkdown>{text}</ReactMarkdown>;
@@ -157,6 +179,13 @@ function AssistantConversation({
             onClick={() => {
               runtime.thread.cancelRun();
               newChat();
+              requestAnimationFrame(() =>
+                document
+                  .querySelector<HTMLTextAreaElement>(
+                    '[aria-label="Message your assistant"]',
+                  )
+                  ?.focus({ preventScroll: true }),
+              );
             }}
             aria-label="New chat"
           >
@@ -174,7 +203,7 @@ function AssistantConversation({
       <FocusContext.Provider value={{ apply, applied }}>
         <AssistantRuntimeProvider runtime={runtime}>
           <ThreadPrimitive.Root className="chat-thread">
-            <ThreadPrimitive.Viewport className="chat-viewport">
+            <ConversationViewport>
               <ThreadPrimitive.Empty>
                 <div className="arrival-briefing">
                   <p className="briefing-transition">{transition}</p>
@@ -213,6 +242,15 @@ function AssistantConversation({
                       <ArrowRight size={17} />
                     </button>
                   )}
+                  {briefing.primary.ask && (
+                    <ThreadPrimitive.Suggestion
+                      prompt={briefing.primary.ask}
+                      autoSend
+                      className="text-button briefing-ask"
+                    >
+                      Ask about this step <ArrowUp size={14} />
+                    </ThreadPrimitive.Suggestion>
+                  )}
                   <p className="briefing-status" role="status">
                     <ShieldCheck size={15} />
                     {briefing.status}
@@ -238,24 +276,26 @@ function AssistantConversation({
                     </section>
                   )}
                   <div className="briefing-prompts">
-                    {briefing.prompts.map((p) => (
-                      <ThreadPrimitive.Suggestion
-                        key={p.label}
-                        prompt={p.prompt}
-                        autoSend
-                        className="suggestion"
-                      >
-                        {p.label}
-                        <ArrowUp size={14} />
-                      </ThreadPrimitive.Suggestion>
-                    ))}
+                    {briefing.prompts
+                      .filter((p) => p.prompt !== briefing.primary.ask)
+                      .map((p) => (
+                        <ThreadPrimitive.Suggestion
+                          key={p.label}
+                          prompt={p.prompt}
+                          autoSend
+                          className="suggestion"
+                        >
+                          {p.label}
+                          <ArrowUp size={14} />
+                        </ThreadPrimitive.Suggestion>
+                      ))}
                   </div>
                 </div>
               </ThreadPrimitive.Empty>
               <ThreadPrimitive.Messages
                 components={{ UserMessage, AssistantMessage }}
               />
-            </ThreadPrimitive.Viewport>
+            </ConversationViewport>
             <ThreadPrimitive.If empty={false}>
               <div className="next-step-strip" role="status">
                 <span>{briefing.primary.reason}</span>

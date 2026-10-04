@@ -51,7 +51,7 @@ function taskStep(w: Workspace, t: Task): OrientationStep {
       ...base,
       title: `Your ${money(t.claim.amount)} claim is ready to review.`,
       reason: "Prepared for your approval",
-      body: `${t.claim.course}. Review the exact claim and its evidence before you decide whether to submit it. Nothing has been sent by preparing this claim.`,
+      body: `${t.claim.course}. Check the prepared claim and its source evidence before you decide whether to submit it.`,
       action: { ...base.action, label: "Review claim" },
     };
   if (kind === "draft") {

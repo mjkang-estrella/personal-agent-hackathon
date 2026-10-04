@@ -30,7 +30,11 @@ No backend, provider, dependency, data-model, submission, or approval contract c
 
 ## Validation
 
-Required validation includes typecheck, unit tests for briefing state selection and source validation, production build, and T3 desktop/tablet/mobile inspection. Initial inspection at 1280×800 and 390×844 Exercised draft retention and focus restoration, plan navigation, exact-claim review access without submission, document page 3 from a live fictional-demo chat answer, settings, and inbox access. The mobile answer stayed visible until its reference was tapped. No real outgoing actions were performed. T3 used an HTTPS tunnel to a local production build because the existing auth client needs a secure browser context. Screenshots are in `docs/screenshots/chat-first/`.
+Typecheck, all 71 unit tests, and production build pass. Briefing tests cover empty setup, paused/error recovery with prepared work retained, analyzing, claim before decision, undated neutral decisions, submitting/waiting/approved/done distinctions, and source quote validation.
+
+T3 inspection at 1280×800, 900×900, and 390×844 verified the next-step heading and Review claim action are visible on arrival with no horizontal overflow. Fixed the chat library’s initial bottom scroll so the briefing starts at the top. Exercised exact-claim review access without submission, a live task-specific model answer, persistent review access during chat, New chat, draft preservation and focus restoration. Earlier inspection also exercised source-page navigation, settings and inbox. Screenshots in `docs/screenshots/chat-first/` show the final fictional demo arrival. No claims or emails were sent. The preview uses an HTTPS tunnel to a local production build because the existing auth client needs a secure context; it is not a deployment.
+
+The requested handoff is an open PR with screenshots. Do not merge this PR without a new user instruction.
 
 ## Links
 

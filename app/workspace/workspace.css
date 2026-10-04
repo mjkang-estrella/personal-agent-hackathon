@@ -2238,3 +2238,7 @@
   font-size: 13px;
   line-height: 1.6;
 }
+.app-shell .briefing-ask { display: inline-flex; margin: 18px 0 0 16px; min-height: 46px; }
+@media (max-width: 720px) {
+  .app-shell .briefing-ask { margin: 8px 0 0; }
+}
