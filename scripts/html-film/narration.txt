@@ -1,0 +1,19 @@
+You’ve accepted a new job. But reimbursements, benefits, and paperwork still need attention. JobSwitch is a personal agent for the work between your last day and your first day.
+
+This is Alex’s fictional transition from Northstar to Orbit. Instead of making Alex figure out where to start, JobSwitch opens with a concrete next step: an $850 reimbursement is ready to review. The action and supporting evidence are right here.
+
+Alex can ask what’s confirmed and what’s still missing, then inspect the original documents. Notice that the conversation stays beside the page. Alex can check the evidence and keep asking questions without losing context.
+
+The board organizes the wider transition around Alex’s dates: before leaving, between jobs, and after starting. It’s there when Alex needs the whole picture, and the same assistant is still available. The agent prepares the work; Alex reviews the decisions.
+
+Let’s complete that first step. The agent has connected the policy, receipt, and HR confirmation into a prepared claim. Alex reviews the exact contents and approves submission. Kernel gives the agent a browser to submit it to our test HR portal. Submitted now means waiting for HR—not approved.
+
+Now we simulate HR asking for the completion certificate. AgentMail powers this email exchange. JobSwitch connects the request to the existing claim and surfaces what’s missing, so Alex doesn’t have to reconstruct the conversation.
+
+Alex adds the certificate, and the agent prepares the reply. Before anything goes out, Alex can inspect the recipient, message, and attachment—including the attachment’s contents. Then Alex approves the send. The agent handles preparation and tracking; Alex controls the outgoing action.
+
+HR approves the reimbursement. JobSwitch records “Approved, unpaid,” because approval and payment are different events. The claim stays accurately tracked instead of being marked complete too early.
+
+We started with a clear next step, followed its evidence, submitted a claim, and handled the follow-up. Chat guides the work, and the board keeps it organized.
+
+JobSwitch: your next chapter, with fewer loose ends.

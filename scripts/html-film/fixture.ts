@@ -1,0 +1,14 @@
+import { makeWorkspace, completionCertificate } from '../../lib/fixtures';
+import { replyPayload } from '../../lib/domain';
+import { writeFileSync } from 'node:fs';
+const workspace = makeWorkspace();
+workspace.tasks = workspace.tasks.filter(t => !t.id.startsWith('review-'));
+const task = workspace.tasks.find(t=>t.id==='learning')!;
+task.status='ready';
+task.claim={employee:'Alex Morgan',course:'Product Strategy Fundamentals',amount:850,receiptId:'course-receipt',certificateId:null,policyDocumentId:'northstar-policy',policyPage:2,note:'Prior approval confirmed. $1,000 remaining allowance. No repayment obligation. HR permits the receipt now and will request the certificate during review.'};
+task.nextAction='Review the exact claim and approve submission to the test HR portal.';
+workspace.agent={enabled:true,pending:false,phase:'idle'};
+workspace.analyzedAt='2026-10-04T12:00:00Z';
+workspace.hrInbox='people@northstar.example';
+workspace.inbox='alex@jobswitch.example';
+writeFileSync(process.argv[2],JSON.stringify({workspace,certificate:completionCertificate(),replyApproval:JSON.stringify(replyPayload(workspace,task,completionCertificate()))},null,2));
