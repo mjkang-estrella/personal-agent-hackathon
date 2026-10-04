@@ -3,11 +3,13 @@ import type { PoolClient } from "pg";
 import { pool } from "../db";
 import { makePersonalWorkspace } from "../fixtures";
 
-async function insertWorkspace(client: PoolClient) {
+type AccountUser = { id: string; name?: string | null };
+
+async function insertWorkspace(client: PoolClient, name?: string | null) {
   const id = randomUUID();
   await client.query(
     "INSERT INTO jobswitch_workspaces(id,data) VALUES($1,$2)",
-    [id, JSON.stringify(makePersonalWorkspace())],
+    [id, JSON.stringify(makePersonalWorkspace(name))],
   );
   return id;
 }
@@ -15,10 +17,11 @@ async function insertWorkspace(client: PoolClient) {
 // Serialize account creation/restoration, and claim a guest workspace at most once.
 // Provider user IDs come exclusively from a verified server session, never a form.
 export async function accountWorkspace(
-  userId: string,
+  user: AccountUser,
   candidate?: string,
   fresh = false,
 ) {
+  const userId = user.id;
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
@@ -43,8 +46,16 @@ export async function accountWorkspace(
       if (owner?.user_id === userId) id = candidate;
     }
     if (!fresh && !id) id = account.active_workspace_id;
+    // Every account keeps a personal workspace. Demo and practice data never
+    // stand in for one, including on accounts created before this rule.
+    const personal = await client.query(
+      `SELECT 1 FROM jobswitch_workspace_owners o JOIN jobswitch_workspaces w ON w.id=o.workspace_id
+       WHERE o.user_id=$1 AND w.data->>'demo' IS DISTINCT FROM 'true' LIMIT 1`,
+      [userId],
+    );
+    if (!personal.rowCount) id = undefined;
     if (!id) {
-      id = await insertWorkspace(client);
+      id = await insertWorkspace(client, user.name);
       await client.query(
         "INSERT INTO jobswitch_workspace_owners(workspace_id,user_id) VALUES($1,$2)",
         [id, userId],
@@ -62,47 +73,6 @@ export async function accountWorkspace(
       "UPDATE jobswitch_accounts SET active_workspace_id=$2 WHERE user_id=$1",
       [userId, id],
     );
-    await client.query("COMMIT");
-    return id;
-  } catch (error) {
-    await client.query("ROLLBACK");
-    throw error;
-  } finally {
-    client.release();
-  }
-}
-
-// Accounts created before personal workspaces were blank only own demo data.
-// Give them a personal workspace on sign-in; returns its ID when one was created.
-export async function ensurePersonalWorkspace(userId: string) {
-  const client = await pool.connect();
-  try {
-    await client.query("BEGIN");
-    await client.query(
-      "INSERT INTO jobswitch_accounts(user_id) VALUES($1) ON CONFLICT DO NOTHING",
-      [userId],
-    );
-    await client.query(
-      "SELECT 1 FROM jobswitch_accounts WHERE user_id=$1 FOR UPDATE",
-      [userId],
-    );
-    const personal = await client.query(
-      `SELECT 1 FROM jobswitch_workspace_owners o JOIN jobswitch_workspaces w ON w.id=o.workspace_id
-       WHERE o.user_id=$1 AND w.data->>'demo' IS DISTINCT FROM 'true' LIMIT 1`,
-      [userId],
-    );
-    let id: string | undefined;
-    if (!personal.rowCount) {
-      id = await insertWorkspace(client);
-      await client.query(
-        "INSERT INTO jobswitch_workspace_owners(workspace_id,user_id) VALUES($1,$2)",
-        [id, userId],
-      );
-      await client.query(
-        "UPDATE jobswitch_accounts SET active_workspace_id=$2 WHERE user_id=$1",
-        [userId, id],
-      );
-    }
     await client.query("COMMIT");
     return id;
   } catch (error) {

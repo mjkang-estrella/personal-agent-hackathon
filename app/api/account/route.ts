@@ -85,7 +85,7 @@ export async function POST(request: Request) {
       if ((await workspaceOwner(data.workspaceId)) !== user.id)
         throw new SignInRequired();
       await setWorkspaceCookie(
-        await accountWorkspace(user.id, data.workspaceId),
+        await accountWorkspace(user, data.workspaceId),
       );
     }
     return Response.json({ ok: true }, { headers });
