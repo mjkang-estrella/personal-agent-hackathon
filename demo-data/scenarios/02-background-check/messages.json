@@ -1,0 +1,162 @@
+[
+  {
+    "id": "s02-m01",
+    "stage": "initial",
+    "date": "2026-10-05T09:00:00-07:00",
+    "sender": "screening",
+    "to": [
+      "alex"
+    ],
+    "subject": "Action needed: two items for your Orbit background check",
+    "body": "Hi Alex,\n\nWe need an education-completion attestation and a Northstar employment statement to continue your screening. Please follow the attached checklist and upload through the secure portal by October 8.\n\nYour review is pending. There is no clearance decision yet.\n\nOrbit Screening Desk\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [
+      {
+        "id": "s02-checklist",
+        "title": "Orbit Labs | Screening evidence checklist",
+        "path": "attachments/s02-checklist.pdf",
+        "mimeType": "application/pdf",
+        "bytes": 2641,
+        "sha256": "61cad9aa9366995d14e7b94a094181305ccf3d7f90eb945e7525f616293a834c",
+        "pages": 1
+      }
+    ],
+    "inReplyTo": null,
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Orbit Screening Desk",
+      "address": "screening@orbit.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s02-m01@jobswitch.example>",
+    "emlPath": "emails/s02-m01.eml",
+    "textPath": "emails/s02-m01.txt"
+  },
+  {
+    "id": "s02-m02",
+    "stage": "approved-inquiry",
+    "date": "2026-10-05T11:00:00-07:00",
+    "sender": "alex",
+    "to": [
+      "northstar"
+    ],
+    "subject": "Employment statement for my Orbit onboarding",
+    "body": "Hi Maya,\n\nCould you provide a statement confirming my Northstar employment start and current status? Please label October 16 as my expected final day because I am still employed. I need it for my next employer screening by October 8.\n\nThanks,\nAlex\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [],
+    "inReplyTo": null,
+    "direction": "outbound",
+    "delivery": "approved-action-fixture",
+    "from": {
+      "name": "Alex Morgan",
+      "address": "alex.morgan@personal.example"
+    },
+    "recipients": [
+      {
+        "name": "Maya Chen | Northstar People Team",
+        "address": "people@northstar.example"
+      }
+    ],
+    "messageId": "<s02-m02@jobswitch.example>",
+    "emlPath": "emails/s02-m02.eml",
+    "textPath": "emails/s02-m02.txt"
+  },
+  {
+    "id": "s02-m03",
+    "stage": "employment-proof",
+    "date": "2026-10-06T09:00:00-07:00",
+    "sender": "northstar",
+    "to": [
+      "alex"
+    ],
+    "subject": "Re: Employment statement for my Orbit onboarding",
+    "body": "Hi Alex,\n\nAttached is your current-employment statement. It distinguishes your current status from your expected departure. Please review the dates before submitting it to the screening portal.\n\nBest,\nMaya\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [
+      {
+        "id": "s02-employment",
+        "title": "Northstar Studio | Employment status statement",
+        "path": "attachments/s02-employment.pdf",
+        "mimeType": "application/pdf",
+        "bytes": 2516,
+        "sha256": "b393f01467ef65c211d123939852da3e5fd724c319d7df4fc2d2771d830a932c",
+        "pages": 1
+      }
+    ],
+    "inReplyTo": "s02-m02",
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Maya Chen | Northstar People Team",
+      "address": "people@northstar.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s02-m03@jobswitch.example>",
+    "emlPath": "emails/s02-m03.eml",
+    "textPath": "emails/s02-m03.txt"
+  },
+  {
+    "id": "s02-m04",
+    "stage": "evidence-received",
+    "date": "2026-10-07T15:00:00-07:00",
+    "sender": "screening",
+    "to": [
+      "alex"
+    ],
+    "subject": "Evidence received - review remains pending",
+    "body": "Hi Alex,\n\nThe demo screening portal confirms receipt of your education attestation and Northstar statement. No further documents are requested today. Your background check is still under review; this receipt is not clearance.\n\nOrbit Screening Desk\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [],
+    "inReplyTo": "s02-m01",
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Orbit Screening Desk",
+      "address": "screening@orbit.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s02-m04@jobswitch.example>",
+    "emlPath": "emails/s02-m04.eml",
+    "textPath": "emails/s02-m04.txt"
+  },
+  {
+    "id": "s02-m05",
+    "stage": "cleared",
+    "date": "2026-10-09T09:00:00-07:00",
+    "sender": "orbit",
+    "to": [
+      "alex"
+    ],
+    "subject": "Your background screening is cleared",
+    "body": "Hi Alex,\n\nYour background screening has been cleared for your October 19 start. This closes the screening task. Your profile, employment-verification onboarding step, and benefits election are separate items.\n\nWelcome aboard,\nJordan\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [],
+    "inReplyTo": null,
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Jordan Lee | Orbit People Team",
+      "address": "people@orbit.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s02-m05@jobswitch.example>",
+    "emlPath": "emails/s02-m05.eml",
+    "textPath": "emails/s02-m05.txt"
+  }
+]

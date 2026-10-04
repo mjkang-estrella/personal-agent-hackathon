@@ -1,0 +1,1754 @@
+{
+  "schemaVersion": "1.0",
+  "fictional": true,
+  "canonicalRepositoryBase": "fcc9eff",
+  "companyNaming": "Matches lib/fixtures.ts at the reviewed base: Northstar Studio / Orbit Labs.",
+  "people": {
+    "alex": [
+      "Alex Morgan",
+      "alex.morgan@personal.example"
+    ],
+    "northstar": [
+      "Maya Chen | Northstar People Team",
+      "people@northstar.example"
+    ],
+    "it": [
+      "Elliot Reed | Northstar IT",
+      "it@northstar.example"
+    ],
+    "payroll": [
+      "Northstar Payroll",
+      "payroll@northstar.example"
+    ],
+    "expenses": [
+      "Northstar Expense Operations",
+      "expenses@northstar.example"
+    ],
+    "orbit": [
+      "Jordan Lee | Orbit People Team",
+      "people@orbit.example"
+    ],
+    "screening": [
+      "Orbit Screening Desk",
+      "screening@orbit.example"
+    ],
+    "orbit-it": [
+      "Orbit IT Welcome Team",
+      "it@orbit.example"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "01-start-date-change",
+      "title": "A changed start date leaves an old offer in circulation",
+      "summary": "Find conflicting dates, request a corrected offer, and review downstream deadlines without silently overwriting the signed version.",
+      "inspiration": "Employment dates had to be coordinated across an offer, authorization-related paperwork and onboarding. All dates and terms below are newly invented.",
+      "initialClock": "2026-10-08T09:30:00-07:00",
+      "profile": {
+        "name": "Alex Morgan",
+        "previousEmployer": "Northstar Studio",
+        "nextEmployer": "Orbit Labs",
+        "lastDay": "2026-10-16",
+        "startDay": "2026-10-19"
+      },
+      "documents": [
+        {
+          "id": "s01-offer-v1",
+          "title": "Orbit Labs | Offer schedule - version 1",
+          "employer": "next",
+          "kind": "other",
+          "issuedAt": "2026-10-02",
+          "sections": [
+            {
+              "heading": "Employee and role",
+              "text": "Alex Morgan | Product Strategy Manager | Orbit Labs. This is a fictional offer schedule, not an employment contract."
+            },
+            {
+              "heading": "Original schedule",
+              "text": "Your first working day is October 19, 2026. Complete the onboarding profile by that date. This version was acknowledged on October 2, 2026."
+            },
+            {
+              "heading": "Benefits timing",
+              "text": "For an eligible employee who elects coverage, health coverage begins on the first day of the month after the start date. The election window is 30 calendar days, counting the start date as day one. Individual enrollment remains unconfirmed."
+            },
+            {
+              "heading": "Version handling",
+              "text": "Retain this version when a replacement arrives. A date-change email does not prove that replacement paperwork has been acknowledged."
+            }
+          ]
+        },
+        {
+          "id": "s01-offer-v2",
+          "title": "Orbit Labs | Revised offer schedule - version 2",
+          "employer": "next",
+          "kind": "other",
+          "issuedAt": "2026-10-09",
+          "sections": [
+            {
+              "heading": "Revision notice",
+              "text": "This fictional schedule supersedes version 1 for employment dates only. Employee: Alex Morgan. Role: Product Strategy Manager."
+            },
+            {
+              "heading": "Revised schedule",
+              "text": "Your first working day is November 2, 2026. Your onboarding profile is due November 2, 2026. Your last day at Northstar Studio remains October 16, 2026."
+            },
+            {
+              "heading": "Benefits impact",
+              "text": "For an eligible employee who elects coverage, the projected health coverage start is December 1, 2026. The election deadline is December 1, 2026, counting November 2 as day one. This is not confirmation of enrollment."
+            },
+            {
+              "heading": "Acknowledgment",
+              "text": "Please acknowledge this revised schedule in the fictional secure portal. HR will separately confirm receipt. No signature or authentication token is embedded in this document."
+            }
+          ]
+        }
+      ],
+      "messages": [
+        {
+          "id": "s01-m01",
+          "stage": "initial",
+          "date": "2026-10-08T09:00:00-07:00",
+          "sender": "orbit",
+          "to": [
+            "alex"
+          ],
+          "subject": "Your October 19 start - offer schedule attached",
+          "body": "Hi Alex,\n\nWe are preparing for your October 19 start at Orbit Labs. Attached is the offer schedule you acknowledged last week. Please complete your onboarding profile before your first day.\n\nKeep this copy with your transition records. Let me know if any dates differ from what you have agreed with your current employer.\n\nBest,\nJordan",
+          "attachments": [
+            "s01-offer-v1"
+          ],
+          "inReplyTo": null,
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s01-m02",
+          "stage": "date-change",
+          "date": "2026-10-08T14:00:00-07:00",
+          "sender": "orbit",
+          "to": [
+            "alex"
+          ],
+          "subject": "Update: your start date is moving to November 2",
+          "body": "Hi Alex,\n\nFollowing our scheduling conversation, your new start date will be November 2, 2026. Your October 19 offer schedule is now out of date. We have not yet issued the replacement document.\n\nPlease keep your Northstar departure date unchanged unless you agree a separate change with them. I will send revised paperwork and confirm the benefits dates.\n\nBest,\nJordan",
+          "attachments": [],
+          "inReplyTo": null,
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s01-m03",
+          "stage": "approved-inquiry",
+          "date": "2026-10-08T14:30:00-07:00",
+          "sender": "alex",
+          "to": [
+            "orbit"
+          ],
+          "subject": "Re: Update: your start date is moving to November 2",
+          "body": "Hi Jordan,\n\nMy saved offer still shows October 19. Please send the revised November 2 schedule and confirm my onboarding deadline, projected insurance start, and benefit election deadline. My last Northstar day is October 16.\n\nThank you,\nAlex",
+          "attachments": [],
+          "inReplyTo": "s01-m02",
+          "direction": "outbound",
+          "delivery": "approved-action-fixture"
+        },
+        {
+          "id": "s01-m04",
+          "stage": "revised-offer",
+          "date": "2026-10-09T10:00:00-07:00",
+          "sender": "orbit",
+          "to": [
+            "alex"
+          ],
+          "subject": "Re: Update: your start date is moving to November 2",
+          "body": "Hi Alex,\n\nAttached is version 2, which supersedes the October 19 schedule. Your onboarding profile is due November 2. Subject to eligibility and election, your health coverage would begin December 1; your election deadline is also December 1.\n\nPlease review and acknowledge version 2 in the secure portal. Receipt of this email is not acknowledgment.\n\nBest,\nJordan",
+          "attachments": [
+            "s01-offer-v2"
+          ],
+          "inReplyTo": "s01-m03",
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s01-m05",
+          "stage": "acknowledged",
+          "date": "2026-10-09T16:00:00-07:00",
+          "sender": "orbit",
+          "to": [
+            "alex"
+          ],
+          "subject": "Revised schedule acknowledgment received",
+          "body": "Hi Alex,\n\nWe received your portal acknowledgment of offer schedule version 2. Your November 2 start is now recorded. We have not received a health plan election, so benefits enrollment is still open.\n\nBest,\nJordan",
+          "attachments": [],
+          "inReplyTo": null,
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        }
+      ],
+      "steps": [
+        {
+          "id": "initial",
+          "title": "Read the original schedule",
+          "trigger": "Load the initial email and its attachment.",
+          "expected": "Record October 19 as the current documented start.",
+          "mustNot": "Do not see the future revision.",
+          "evidence": [
+            {
+              "sourceId": "s01-offer-v1",
+              "quote": "Your first working day is October 19, 2026."
+            }
+          ]
+        },
+        {
+          "id": "date-change",
+          "title": "Detect a conflict",
+          "trigger": "Deliver the date-change email.",
+          "expected": "Flag the stale offer; propose November 2 and dependent deadline review.",
+          "mustNot": "Do not invent a revised offer or mark acknowledgment complete.",
+          "evidence": [
+            {
+              "sourceId": "s01-m02",
+              "quote": "We have not yet issued the replacement document."
+            }
+          ]
+        },
+        {
+          "id": "approved-inquiry",
+          "title": "Request corrections",
+          "trigger": "User approves the exact inquiry, then replay the outbound email.",
+          "expected": "Track a request awaiting HR.",
+          "mustNot": "Do not send without approval.",
+          "evidence": [
+            {
+              "sourceId": "s01-m03",
+              "quote": "Please send the revised November 2 schedule"
+            }
+          ]
+        },
+        {
+          "id": "revised-offer",
+          "title": "Review replacement",
+          "trigger": "Deliver the revised offer email with version 2.",
+          "expected": "Preserve both versions; show November 2 start and December 1 conditional coverage/election dates; request acknowledgment.",
+          "mustNot": "Do not infer insurance enrollment.",
+          "evidence": [
+            {
+              "sourceId": "s01-offer-v2",
+              "quote": "Your first working day is November 2, 2026."
+            }
+          ]
+        },
+        {
+          "id": "acknowledged",
+          "title": "Close the document correction",
+          "trigger": "Deliver the acknowledgment confirmation.",
+          "expected": "Mark schedule acknowledgment complete while retaining the open benefits election task.",
+          "mustNot": "Do not mark all onboarding complete.",
+          "evidence": [
+            {
+              "sourceId": "s01-m05",
+              "quote": "benefits enrollment is still open."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "02-background-check",
+      "title": "Background screening needs additional evidence",
+      "summary": "Track a screening request across two employers and distinguish uploaded evidence from a cleared check.",
+      "inspiration": "A screening provider requested education and prior-employment evidence before the employer confirmed clearance. No real education records are reproduced.",
+      "initialClock": "2026-10-05T10:00:00-07:00",
+      "profile": {
+        "name": "Alex Morgan",
+        "previousEmployer": "Northstar Studio",
+        "nextEmployer": "Orbit Labs",
+        "lastDay": "2026-10-16",
+        "startDay": "2026-10-19"
+      },
+      "documents": [
+        {
+          "id": "s02-checklist",
+          "title": "Orbit Labs | Screening evidence checklist",
+          "employer": "next",
+          "kind": "other",
+          "issuedAt": "2026-10-05",
+          "sections": [
+            {
+              "heading": "Case reference",
+              "text": "Demo case OBL-SCREEN-042 | Alex Morgan | Target start October 19, 2026."
+            },
+            {
+              "heading": "Requested evidence",
+              "text": "Provide an education-completion attestation and a current-employment statement for Northstar Studio. Because you are still employed, an expected departure date must be labeled expected, not completed."
+            },
+            {
+              "heading": "Submission channel",
+              "text": "Upload evidence through the fictional secure screening portal by October 8, 2026. Do not send identity documents or sensitive identifiers by email. A simulated portal receipt is sufficient for this demo."
+            },
+            {
+              "heading": "Completion rule",
+              "text": "Uploaded documents do not mean the background check is cleared. Orbit People must send a separate clearance confirmation."
+            }
+          ]
+        },
+        {
+          "id": "s02-employment",
+          "title": "Northstar Studio | Employment status statement",
+          "employer": "previous",
+          "kind": "other",
+          "issuedAt": "2026-10-06",
+          "sections": [
+            {
+              "heading": "Demo statement",
+              "text": "This fictional employer statement is prepared for Alex Morgan, Product Strategist. It is not a government document or a credential."
+            },
+            {
+              "heading": "Employment dates",
+              "text": "Alex joined Northstar Studio on January 12, 2024 and remains employed as of October 6, 2026. The expected final working day is October 16, 2026."
+            },
+            {
+              "heading": "Verification",
+              "text": "The statement confirms employment dates only. No salary, identification number, residential address, or signature image is included. Demo inquiries may be addressed to people@northstar.example."
+            }
+          ]
+        }
+      ],
+      "messages": [
+        {
+          "id": "s02-m01",
+          "stage": "initial",
+          "date": "2026-10-05T09:00:00-07:00",
+          "sender": "screening",
+          "to": [
+            "alex"
+          ],
+          "subject": "Action needed: two items for your Orbit background check",
+          "body": "Hi Alex,\n\nWe need an education-completion attestation and a Northstar employment statement to continue your screening. Please follow the attached checklist and upload through the secure portal by October 8.\n\nYour review is pending. There is no clearance decision yet.\n\nOrbit Screening Desk",
+          "attachments": [
+            "s02-checklist"
+          ],
+          "inReplyTo": null,
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s02-m02",
+          "stage": "approved-inquiry",
+          "date": "2026-10-05T11:00:00-07:00",
+          "sender": "alex",
+          "to": [
+            "northstar"
+          ],
+          "subject": "Employment statement for my Orbit onboarding",
+          "body": "Hi Maya,\n\nCould you provide a statement confirming my Northstar employment start and current status? Please label October 16 as my expected final day because I am still employed. I need it for my next employer screening by October 8.\n\nThanks,\nAlex",
+          "attachments": [],
+          "inReplyTo": null,
+          "direction": "outbound",
+          "delivery": "approved-action-fixture"
+        },
+        {
+          "id": "s02-m03",
+          "stage": "employment-proof",
+          "date": "2026-10-06T09:00:00-07:00",
+          "sender": "northstar",
+          "to": [
+            "alex"
+          ],
+          "subject": "Re: Employment statement for my Orbit onboarding",
+          "body": "Hi Alex,\n\nAttached is your current-employment statement. It distinguishes your current status from your expected departure. Please review the dates before submitting it to the screening portal.\n\nBest,\nMaya",
+          "attachments": [
+            "s02-employment"
+          ],
+          "inReplyTo": "s02-m02",
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s02-m04",
+          "stage": "evidence-received",
+          "date": "2026-10-07T15:00:00-07:00",
+          "sender": "screening",
+          "to": [
+            "alex"
+          ],
+          "subject": "Evidence received - review remains pending",
+          "body": "Hi Alex,\n\nThe demo screening portal confirms receipt of your education attestation and Northstar statement. No further documents are requested today. Your background check is still under review; this receipt is not clearance.\n\nOrbit Screening Desk",
+          "attachments": [],
+          "inReplyTo": "s02-m01",
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s02-m05",
+          "stage": "cleared",
+          "date": "2026-10-09T09:00:00-07:00",
+          "sender": "orbit",
+          "to": [
+            "alex"
+          ],
+          "subject": "Your background screening is cleared",
+          "body": "Hi Alex,\n\nYour background screening has been cleared for your October 19 start. This closes the screening task. Your profile, employment-verification onboarding step, and benefits election are separate items.\n\nWelcome aboard,\nJordan",
+          "attachments": [],
+          "inReplyTo": null,
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        }
+      ],
+      "steps": [
+        {
+          "id": "initial",
+          "title": "Identify missing evidence",
+          "trigger": "Load the checklist.",
+          "expected": "Create two evidence requests with the October 8 due date.",
+          "mustNot": "Do not assume the applicant failed screening.",
+          "evidence": [
+            {
+              "sourceId": "s02-m01",
+              "quote": "Your review is pending."
+            }
+          ]
+        },
+        {
+          "id": "approved-inquiry",
+          "title": "Ask the prior employer",
+          "trigger": "User approves the employment statement inquiry.",
+          "expected": "Track the request to Northstar.",
+          "mustNot": "Do not attach real identity records.",
+          "evidence": [
+            {
+              "sourceId": "s02-m02",
+              "quote": "Please label October 16 as my expected final day"
+            }
+          ]
+        },
+        {
+          "id": "employment-proof",
+          "title": "One item is ready",
+          "trigger": "Deliver the Northstar statement.",
+          "expected": "Mark employment evidence available and keep education evidence unverified until receipt.",
+          "mustNot": "Do not infer both items are uploaded.",
+          "evidence": [
+            {
+              "sourceId": "s02-employment",
+              "quote": "remains employed as of October 6, 2026."
+            }
+          ]
+        },
+        {
+          "id": "evidence-received",
+          "title": "Wait for clearance",
+          "trigger": "Simulate a secure portal upload outside the email system; deliver its confirmation.",
+          "expected": "Mark evidence received, screening pending.",
+          "mustNot": "Do not mark cleared.",
+          "evidence": [
+            {
+              "sourceId": "s02-m04",
+              "quote": "this receipt is not clearance."
+            }
+          ]
+        },
+        {
+          "id": "cleared",
+          "title": "Close screening only",
+          "trigger": "Deliver the employer clearance email.",
+          "expected": "Complete screening; retain unrelated onboarding tasks.",
+          "mustNot": "Do not complete all onboarding.",
+          "evidence": [
+            {
+              "sourceId": "s02-m05",
+              "quote": "Your background screening has been cleared"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "03-reopened-paperwork",
+      "title": "A completed onboarding form is reopened",
+      "summary": "A later correction request overrides an earlier receipt without erasing the original history.",
+      "inspiration": "A submitted employment-verification form later received a correction request. This dataset uses a fictional non-government employment-verification record.",
+      "initialClock": "2026-10-20T09:30:00-07:00",
+      "profile": {
+        "name": "Alex Morgan",
+        "previousEmployer": "Northstar Studio",
+        "nextEmployer": "Orbit Labs",
+        "lastDay": "2026-10-16",
+        "startDay": "2026-10-19"
+      },
+      "documents": [
+        {
+          "id": "s03-original-receipt",
+          "title": "Orbit Labs | Employment-verification submission receipt",
+          "employer": "next",
+          "kind": "other",
+          "issuedAt": "2026-10-20",
+          "sections": [
+            {
+              "heading": "Submission receipt",
+              "text": "Demo record OBL-EV-042 for Alex Morgan was received on October 20, 2026. Workflow status: accepted for processing."
+            },
+            {
+              "heading": "Scope",
+              "text": "All required form sections were present at submission. Later quality review may reopen the task. This receipt is not an I-9, a work authorization, or a legal eligibility determination."
+            },
+            {
+              "heading": "Privacy",
+              "text": "No identity document images, government identifiers, birth date, or authentication secrets are included."
+            }
+          ]
+        },
+        {
+          "id": "s03-correction-receipt",
+          "title": "Orbit Labs | Correction acceptance receipt",
+          "employer": "next",
+          "kind": "other",
+          "issuedAt": "2026-10-23",
+          "sections": [
+            {
+              "heading": "Corrected record",
+              "text": "Demo record OBL-EV-042 revision 2 for Alex Morgan was reviewed on October 23, 2026."
+            },
+            {
+              "heading": "Resolution",
+              "text": "The authorized representative title field is corrected to Authorized Representative. Orbit People has accepted the correction. No further action is needed on this demo record."
+            },
+            {
+              "heading": "Scope",
+              "text": "This closes this fictional administrative correction only. It is not proof of government-issued employment authorization."
+            }
+          ]
+        }
+      ],
+      "messages": [
+        {
+          "id": "s03-m01",
+          "stage": "initial",
+          "date": "2026-10-20T09:00:00-07:00",
+          "sender": "orbit",
+          "to": [
+            "alex"
+          ],
+          "subject": "Your employment-verification submission was received",
+          "body": "Hi Alex,\n\nYour employment-verification submission was received and all sections are present. We have marked the submission task complete pending any later quality-review request. The receipt is attached.\n\nThank you,\nJordan",
+          "attachments": [
+            "s03-original-receipt"
+          ],
+          "inReplyTo": null,
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s03-m02",
+          "stage": "correction-request",
+          "date": "2026-10-22T10:00:00-07:00",
+          "sender": "orbit",
+          "to": [
+            "alex"
+          ],
+          "subject": "Action required: correction to your submitted form",
+          "body": "Hi Alex,\n\nDuring quality review we found that the representative title says Friend. It must say Authorized Representative in this demo form. Your previously completed task is reopened.\n\nPlease ask your representative to correct that field in the secure portal by October 23. Do not email identity documents.\n\nBest,\nJordan",
+          "attachments": [],
+          "inReplyTo": "s03-m01",
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s03-m03",
+          "stage": "approved-clarification",
+          "date": "2026-10-22T11:00:00-07:00",
+          "sender": "alex",
+          "to": [
+            "orbit"
+          ],
+          "subject": "Re: Action required: correction to your submitted form",
+          "body": "Hi Jordan,\n\nI will coordinate the title correction in the secure portal. Please confirm that no identity-document resubmission is needed and that only the representative title requires an update.\n\nThanks,\nAlex",
+          "attachments": [],
+          "inReplyTo": "s03-m02",
+          "direction": "outbound",
+          "delivery": "approved-action-fixture"
+        },
+        {
+          "id": "s03-m04",
+          "stage": "scope-confirmed",
+          "date": "2026-10-22T13:00:00-07:00",
+          "sender": "orbit",
+          "to": [
+            "alex"
+          ],
+          "subject": "Re: Action required: correction to your submitted form",
+          "body": "Hi Alex,\n\nCorrect: only the representative title field needs an update. We do not need another identity-document copy. The correction is still pending until it is saved and reviewed.\n\nBest,\nJordan",
+          "attachments": [],
+          "inReplyTo": "s03-m03",
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s03-m05",
+          "stage": "correction-accepted",
+          "date": "2026-10-23T14:00:00-07:00",
+          "sender": "orbit",
+          "to": [
+            "alex"
+          ],
+          "subject": "Correction accepted - no further action on this form",
+          "body": "Hi Alex,\n\nWe reviewed the corrected record and accepted the representative title update. This task is now complete. Attached is the correction receipt for your records.\n\nBest,\nJordan",
+          "attachments": [
+            "s03-correction-receipt"
+          ],
+          "inReplyTo": "s03-m04",
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        }
+      ],
+      "steps": [
+        {
+          "id": "initial",
+          "title": "Record a completion receipt",
+          "trigger": "Load the first receipt.",
+          "expected": "Record submission completion with a quality-review caveat.",
+          "mustNot": "Do not infer legal work authorization.",
+          "evidence": [
+            {
+              "sourceId": "s03-original-receipt",
+              "quote": "Later quality review may reopen the task."
+            }
+          ]
+        },
+        {
+          "id": "correction-request",
+          "title": "Reopen the task",
+          "trigger": "Deliver the later correction request.",
+          "expected": "Move the task to needs_info and show the October 23 correction deadline.",
+          "mustNot": "Do not let the older receipt override the newer request.",
+          "evidence": [
+            {
+              "sourceId": "s03-m02",
+              "quote": "Your previously completed task is reopened."
+            }
+          ]
+        },
+        {
+          "id": "approved-clarification",
+          "title": "Clarify the scope",
+          "trigger": "User approves the clarification email.",
+          "expected": "Ask only about the requested correction.",
+          "mustNot": "Do not send identity documents.",
+          "evidence": [
+            {
+              "sourceId": "s03-m03",
+              "quote": "only the representative title requires an update."
+            }
+          ]
+        },
+        {
+          "id": "scope-confirmed",
+          "title": "Keep the correction open",
+          "trigger": "Deliver HR clarification.",
+          "expected": "Keep pending until secure-portal correction and review occur.",
+          "mustNot": "Do not treat clarification as completion.",
+          "evidence": [
+            {
+              "sourceId": "s03-m04",
+              "quote": "The correction is still pending"
+            }
+          ]
+        },
+        {
+          "id": "correction-accepted",
+          "title": "Close after confirmation",
+          "trigger": "Simulate the portal correction; deliver the acceptance receipt.",
+          "expected": "Mark the correction complete and retain both receipts.",
+          "mustNot": "Do not delete the reopening history.",
+          "evidence": [
+            {
+              "sourceId": "s03-correction-receipt",
+              "quote": "Orbit People has accepted the correction."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "04-equipment-return",
+      "title": "A signed return form is not a returned laptop",
+      "summary": "Follow equipment from instructions through signed paperwork and shipping to a named IT receipt.",
+      "inspiration": "Return instructions and a signing-completion notice existed, but actual receipt was not established. The shipping and IT receipt events below are synthetic additions.",
+      "initialClock": "2026-10-14T09:30:00-07:00",
+      "profile": {
+        "name": "Alex Morgan",
+        "previousEmployer": "Northstar Studio",
+        "nextEmployer": "Orbit Labs",
+        "lastDay": "2026-10-16",
+        "startDay": "2026-10-19"
+      },
+      "documents": [
+        {
+          "id": "s04-instructions",
+          "title": "Northstar Studio | Equipment return instructions",
+          "employer": "previous",
+          "kind": "other",
+          "issuedAt": "2026-10-14",
+          "sections": [
+            {
+              "heading": "Assigned equipment",
+              "text": "Alex Morgan | Demo asset NS-LT-042. Return one company laptop, charger, access badge and security key. The asset ID is fictional, not a device serial number."
+            },
+            {
+              "heading": "Return options",
+              "text": "Return in person on October 16, 2026 or use the demo prepaid collection arranged by Northstar IT. If shipping is required, obtain written approval for the handover date."
+            },
+            {
+              "heading": "Confirmation rule",
+              "text": "Signing the return form acknowledges the instructions only. A carrier delivered event is not an inventory receipt. The task closes only when Northstar IT confirms all listed items were checked in."
+            },
+            {
+              "heading": "Account cleanup",
+              "text": "Follow company IT guidance for personal-account sign-out. Do not remove company security controls. No corporate shipping account number or live return address is provided."
+            }
+          ]
+        },
+        {
+          "id": "s04-receipt",
+          "title": "Northstar Studio | IT equipment receipt",
+          "employer": "previous",
+          "kind": "other",
+          "issuedAt": "2026-10-20",
+          "sections": [
+            {
+              "heading": "Receipt",
+              "text": "Demo receipt NS-RETURN-042 | Employee Alex Morgan | Checked in October 20, 2026 by Northstar IT."
+            },
+            {
+              "heading": "Inventory accepted",
+              "text": "Laptop NS-LT-042, charger, access badge and security key were received. All assigned return items are accounted for. Equipment return is complete."
+            },
+            {
+              "heading": "Boundary",
+              "text": "This receipt concerns equipment only. It does not close payroll, expenses, benefits or other departure tasks."
+            }
+          ]
+        }
+      ],
+      "messages": [
+        {
+          "id": "s04-m01",
+          "stage": "initial",
+          "date": "2026-10-14T09:00:00-07:00",
+          "sender": "it",
+          "to": [
+            "alex"
+          ],
+          "subject": "Your Northstar equipment return checklist",
+          "body": "Hi Alex,\n\nYour last working day is October 16. Attached are the return instructions for your laptop and accessories. Please confirm whether you will use office drop-off or the prepaid collection.\n\nWe need an IT inventory receipt to close the return task.\n\nThanks,\nElliot",
+          "attachments": [
+            "s04-instructions"
+          ],
+          "inReplyTo": null,
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s04-m02",
+          "stage": "form-signed",
+          "date": "2026-10-16T10:00:00-07:00",
+          "sender": "it",
+          "to": [
+            "alex"
+          ],
+          "subject": "Return form acknowledged - collection booked",
+          "body": "Hi Alex,\n\nYour return form has been acknowledged. We approved prepaid collection on October 19 because a pickup was unavailable on your final day. Your return remains open until the equipment is checked in by IT.\n\nThanks,\nElliot",
+          "attachments": [],
+          "inReplyTo": "s04-m01",
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s04-m03",
+          "stage": "carrier-delivered",
+          "date": "2026-10-20T09:00:00-07:00",
+          "sender": "it",
+          "to": [
+            "alex"
+          ],
+          "subject": "Carrier update for demo shipment NS-SHIP-042",
+          "body": "Hi Alex,\n\nThe demo carrier marked shipment NS-SHIP-042 delivered this morning. Our asset team has not yet checked the contents. Please keep the task open until you receive an IT inventory receipt.\n\nThanks,\nElliot",
+          "attachments": [],
+          "inReplyTo": "s04-m02",
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s04-m04",
+          "stage": "approved-followup",
+          "date": "2026-10-20T11:00:00-07:00",
+          "sender": "alex",
+          "to": [
+            "it"
+          ],
+          "subject": "Re: Carrier update for demo shipment NS-SHIP-042",
+          "body": "Hi Elliot,\n\nThe shipment is marked delivered. Could you confirm whether the laptop, charger, badge and security key have all been checked in and send the inventory receipt?\n\nThanks,\nAlex",
+          "attachments": [],
+          "inReplyTo": "s04-m03",
+          "direction": "outbound",
+          "delivery": "approved-action-fixture"
+        },
+        {
+          "id": "s04-m05",
+          "stage": "it-received",
+          "date": "2026-10-20T15:00:00-07:00",
+          "sender": "it",
+          "to": [
+            "alex"
+          ],
+          "subject": "Re: Carrier update for demo shipment NS-SHIP-042",
+          "body": "Hi Alex,\n\nIT has checked in all four assigned items. Your equipment return is complete. The inventory receipt is attached.\n\nThanks for returning everything,\nElliot",
+          "attachments": [
+            "s04-receipt"
+          ],
+          "inReplyTo": "s04-m04",
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        }
+      ],
+      "steps": [
+        {
+          "id": "initial",
+          "title": "Create a return task",
+          "trigger": "Load instructions.",
+          "expected": "List four items and require an IT receipt.",
+          "mustNot": "Do not mark returned from instructions.",
+          "evidence": [
+            {
+              "sourceId": "s04-instructions",
+              "quote": "The task closes only when Northstar IT confirms all listed items were checked in."
+            }
+          ]
+        },
+        {
+          "id": "form-signed",
+          "title": "Record acknowledged instructions",
+          "trigger": "Deliver signing confirmation.",
+          "expected": "Track October 19 authorized collection and keep return open.",
+          "mustNot": "Do not confuse signing with return.",
+          "evidence": [
+            {
+              "sourceId": "s04-m02",
+              "quote": "Your return remains open"
+            }
+          ]
+        },
+        {
+          "id": "carrier-delivered",
+          "title": "Await inventory check",
+          "trigger": "Deliver the carrier update.",
+          "expected": "Record delivery but await IT inspection.",
+          "mustNot": "Do not close on carrier delivery.",
+          "evidence": [
+            {
+              "sourceId": "s04-m03",
+              "quote": "Our asset team has not yet checked the contents."
+            }
+          ]
+        },
+        {
+          "id": "approved-followup",
+          "title": "Request receipt",
+          "trigger": "User approves the follow-up.",
+          "expected": "Send a scoped inventory inquiry.",
+          "mustNot": "Do not create an invented receipt.",
+          "evidence": [
+            {
+              "sourceId": "s04-m04",
+              "quote": "send the inventory receipt?"
+            }
+          ]
+        },
+        {
+          "id": "it-received",
+          "title": "Close with evidence",
+          "trigger": "Deliver the IT receipt.",
+          "expected": "Mark equipment returned and retain receipt.",
+          "mustNot": "Do not close unrelated exit tasks.",
+          "evidence": [
+            {
+              "sourceId": "s04-receipt",
+              "quote": "Equipment return is complete."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "05-post-exit-expense",
+      "title": "An unclaimed expense after company access is disabled",
+      "summary": "Find an alternative claim channel, obtain a missing itemized receipt, and distinguish submission, approval and payment.",
+      "inspiration": "A departure packet described an alternative expense route after access loss. The amount, merchant, deadline and correspondence here are fictional.",
+      "initialClock": "2026-10-19T09:30:00-07:00",
+      "profile": {
+        "name": "Alex Morgan",
+        "previousEmployer": "Northstar Studio",
+        "nextEmployer": "Orbit Labs",
+        "lastDay": "2026-10-16",
+        "startDay": "2026-10-19"
+      },
+      "documents": [
+        {
+          "id": "s05-policy",
+          "title": "Northstar Studio | Post-departure expense route",
+          "employer": "previous",
+          "kind": "policy",
+          "issuedAt": "2026-10-14",
+          "sections": [
+            {
+              "heading": "Who this applies to",
+              "text": "Alex Morgan has a final working day of October 16, 2026. Expenses must have been incurred for approved company business before that date."
+            },
+            {
+              "heading": "Alternative route",
+              "text": "If the company expense portal is unavailable, submit the expense summary and receipt to expenses@northstar.example and request manager review. For this fictional case, the confirmed submission deadline is October 30, 2026 at 5:00 p.m. Pacific."
+            },
+            {
+              "heading": "Required evidence",
+              "text": "Include business purpose, purchase date, merchant, amount and itemized receipt. A card authorization alone is not an itemized receipt. Do not email bank account details."
+            },
+            {
+              "heading": "Status rules",
+              "text": "Receipt of a claim means submitted, not approved. An approval email is not payment evidence. A payroll payment record is required to mark paid."
+            }
+          ]
+        },
+        {
+          "id": "s05-receipt",
+          "title": "Harbor Learning | Itemized workshop receipt",
+          "employer": "personal",
+          "kind": "receipt",
+          "issuedAt": "2026-10-20",
+          "sections": [
+            {
+              "heading": "Merchant and customer",
+              "text": "Harbor Learning, fictional merchant | Customer: Alex Morgan | Receipt DEMO-EXP-042."
+            },
+            {
+              "heading": "Purchase",
+              "text": "Product Discovery Workshop, one seat. Purchase date October 12, 2026. Service date October 14, 2026. Line item $240.00 USD; tax $0.00; total $240.00 USD."
+            },
+            {
+              "heading": "Payment",
+              "text": "Paid in full on October 12, 2026. No card or bank identifiers are included. This receipt is newly generated demo data."
+            },
+            {
+              "heading": "Business context",
+              "text": "Workshop attendance supported the Northstar product planning project. Employer approval is a separate decision; this receipt does not establish reimbursement eligibility."
+            }
+          ]
+        }
+      ],
+      "messages": [
+        {
+          "id": "s05-m01",
+          "stage": "initial",
+          "date": "2026-10-19T09:00:00-07:00",
+          "sender": "expenses",
+          "to": [
+            "alex"
+          ],
+          "subject": "Your $240 workshop expense still needs a claim",
+          "body": "Hi Alex,\n\nWe noticed an unsubmitted $240 workshop expense from October 12. Your employee portal is now disabled. Use the alternative route in the attached policy; your deadline is October 30 at 5 p.m. Pacific.\n\nWe currently have only a card authorization, not an itemized receipt. Please obtain the receipt before submitting.\n\nNorthstar Expense Operations",
+          "attachments": [
+            "s05-policy"
+          ],
+          "inReplyTo": null,
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s05-m02",
+          "stage": "receipt-available",
+          "date": "2026-10-20T10:00:00-07:00",
+          "sender": "northstar",
+          "to": [
+            "alex"
+          ],
+          "subject": "Itemized workshop receipt recovered",
+          "body": "Hi Alex,\n\nOur events coordinator recovered the itemized receipt from Harbor Learning and shared the attached demo copy with you. Please check the merchant, date and amount before using it in your claim. This email does not approve the reimbursement.\n\nBest,\nMaya",
+          "attachments": [
+            "s05-receipt"
+          ],
+          "inReplyTo": null,
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s05-m03",
+          "stage": "approved-submission",
+          "date": "2026-10-20T13:00:00-07:00",
+          "sender": "alex",
+          "to": [
+            "expenses"
+          ],
+          "subject": "Expense claim DEMO-EXP-042 - $240 workshop",
+          "body": "Hello Expense Operations,\n\nPlease review my $240.00 USD expense for the Product Discovery Workshop purchased October 12 and attended October 14 for the Northstar product planning project. My last working day was October 16 and my portal access is disabled.\n\nThe itemized receipt is attached. Please route this claim for manager review and confirm receipt.\n\nThank you,\nAlex",
+          "attachments": [
+            "s05-receipt"
+          ],
+          "inReplyTo": null,
+          "direction": "outbound",
+          "delivery": "approved-action-fixture"
+        },
+        {
+          "id": "s05-m04",
+          "stage": "received",
+          "date": "2026-10-20T15:00:00-07:00",
+          "sender": "expenses",
+          "to": [
+            "alex"
+          ],
+          "subject": "Re: Expense claim DEMO-EXP-042 - $240 workshop",
+          "body": "Hi Alex,\n\nClaim DEMO-EXP-042 and its itemized receipt have been received before the deadline. Manager review is pending. No reimbursement approval or payment has been issued.\n\nNorthstar Expense Operations",
+          "attachments": [],
+          "inReplyTo": "s05-m03",
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s05-m05",
+          "stage": "approved-unpaid",
+          "date": "2026-10-22T14:00:00-07:00",
+          "sender": "expenses",
+          "to": [
+            "alex"
+          ],
+          "subject": "Re: Expense claim DEMO-EXP-042 - $240 workshop",
+          "body": "Hi Alex,\n\nYour manager has approved the $240.00 claim DEMO-EXP-042. It is queued for a future payroll run. Payment has not been issued. We will send a separate payment notice when processing completes.\n\nNorthstar Expense Operations",
+          "attachments": [],
+          "inReplyTo": "s05-m04",
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        }
+      ],
+      "steps": [
+        {
+          "id": "initial",
+          "title": "Find the alternative route",
+          "trigger": "Load post-exit request.",
+          "expected": "Create $240 claim task with October 30 deadline and missing receipt.",
+          "mustNot": "Do not reuse the separate $850 learning claim or infer eligibility.",
+          "evidence": [
+            {
+              "sourceId": "s05-policy",
+              "quote": "A card authorization alone is not an itemized receipt."
+            }
+          ]
+        },
+        {
+          "id": "receipt-available",
+          "title": "Validate the receipt",
+          "trigger": "Deliver the itemized receipt.",
+          "expected": "Match Alex, amount, dates and purpose; prepare for user review.",
+          "mustNot": "Do not treat receipt as manager approval.",
+          "evidence": [
+            {
+              "sourceId": "s05-m02",
+              "quote": "This email does not approve the reimbursement."
+            }
+          ]
+        },
+        {
+          "id": "approved-submission",
+          "title": "Submit after approval",
+          "trigger": "User approves exact recipient, body and PDF attachment.",
+          "expected": "Record submission and await receipt.",
+          "mustNot": "Do not send automatically without approval.",
+          "evidence": [
+            {
+              "sourceId": "s05-m03",
+              "quote": "Please route this claim for manager review"
+            }
+          ]
+        },
+        {
+          "id": "received",
+          "title": "Track review",
+          "trigger": "Deliver acknowledgment.",
+          "expected": "Mark submitted and awaiting review.",
+          "mustNot": "Do not mark approved or paid.",
+          "evidence": [
+            {
+              "sourceId": "s05-m04",
+              "quote": "Manager review is pending."
+            }
+          ]
+        },
+        {
+          "id": "approved-unpaid",
+          "title": "Record approval only",
+          "trigger": "Deliver approval.",
+          "expected": "Mark approved, unpaid.",
+          "mustNot": "Never infer money was deposited.",
+          "evidence": [
+            {
+              "sourceId": "s05-m05",
+              "quote": "Payment has not been issued."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "06-coverage-gap",
+      "title": "Compare coverage dates across two employers",
+      "summary": "Separate policy timing from individual enrollment and expose an unresolved gap without choosing insurance for the user.",
+      "inspiration": "A departure packet described insurance end dates and continuation notices. Orbit policy and individual confirmations here are synthetic. The Northstar end rule follows the current app fixture, not the real employer policy.",
+      "initialClock": "2026-10-08T10:30:00-07:00",
+      "profile": {
+        "name": "Alex Morgan",
+        "previousEmployer": "Northstar Studio",
+        "nextEmployer": "Orbit Labs",
+        "lastDay": "2026-10-16",
+        "startDay": "2026-10-19"
+      },
+      "documents": [
+        {
+          "id": "s06-northstar",
+          "title": "Northstar Studio | Coverage at departure",
+          "employer": "previous",
+          "kind": "policy",
+          "issuedAt": "2026-10-08",
+          "sections": [
+            {
+              "heading": "Fictional policy",
+              "text": "For this demo, active employee medical and dental coverage ends at 11:59 p.m. Pacific on the last working day. This differs from the source inspiration and is intentionally aligned to the current JobSwitch fixture."
+            },
+            {
+              "heading": "Individual confirmation",
+              "text": "Alex Morgan is scheduled to leave October 16, 2026. Coverage and dependent participation must be verified separately with HR. No continuation selection is recorded in this policy."
+            },
+            {
+              "heading": "Next action",
+              "text": "Ask for the exact end date and the available continuation information. Do not cancel existing coverage or select a plan on the employee behalf."
+            }
+          ]
+        },
+        {
+          "id": "s06-orbit",
+          "title": "Orbit Labs | New-hire health enrollment",
+          "employer": "next",
+          "kind": "policy",
+          "issuedAt": "2026-10-08",
+          "sections": [
+            {
+              "heading": "Coverage rule",
+              "text": "For an eligible employee who elects coverage, coverage begins on the first day of the month after the start date."
+            },
+            {
+              "heading": "Alex schedule",
+              "text": "Alex Morgan starts October 19, 2026. The projected coverage start is November 1, 2026. The election deadline is November 17, 2026: 30 calendar days counting October 19 as day one."
+            },
+            {
+              "heading": "Not an enrollment receipt",
+              "text": "This guide does not establish that a plan was selected or activated. Ask HR to confirm eligibility and the effective date. The employee must review costs, networks and dependents before choosing."
+            }
+          ]
+        }
+      ],
+      "messages": [
+        {
+          "id": "s06-m01",
+          "stage": "initial",
+          "date": "2026-10-08T09:00:00-07:00",
+          "sender": "northstar",
+          "to": [
+            "alex"
+          ],
+          "subject": "Please review your coverage at departure",
+          "body": "Hi Alex,\n\nAttached is our fictional coverage-at-departure policy for your October 16 exit. It describes the general timing but does not confirm your personal or dependent enrollment. Please ask us for an individual end-date confirmation if needed.\n\nBest,\nMaya",
+          "attachments": [
+            "s06-northstar"
+          ],
+          "inReplyTo": null,
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s06-m02",
+          "stage": "initial",
+          "date": "2026-10-08T10:00:00-07:00",
+          "sender": "orbit",
+          "to": [
+            "alex"
+          ],
+          "subject": "Your Orbit health enrollment window",
+          "body": "Hi Alex,\n\nFor your October 19 start, please review the attached benefits timing guide. November 1 is the projected start if you are eligible and elect coverage. Your election is due November 17. We have not received your selection.\n\nBest,\nJordan",
+          "attachments": [
+            "s06-orbit"
+          ],
+          "inReplyTo": null,
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s06-m03",
+          "stage": "approved-inquiry",
+          "date": "2026-10-08T13:00:00-07:00",
+          "sender": "alex",
+          "to": [
+            "northstar"
+          ],
+          "subject": "Please confirm my active coverage end date",
+          "body": "Hi Maya,\n\nMy last Northstar day is October 16 and the Orbit guide projects November 1 coverage. Please confirm when my active Northstar medical coverage ends and send the continuation information. I have not selected any continuation option.\n\nThanks,\nAlex",
+          "attachments": [],
+          "inReplyTo": null,
+          "direction": "outbound",
+          "delivery": "approved-action-fixture"
+        },
+        {
+          "id": "s06-m04",
+          "stage": "old-coverage-confirmed",
+          "date": "2026-10-09T09:00:00-07:00",
+          "sender": "northstar",
+          "to": [
+            "alex"
+          ],
+          "subject": "Re: Please confirm my active coverage end date",
+          "body": "Hi Alex,\n\nWe confirm your currently enrolled employee medical coverage ends October 16 at 11:59 p.m. Pacific. No continuation election has been received. We will provide continuation materials separately; this email does not enroll you.\n\nBest,\nMaya",
+          "attachments": [],
+          "inReplyTo": "s06-m03",
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s06-m05",
+          "stage": "new-eligibility-confirmed",
+          "date": "2026-10-09T11:00:00-07:00",
+          "sender": "orbit",
+          "to": [
+            "alex"
+          ],
+          "subject": "Eligibility confirmed - plan selection still needed",
+          "body": "Hi Alex,\n\nYou are eligible for our employee medical plan. With your October 19 start, the effective date would be November 1 if you complete an eligible election by November 17. You have not selected a plan, so we cannot confirm active coverage.\n\nBest,\nJordan",
+          "attachments": [],
+          "inReplyTo": "s06-m02",
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        }
+      ],
+      "steps": [
+        {
+          "id": "initial",
+          "title": "Compare two policies",
+          "trigger": "Load both initial emails and guides.",
+          "expected": "Flag a potential October 17-31 gap (15 calendar days) and an unconfirmed new enrollment.",
+          "mustNot": "Do not assume policy eligibility means active insurance.",
+          "evidence": [
+            {
+              "sourceId": "s06-orbit",
+              "quote": "The projected coverage start is November 1, 2026."
+            }
+          ]
+        },
+        {
+          "id": "approved-inquiry",
+          "title": "Confirm the old end date",
+          "trigger": "User approves the HR inquiry.",
+          "expected": "Ask for date and continuation information.",
+          "mustNot": "Do not select or cancel coverage.",
+          "evidence": [
+            {
+              "sourceId": "s06-m03",
+              "quote": "I have not selected any continuation option."
+            }
+          ]
+        },
+        {
+          "id": "old-coverage-confirmed",
+          "title": "Record the old coverage end",
+          "trigger": "Deliver individual confirmation.",
+          "expected": "Record October 16 active coverage end; keep gap unresolved.",
+          "mustNot": "Do not infer continuation was elected.",
+          "evidence": [
+            {
+              "sourceId": "s06-m04",
+              "quote": "No continuation election has been received."
+            }
+          ]
+        },
+        {
+          "id": "new-eligibility-confirmed",
+          "title": "Keep the decision with the employee",
+          "trigger": "Deliver Orbit eligibility confirmation.",
+          "expected": "Retain a conditional November 1 start, November 17 deadline and open gap task.",
+          "mustNot": "Do not mark the gap resolved or recommend a specific insurance purchase.",
+          "evidence": [
+            {
+              "sourceId": "s06-m05",
+              "quote": "we cannot confirm active coverage."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "07-payroll-access",
+      "title": "Recover access to pay and tax records after leaving",
+      "summary": "A registration link has expired; obtain a replacement and verify document access without moving credentials through email.",
+      "inspiration": "A payroll registration guide and departure packet described post-employment access, contact updates and expiring registration codes. All portal names and dates here are fictional.",
+      "initialClock": "2026-10-20T09:30:00-07:00",
+      "profile": {
+        "name": "Alex Morgan",
+        "previousEmployer": "Northstar Studio",
+        "nextEmployer": "Orbit Labs",
+        "lastDay": "2026-10-16",
+        "startDay": "2026-10-19"
+      },
+      "documents": [
+        {
+          "id": "s07-guide",
+          "title": "Northstar Studio | Former-employee payroll access",
+          "employer": "previous",
+          "kind": "other",
+          "issuedAt": "2026-10-20",
+          "sections": [
+            {
+              "heading": "Personal access",
+              "text": "Use Northstar Pay Archive, a fictional former-employee portal, for pay statements and tax documents. Your work single sign-on ends at departure; the archive uses a separate personal registration."
+            },
+            {
+              "heading": "Registration window",
+              "text": "A demo registration invitation was issued October 1, 2026 and expired October 16 at 5:00 p.m. Pacific. Contact payroll@northstar.example for a fresh invitation. No working code is included."
+            },
+            {
+              "heading": "Records and contact details",
+              "text": "Pay statements remain available for three years after the last statement in this fictional policy. Tax documents follow the annual publication schedule. Review your contact information in the secure portal."
+            },
+            {
+              "heading": "Boundary",
+              "text": "Access to a pay statement does not prove a bank deposit. Never email a password, bank information or a government identifier."
+            }
+          ]
+        },
+        {
+          "id": "s07-access-receipt",
+          "title": "Northstar Pay Archive | Account access confirmation",
+          "employer": "previous",
+          "kind": "other",
+          "issuedAt": "2026-10-22",
+          "sections": [
+            {
+              "heading": "Demo account",
+              "text": "Alex Morgan completed personal registration for Northstar Pay Archive on October 22, 2026."
+            },
+            {
+              "heading": "Verified access",
+              "text": "The archive confirms the October 16 pay statement can be viewed. No bank deposit was verified. The 2026 annual tax document is not yet available."
+            },
+            {
+              "heading": "Safe receipt",
+              "text": "This fictional receipt contains no account number, password, recovery token, earnings figures or live login link."
+            }
+          ]
+        }
+      ],
+      "messages": [
+        {
+          "id": "s07-m01",
+          "stage": "initial",
+          "date": "2026-10-20T09:00:00-07:00",
+          "sender": "payroll",
+          "to": [
+            "alex"
+          ],
+          "subject": "Keep access to your Northstar pay statements",
+          "body": "Hi Alex,\n\nYour company sign-in is disabled, but your pay records are available through Northstar Pay Archive. The attached guide explains personal registration. Our records show you have not finished registration.\n\nThe October 1 invitation expired on October 16. Please request a new invitation rather than reusing it.\n\nNorthstar Payroll",
+          "attachments": [
+            "s07-guide"
+          ],
+          "inReplyTo": null,
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s07-m02",
+          "stage": "approved-request",
+          "date": "2026-10-20T11:00:00-07:00",
+          "sender": "alex",
+          "to": [
+            "payroll"
+          ],
+          "subject": "Replacement Pay Archive registration invitation",
+          "body": "Hello Payroll,\n\nMy October 1 registration invitation has expired. Please send a replacement through the approved registration channel so I can access my pay statements after leaving. Please do not include any password or tax identifier in your email reply.\n\nThank you,\nAlex",
+          "attachments": [],
+          "inReplyTo": null,
+          "direction": "outbound",
+          "delivery": "approved-action-fixture"
+        },
+        {
+          "id": "s07-m03",
+          "stage": "reissued",
+          "date": "2026-10-21T09:00:00-07:00",
+          "sender": "payroll",
+          "to": [
+            "alex"
+          ],
+          "subject": "Re: Replacement Pay Archive registration invitation",
+          "body": "Hi Alex,\n\nA replacement invitation has been issued through the secure registration channel. It expires November 5 at 5 p.m. Pacific. This notice does not contain the invitation or a usable access code.\n\nComplete registration yourself, then confirm whether you can view your statements.\n\nNorthstar Payroll",
+          "attachments": [],
+          "inReplyTo": "s07-m02",
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s07-m04",
+          "stage": "registered",
+          "date": "2026-10-22T10:00:00-07:00",
+          "sender": "payroll",
+          "to": [
+            "alex"
+          ],
+          "subject": "Pay Archive registration complete",
+          "body": "Hi Alex,\n\nYour personal registration is complete and access to the October 16 pay statement is verified. The access confirmation is attached. This does not confirm a bank deposit, and the 2026 tax document is not yet published.\n\nNorthstar Payroll",
+          "attachments": [
+            "s07-access-receipt"
+          ],
+          "inReplyTo": "s07-m03",
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s07-m05",
+          "stage": "tax-followup",
+          "date": "2026-10-22T14:00:00-07:00",
+          "sender": "payroll",
+          "to": [
+            "alex"
+          ],
+          "subject": "Your annual tax document will be a separate follow-up",
+          "body": "Hi Alex,\n\nYour 2026 annual tax document is scheduled for publication in January 2027. Please keep your personal contact information current in Pay Archive. No further account registration is needed now.\n\nWe will notify you when the document is available.\n\nNorthstar Payroll",
+          "attachments": [],
+          "inReplyTo": "s07-m04",
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        }
+      ],
+      "steps": [
+        {
+          "id": "initial",
+          "title": "Detect expired registration",
+          "trigger": "Load payroll guide and notice.",
+          "expected": "Create a replacement invitation task.",
+          "mustNot": "Do not try the expired invitation or claim account access.",
+          "evidence": [
+            {
+              "sourceId": "s07-m01",
+              "quote": "The October 1 invitation expired on October 16."
+            }
+          ]
+        },
+        {
+          "id": "approved-request",
+          "title": "Request a replacement",
+          "trigger": "User approves the scoped request.",
+          "expected": "Request a secure invitation without requesting secrets by email.",
+          "mustNot": "Do not transmit passwords or identifiers.",
+          "evidence": [
+            {
+              "sourceId": "s07-m02",
+              "quote": "Please do not include any password or tax identifier"
+            }
+          ]
+        },
+        {
+          "id": "reissued",
+          "title": "Wait for employee registration",
+          "trigger": "Deliver reissue notice.",
+          "expected": "Set November 5 invitation expiry; leave account setup pending.",
+          "mustNot": "Do not mark access complete because an invitation was issued.",
+          "evidence": [
+            {
+              "sourceId": "s07-m03",
+              "quote": "Complete registration yourself"
+            }
+          ]
+        },
+        {
+          "id": "registered",
+          "title": "Verify actual access",
+          "trigger": "Simulate the employee registering outside email; deliver access receipt.",
+          "expected": "Complete account access only.",
+          "mustNot": "Do not infer final wages were deposited or tax forms exist.",
+          "evidence": [
+            {
+              "sourceId": "s07-access-receipt",
+              "quote": "No bank deposit was verified."
+            }
+          ]
+        },
+        {
+          "id": "tax-followup",
+          "title": "Schedule a later check",
+          "trigger": "Deliver tax follow-up.",
+          "expected": "Retain a January 2027 availability follow-up with no invented exact day.",
+          "mustNot": "Do not claim the tax document is attached.",
+          "evidence": [
+            {
+              "sourceId": "s07-m05",
+              "quote": "scheduled for publication in January 2027."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "08-onboarding-coordination",
+      "title": "One onboarding plan across multiple systems",
+      "summary": "Merge overlapping HR and IT messages, respect dependencies, and ask only about missing appointment details.",
+      "inspiration": "Multiple people, onboarding, screening and IT systems sent separate tasks and first-day reminders. These synthetic messages recreate that coordination pattern.",
+      "initialClock": "2026-10-12T10:30:00-07:00",
+      "profile": {
+        "name": "Alex Morgan",
+        "previousEmployer": "Northstar Studio",
+        "nextEmployer": "Orbit Labs",
+        "lastDay": "2026-10-16",
+        "startDay": "2026-10-19"
+      },
+      "documents": [
+        {
+          "id": "s08-checklist",
+          "title": "Orbit Labs | First-week onboarding checklist",
+          "employer": "next",
+          "kind": "other",
+          "issuedAt": "2026-10-12",
+          "sections": [
+            {
+              "heading": "Schedule",
+              "text": "Alex Morgan | First working day October 19, 2026. Complete the People Portal profile by October 15. Payroll payment preference is due October 20; the employee enters it directly in the secure portal."
+            },
+            {
+              "heading": "Dependencies",
+              "text": "Profile verification releases the screening invitation. Laptop setup must finish before the virtual welcome session. Do not mark downstream tasks complete merely because the prerequisite is complete."
+            },
+            {
+              "heading": "Separate work items",
+              "text": "Profile verification, screening clearance, employment-verification paperwork, payroll preference, laptop setup and orientation attendance are separate tasks. The same task may be mentioned in several reminder emails."
+            },
+            {
+              "heading": "Unknown details",
+              "text": "The laptop appointment time and location are not yet assigned. Ask Orbit IT to confirm them. Benefits election remains a separate task due November 17."
+            }
+          ]
+        },
+        {
+          "id": "s08-status",
+          "title": "Orbit Labs | Onboarding status receipt",
+          "employer": "next",
+          "kind": "other",
+          "issuedAt": "2026-10-19",
+          "sections": [
+            {
+              "heading": "As of October 19, 2026 at 4 p.m. Pacific",
+              "text": "Alex Morgan: profile verified; screening cleared; laptop setup complete; welcome-session attendance confirmed."
+            },
+            {
+              "heading": "Open items",
+              "text": "Payroll payment preference remains unconfirmed and is due October 20. Employment-verification paperwork is still under review. Benefits election remains open with a November 17 deadline."
+            },
+            {
+              "heading": "Evidence rule",
+              "text": "This receipt confirms only the named completed items. It must not be used to mark the whole onboarding process complete."
+            }
+          ]
+        }
+      ],
+      "messages": [
+        {
+          "id": "s08-m01",
+          "stage": "initial",
+          "date": "2026-10-12T09:00:00-07:00",
+          "sender": "orbit",
+          "to": [
+            "alex"
+          ],
+          "subject": "Welcome to Orbit - your onboarding checklist",
+          "body": "Hi Alex,\n\nWe look forward to your October 19 start. Please complete your People Portal profile by October 15; that releases your screening invitation. Your payroll payment preference is due October 20 and should be entered directly in the secure portal.\n\nThe attached checklist separates each task. We are still confirming the laptop appointment.\n\nBest,\nJordan",
+          "attachments": [
+            "s08-checklist"
+          ],
+          "inReplyTo": null,
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s08-m02",
+          "stage": "initial",
+          "date": "2026-10-12T10:00:00-07:00",
+          "sender": "orbit-it",
+          "to": [
+            "alex"
+          ],
+          "subject": "Laptop setup before your Orbit welcome session",
+          "body": "Hi Alex,\n\nYour laptop setup is planned for your first day, October 19, before the virtual welcome session. The appointment time and pickup location are not assigned yet. Please do not travel to an assumed location.\n\nOrbit IT Welcome Team",
+          "attachments": [],
+          "inReplyTo": null,
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s08-m03",
+          "stage": "profile-verified",
+          "date": "2026-10-14T09:00:00-07:00",
+          "sender": "orbit",
+          "to": [
+            "alex"
+          ],
+          "subject": "Profile verified - screening invitation released",
+          "body": "Hi Alex,\n\nYour People Portal profile is verified. We have released the screening invitation; the screening itself is not yet cleared. Payroll preference and employment-verification paperwork remain separate open tasks.\n\nBest,\nJordan",
+          "attachments": [],
+          "inReplyTo": "s08-m01",
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s08-m04",
+          "stage": "duplicate-reminder",
+          "date": "2026-10-14T10:00:00-07:00",
+          "sender": "orbit",
+          "to": [
+            "alex"
+          ],
+          "subject": "Reminder: complete your profile before October 15",
+          "body": "Hi Alex,\n\nThis scheduled reminder concerns the same People Portal profile task in your welcome checklist. If you already received a profile verification confirmation, no additional profile is required. This reminder does not reverse that confirmation.\n\nBest,\nJordan",
+          "attachments": [],
+          "inReplyTo": "s08-m01",
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s08-m05",
+          "stage": "approved-it-inquiry",
+          "date": "2026-10-15T09:00:00-07:00",
+          "sender": "alex",
+          "to": [
+            "orbit-it"
+          ],
+          "subject": "Please confirm my October 19 laptop appointment",
+          "body": "Hello Orbit IT,\n\nCould you confirm the time and location for my October 19 laptop setup and the start time of the welcome session? I want to complete setup before joining.\n\nThanks,\nAlex",
+          "attachments": [],
+          "inReplyTo": "s08-m02",
+          "direction": "outbound",
+          "delivery": "approved-action-fixture"
+        },
+        {
+          "id": "s08-m06",
+          "stage": "appointment-confirmed",
+          "date": "2026-10-15T13:00:00-07:00",
+          "sender": "orbit-it",
+          "to": [
+            "alex"
+          ],
+          "subject": "Re: Please confirm my October 19 laptop appointment",
+          "body": "Hi Alex,\n\nYour laptop appointment is October 19 at 9 a.m. Pacific in the fictional Orbit Welcome Room A. The virtual welcome session begins at 10 a.m. Pacific. An access link will be provided through the secure portal.\n\nThis confirms the schedule, not attendance or completed setup.\n\nOrbit IT Welcome Team",
+          "attachments": [],
+          "inReplyTo": "s08-m05",
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        },
+        {
+          "id": "s08-m07",
+          "stage": "partial-completion",
+          "date": "2026-10-19T16:00:00-07:00",
+          "sender": "orbit",
+          "to": [
+            "alex"
+          ],
+          "subject": "First-day status - two paperwork items remain open",
+          "body": "Hi Alex,\n\nYour profile and screening are complete; IT confirmed laptop setup and the welcome team confirmed attendance. The attached status receipt lists the evidence.\n\nPayroll preference remains unconfirmed, due October 20. Employment-verification paperwork is still under review. Benefits election is also open, due November 17.\n\nBest,\nJordan",
+          "attachments": [
+            "s08-status"
+          ],
+          "inReplyTo": "s08-m01",
+          "direction": "inbound",
+          "delivery": "incoming-fixture"
+        }
+      ],
+      "steps": [
+        {
+          "id": "initial",
+          "title": "Build one plan",
+          "trigger": "Load HR and IT welcome emails.",
+          "expected": "Create distinct tasks with deadlines, dependencies and missing appointment details.",
+          "mustNot": "Do not duplicate laptop setup or invent a location.",
+          "evidence": [
+            {
+              "sourceId": "s08-checklist",
+              "quote": "The laptop appointment time and location are not yet assigned."
+            }
+          ]
+        },
+        {
+          "id": "profile-verified",
+          "title": "Advance one dependency",
+          "trigger": "Deliver profile verification.",
+          "expected": "Complete profile; release screening task without marking screening cleared.",
+          "mustNot": "Do not complete downstream tasks.",
+          "evidence": [
+            {
+              "sourceId": "s08-m03",
+              "quote": "the screening itself is not yet cleared."
+            }
+          ]
+        },
+        {
+          "id": "duplicate-reminder",
+          "title": "Deduplicate stale reminders",
+          "trigger": "Deliver the scheduled reminder after confirmation.",
+          "expected": "Keep profile complete; associate reminder with existing task.",
+          "mustNot": "Do not reopen the profile without a substantive correction request.",
+          "evidence": [
+            {
+              "sourceId": "s08-m04",
+              "quote": "This reminder does not reverse that confirmation."
+            }
+          ]
+        },
+        {
+          "id": "approved-it-inquiry",
+          "title": "Ask only for missing details",
+          "trigger": "User approves the appointment inquiry.",
+          "expected": "Ask IT for time and location.",
+          "mustNot": "Do not ask HR to repeat already confirmed profile status.",
+          "evidence": [
+            {
+              "sourceId": "s08-m05",
+              "quote": "confirm the time and location"
+            }
+          ]
+        },
+        {
+          "id": "appointment-confirmed",
+          "title": "Record an appointment",
+          "trigger": "Deliver IT confirmation.",
+          "expected": "Record 9 a.m. setup and 10 a.m. orientation on October 19.",
+          "mustNot": "Do not equate scheduling with attendance.",
+          "evidence": [
+            {
+              "sourceId": "s08-m06",
+              "quote": "not attendance or completed setup."
+            }
+          ]
+        },
+        {
+          "id": "partial-completion",
+          "title": "Keep remaining work visible",
+          "trigger": "Simulate first-day activities; deliver status receipt.",
+          "expected": "Close four confirmed items and retain payroll, paperwork and benefits tasks.",
+          "mustNot": "Do not mark all onboarding complete.",
+          "evidence": [
+            {
+              "sourceId": "s08-status",
+              "quote": "Payroll payment preference remains unconfirmed"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

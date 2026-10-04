@@ -1,0 +1,45 @@
+From: Alex Morgan <alex.morgan@personal.example>
+To: Jordan Lee | Orbit People Team <people@orbit.example>
+Subject: Re: Action required: correction to your submitted form
+Date: Thu, 22 Oct 2026 11:00:00 -0700
+Message-ID: <s03-m03@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 03-reopened-paperwork
+X-JobSwitch-Stage: approved-clarification
+In-Reply-To: <s03-m02@jobswitch.example>
+References: <s03-m02@jobswitch.example>
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="jobswitch-s03-m03-0"
+
+--jobswitch-s03-m03-0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Jordan,
+
+I will coordinate the title correction in the secure portal. Please confirm t=
+hat no identity-document resubmission is needed and that only the representat=
+ive title requires an update.
+
+Thanks,
+Alex
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s03-m03-0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+i Jordan,</p><p>I will coordinate the title correction in the secure portal. =
+Please confirm that no identity-document resubmission is needed and that only=
+ the representative title requires an update.</p><p>Thanks,<br>Alex</p><p>---=
+<br>Fictional JobSwitch demo. All people, policies and events in this message=
+ are synthetic. Addresses use reserved .example domains. Do not deliver to re=
+al people.<br></p></div></body></html>
+
+--jobswitch-s03-m03-0--

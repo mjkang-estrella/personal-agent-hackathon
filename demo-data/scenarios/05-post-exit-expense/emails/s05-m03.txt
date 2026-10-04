@@ -1,0 +1,18 @@
+From: Alex Morgan <alex.morgan@personal.example>
+To: Northstar Expense Operations <expenses@northstar.example>
+Date: 2026-10-20T13:00:00-07:00
+Subject: Expense claim DEMO-EXP-042 - $240 workshop
+Message-ID: <s05-m03@jobswitch.example>
+Attachments: attachments/s05-receipt.pdf
+
+Hello Expense Operations,
+
+Please review my $240.00 USD expense for the Product Discovery Workshop purchased October 12 and attended October 14 for the Northstar product planning project. My last working day was October 16 and my portal access is disabled.
+
+The itemized receipt is attached. Please route this claim for manager review and confirm receipt.
+
+Thank you,
+Alex
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

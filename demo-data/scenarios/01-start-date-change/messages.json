@@ -1,0 +1,162 @@
+[
+  {
+    "id": "s01-m01",
+    "stage": "initial",
+    "date": "2026-10-08T09:00:00-07:00",
+    "sender": "orbit",
+    "to": [
+      "alex"
+    ],
+    "subject": "Your October 19 start - offer schedule attached",
+    "body": "Hi Alex,\n\nWe are preparing for your October 19 start at Orbit Labs. Attached is the offer schedule you acknowledged last week. Please complete your onboarding profile before your first day.\n\nKeep this copy with your transition records. Let me know if any dates differ from what you have agreed with your current employer.\n\nBest,\nJordan\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [
+      {
+        "id": "s01-offer-v1",
+        "title": "Orbit Labs | Offer schedule - version 1",
+        "path": "attachments/s01-offer-v1.pdf",
+        "mimeType": "application/pdf",
+        "bytes": 2679,
+        "sha256": "5de04ba0427da4d768c3f4aadc67522413b7da0baff7c96a03994504a8edabf6",
+        "pages": 1
+      }
+    ],
+    "inReplyTo": null,
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Jordan Lee | Orbit People Team",
+      "address": "people@orbit.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s01-m01@jobswitch.example>",
+    "emlPath": "emails/s01-m01.eml",
+    "textPath": "emails/s01-m01.txt"
+  },
+  {
+    "id": "s01-m02",
+    "stage": "date-change",
+    "date": "2026-10-08T14:00:00-07:00",
+    "sender": "orbit",
+    "to": [
+      "alex"
+    ],
+    "subject": "Update: your start date is moving to November 2",
+    "body": "Hi Alex,\n\nFollowing our scheduling conversation, your new start date will be November 2, 2026. Your October 19 offer schedule is now out of date. We have not yet issued the replacement document.\n\nPlease keep your Northstar departure date unchanged unless you agree a separate change with them. I will send revised paperwork and confirm the benefits dates.\n\nBest,\nJordan\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [],
+    "inReplyTo": null,
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Jordan Lee | Orbit People Team",
+      "address": "people@orbit.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s01-m02@jobswitch.example>",
+    "emlPath": "emails/s01-m02.eml",
+    "textPath": "emails/s01-m02.txt"
+  },
+  {
+    "id": "s01-m03",
+    "stage": "approved-inquiry",
+    "date": "2026-10-08T14:30:00-07:00",
+    "sender": "alex",
+    "to": [
+      "orbit"
+    ],
+    "subject": "Re: Update: your start date is moving to November 2",
+    "body": "Hi Jordan,\n\nMy saved offer still shows October 19. Please send the revised November 2 schedule and confirm my onboarding deadline, projected insurance start, and benefit election deadline. My last Northstar day is October 16.\n\nThank you,\nAlex\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [],
+    "inReplyTo": "s01-m02",
+    "direction": "outbound",
+    "delivery": "approved-action-fixture",
+    "from": {
+      "name": "Alex Morgan",
+      "address": "alex.morgan@personal.example"
+    },
+    "recipients": [
+      {
+        "name": "Jordan Lee | Orbit People Team",
+        "address": "people@orbit.example"
+      }
+    ],
+    "messageId": "<s01-m03@jobswitch.example>",
+    "emlPath": "emails/s01-m03.eml",
+    "textPath": "emails/s01-m03.txt"
+  },
+  {
+    "id": "s01-m04",
+    "stage": "revised-offer",
+    "date": "2026-10-09T10:00:00-07:00",
+    "sender": "orbit",
+    "to": [
+      "alex"
+    ],
+    "subject": "Re: Update: your start date is moving to November 2",
+    "body": "Hi Alex,\n\nAttached is version 2, which supersedes the October 19 schedule. Your onboarding profile is due November 2. Subject to eligibility and election, your health coverage would begin December 1; your election deadline is also December 1.\n\nPlease review and acknowledge version 2 in the secure portal. Receipt of this email is not acknowledgment.\n\nBest,\nJordan\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [
+      {
+        "id": "s01-offer-v2",
+        "title": "Orbit Labs | Revised offer schedule - version 2",
+        "path": "attachments/s01-offer-v2.pdf",
+        "mimeType": "application/pdf",
+        "bytes": 2707,
+        "sha256": "c2645ad43506f4e4e8a7fb9f36e03e57cfcede11db686a7719a5bb91e97f3496",
+        "pages": 1
+      }
+    ],
+    "inReplyTo": "s01-m03",
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Jordan Lee | Orbit People Team",
+      "address": "people@orbit.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s01-m04@jobswitch.example>",
+    "emlPath": "emails/s01-m04.eml",
+    "textPath": "emails/s01-m04.txt"
+  },
+  {
+    "id": "s01-m05",
+    "stage": "acknowledged",
+    "date": "2026-10-09T16:00:00-07:00",
+    "sender": "orbit",
+    "to": [
+      "alex"
+    ],
+    "subject": "Revised schedule acknowledgment received",
+    "body": "Hi Alex,\n\nWe received your portal acknowledgment of offer schedule version 2. Your November 2 start is now recorded. We have not received a health plan election, so benefits enrollment is still open.\n\nBest,\nJordan\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [],
+    "inReplyTo": null,
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Jordan Lee | Orbit People Team",
+      "address": "people@orbit.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s01-m05@jobswitch.example>",
+    "emlPath": "emails/s01-m05.eml",
+    "textPath": "emails/s01-m05.txt"
+  }
+]

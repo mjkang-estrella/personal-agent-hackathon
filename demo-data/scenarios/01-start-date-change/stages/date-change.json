@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0",
+  "scenarioId": "01-start-date-change",
+  "stage": "date-change",
+  "initialProfile": {
+    "name": "Alex Morgan",
+    "previousEmployer": "Northstar Studio",
+    "nextEmployer": "Orbit Labs",
+    "lastDay": "2026-10-16",
+    "startDay": "2026-10-19"
+  },
+  "visibleMessageIds": [
+    "s01-m01",
+    "s01-m02"
+  ],
+  "documents": [
+    {
+      "id": "s01-m01",
+      "name": "Your October 19 start - offer schedule attached.txt",
+      "employer": "next",
+      "kind": "other",
+      "pages": [
+        "From: Jordan Lee | Orbit People Team <people@orbit.example>\nTo: Alex Morgan <alex.morgan@personal.example>\nDate: 2026-10-08T09:00:00-07:00\nSubject: Your October 19 start - offer schedule attached\nMessage-ID: <s01-m01@jobswitch.example>\nAttachments: attachments/s01-offer-v1.pdf\n\nHi Alex,\n\nWe are preparing for your October 19 start at Orbit Labs. Attached is the offer schedule you acknowledged last week. Please complete your onboarding profile before your first day.\n\nKeep this copy with your transition records. Let me know if any dates differ from what you have agreed with your current employer.\n\nBest,\nJordan\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n"
+      ],
+      "addedAt": "2026-10-08T09:00:00-07:00"
+    },
+    {
+      "id": "s01-offer-v1",
+      "name": "s01-offer-v1.pdf",
+      "employer": "next",
+      "kind": "other",
+      "pages": [
+        "ORBIT LABS\nJOBSWITCH / SYNTHETIC ATTACHMENT\nFICTIONAL DEMO DATA - NOT A REAL EMPLOYMENT RECORD\ns01-offer-v1 | 01-start-date-change\nPage 1\nOffer schedule - version 1\nIssued 2026-10-02 | Alex Morgan | Document s01-offer-v1\nEmployee and role\nAlex Morgan | Product Strategy Manager | Orbit Labs. This is a fictional offer schedule, not an employment\ncontract.\nOriginal schedule\nYour first working day is October 19, 2026. Complete the onboarding profile by that date. This version was\nacknowledged on October 2, 2026.\nBenefits timing\nFor an eligible employee who elects coverage, health coverage begins on the first day of the month after the\nstart date. The election window is 30 calendar days, counting the start date as day one. Individual enrollment\nremains unconfirmed.\nVersion handling\nRetain this version when a replacement arrives. A date-change email does not prove that replacement\npaperwork has been acknowledged.\n"
+      ],
+      "addedAt": "2026-10-04T20:00:00Z"
+    },
+    {
+      "id": "s01-m02",
+      "name": "Update: your start date is moving to November 2.txt",
+      "employer": "next",
+      "kind": "other",
+      "pages": [
+        "From: Jordan Lee | Orbit People Team <people@orbit.example>\nTo: Alex Morgan <alex.morgan@personal.example>\nDate: 2026-10-08T14:00:00-07:00\nSubject: Update: your start date is moving to November 2\nMessage-ID: <s01-m02@jobswitch.example>\nAttachments: (none)\n\nHi Alex,\n\nFollowing our scheduling conversation, your new start date will be November 2, 2026. Your October 19 offer schedule is now out of date. We have not yet issued the replacement document.\n\nPlease keep your Northstar departure date unchanged unless you agree a separate change with them. I will send revised paperwork and confirm the benefits dates.\n\nBest,\nJordan\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n"
+      ],
+      "addedAt": "2026-10-08T14:00:00-07:00"
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "1.0",
+  "scenarioId": "02-background-check",
+  "stage": "employment-proof",
+  "initialProfile": {
+    "name": "Alex Morgan",
+    "previousEmployer": "Northstar Studio",
+    "nextEmployer": "Orbit Labs",
+    "lastDay": "2026-10-16",
+    "startDay": "2026-10-19"
+  },
+  "visibleMessageIds": [
+    "s02-m01",
+    "s02-m02",
+    "s02-m03"
+  ],
+  "documents": [
+    {
+      "id": "s02-m01",
+      "name": "Action needed: two items for your Orbit background check.txt",
+      "employer": "next",
+      "kind": "other",
+      "pages": [
+        "From: Orbit Screening Desk <screening@orbit.example>\nTo: Alex Morgan <alex.morgan@personal.example>\nDate: 2026-10-05T09:00:00-07:00\nSubject: Action needed: two items for your Orbit background check\nMessage-ID: <s02-m01@jobswitch.example>\nAttachments: attachments/s02-checklist.pdf\n\nHi Alex,\n\nWe need an education-completion attestation and a Northstar employment statement to continue your screening. Please follow the attached checklist and upload through the secure portal by October 8.\n\nYour review is pending. There is no clearance decision yet.\n\nOrbit Screening Desk\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n"
+      ],
+      "addedAt": "2026-10-05T09:00:00-07:00"
+    },
+    {
+      "id": "s02-checklist",
+      "name": "s02-checklist.pdf",
+      "employer": "next",
+      "kind": "other",
+      "pages": [
+        "ORBIT LABS\nJOBSWITCH / SYNTHETIC ATTACHMENT\nFICTIONAL DEMO DATA - NOT A REAL EMPLOYMENT RECORD\ns02-checklist | 02-background-check\nPage 1\nScreening evidence checklist\nIssued 2026-10-05 | Alex Morgan | Document s02-checklist\nCase reference\nDemo case OBL-SCREEN-042 | Alex Morgan | Target start October 19, 2026.\nRequested evidence\nProvide an education-completion attestation and a current-employment statement for Northstar Studio.\nBecause you are still employed, an expected departure date must be labeled expected, not completed.\nSubmission channel\nUpload evidence through the fictional secure screening portal by October 8, 2026. Do not send identity\ndocuments or sensitive identifiers by email. A simulated portal receipt is sufficient for this demo.\nCompletion rule\nUploaded documents do not mean the background check is cleared. Orbit People must send a separate\nclearance confirmation.\n"
+      ],
+      "addedAt": "2026-10-04T20:00:00Z"
+    },
+    {
+      "id": "s02-m02",
+      "name": "Employment statement for my Orbit onboarding.txt",
+      "employer": "personal",
+      "kind": "other",
+      "pages": [
+        "From: Alex Morgan <alex.morgan@personal.example>\nTo: Maya Chen | Northstar People Team <people@northstar.example>\nDate: 2026-10-05T11:00:00-07:00\nSubject: Employment statement for my Orbit onboarding\nMessage-ID: <s02-m02@jobswitch.example>\nAttachments: (none)\n\nHi Maya,\n\nCould you provide a statement confirming my Northstar employment start and current status? Please label October 16 as my expected final day because I am still employed. I need it for my next employer screening by October 8.\n\nThanks,\nAlex\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n"
+      ],
+      "addedAt": "2026-10-05T11:00:00-07:00"
+    },
+    {
+      "id": "s02-m03",
+      "name": "Re: Employment statement for my Orbit onboarding.txt",
+      "employer": "previous",
+      "kind": "other",
+      "pages": [
+        "From: Maya Chen | Northstar People Team <people@northstar.example>\nTo: Alex Morgan <alex.morgan@personal.example>\nDate: 2026-10-06T09:00:00-07:00\nSubject: Re: Employment statement for my Orbit onboarding\nMessage-ID: <s02-m03@jobswitch.example>\nAttachments: attachments/s02-employment.pdf\n\nHi Alex,\n\nAttached is your current-employment statement. It distinguishes your current status from your expected departure. Please review the dates before submitting it to the screening portal.\n\nBest,\nMaya\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n"
+      ],
+      "addedAt": "2026-10-06T09:00:00-07:00"
+    },
+    {
+      "id": "s02-employment",
+      "name": "s02-employment.pdf",
+      "employer": "previous",
+      "kind": "other",
+      "pages": [
+        "NORTHSTAR STUDIO\nJOBSWITCH / SYNTHETIC ATTACHMENT\nFICTIONAL DEMO DATA - NOT A REAL EMPLOYMENT RECORD\ns02-employment | 02-background-check\nPage 1\nEmployment status statement\nIssued 2026-10-06 | Alex Morgan | Document s02-employment\nDemo statement\nThis fictional employer statement is prepared for Alex Morgan, Product Strategist. It is not a government\ndocument or a credential.\nEmployment dates\nAlex joined Northstar Studio on January 12, 2024 and remains employed as of October 6, 2026. The\nexpected final working day is October 16, 2026.\nVerification\nThe statement confirms employment dates only. No salary, identification number, residential address, or\nsignature image is included. Demo inquiries may be addressed to people@northstar.example.\n"
+      ],
+      "addedAt": "2026-10-04T20:00:00Z"
+    }
+  ]
+}

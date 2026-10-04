@@ -1,0 +1,16 @@
+From: Jordan Lee | Orbit People Team <people@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-14T09:00:00-07:00
+Subject: Profile verified - screening invitation released
+Message-ID: <s08-m03@jobswitch.example>
+Attachments: (none)
+
+Hi Alex,
+
+Your People Portal profile is verified. We have released the screening invitation; the screening itself is not yet cleared. Payroll preference and employment-verification paperwork remain separate open tasks.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

@@ -1,0 +1,42 @@
+From: Orbit IT Welcome Team <it@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Subject: Laptop setup before your Orbit welcome session
+Date: Mon, 12 Oct 2026 10:00:00 -0700
+Message-ID: <s08-m02@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 08-onboarding-coordination
+X-JobSwitch-Stage: initial
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="jobswitch-s08-m02-0"
+
+--jobswitch-s08-m02-0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Alex,
+
+Your laptop setup is planned for your first day, October 19, before the virtu=
+al welcome session. The appointment time and pickup location are not assigned=
+ yet. Please do not travel to an assumed location.
+
+Orbit IT Welcome Team
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s08-m02-0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+i Alex,</p><p>Your laptop setup is planned for your first day, October 19, be=
+fore the virtual welcome session. The appointment time and pickup location ar=
+e not assigned yet. Please do not travel to an assumed location.</p><p>Orbit =
+IT Welcome Team</p><p>---<br>Fictional JobSwitch demo. All people, policies a=
+nd events in this message are synthetic. Addresses use reserved .example doma=
+ins. Do not deliver to real people.<br></p></div></body></html>
+
+--jobswitch-s08-m02-0--

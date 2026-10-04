@@ -1,0 +1,47 @@
+From: Jordan Lee | Orbit People Team <people@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Subject: Eligibility confirmed - plan selection still needed
+Date: Fri, 09 Oct 2026 11:00:00 -0700
+Message-ID: <s06-m05@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 06-coverage-gap
+X-JobSwitch-Stage: new-eligibility-confirmed
+In-Reply-To: <s06-m02@jobswitch.example>
+References: <s06-m02@jobswitch.example>
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="jobswitch-s06-m05-0"
+
+--jobswitch-s06-m05-0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Alex,
+
+You are eligible for our employee medical plan. With your October 19 start, t=
+he effective date would be November 1 if you complete an eligible election by=
+ November 17. You have not selected a plan, so we cannot confirm active cover=
+age.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s06-m05-0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+i Alex,</p><p>You are eligible for our employee medical plan. With your Octob=
+er 19 start, the effective date would be November 1 if you complete an eligib=
+le election by November 17. You have not selected a plan, so we cannot confir=
+m active coverage.</p><p>Best,<br>Jordan</p><p>---<br>Fictional JobSwitch dem=
+o. All people, policies and events in this message are synthetic. Addresses u=
+se reserved .example domains. Do not deliver to real people.<br></p></div></b=
+ody></html>
+
+--jobswitch-s06-m05-0--

@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "1.0",
+  "scenarioId": "06-coverage-gap",
+  "stage": "new-eligibility-confirmed",
+  "initialProfile": {
+    "name": "Alex Morgan",
+    "previousEmployer": "Northstar Studio",
+    "nextEmployer": "Orbit Labs",
+    "lastDay": "2026-10-16",
+    "startDay": "2026-10-19"
+  },
+  "visibleMessageIds": [
+    "s06-m01",
+    "s06-m02",
+    "s06-m03",
+    "s06-m04",
+    "s06-m05"
+  ],
+  "documents": [
+    {
+      "id": "s06-m01",
+      "name": "Please review your coverage at departure.txt",
+      "employer": "previous",
+      "kind": "other",
+      "pages": [
+        "From: Maya Chen | Northstar People Team <people@northstar.example>\nTo: Alex Morgan <alex.morgan@personal.example>\nDate: 2026-10-08T09:00:00-07:00\nSubject: Please review your coverage at departure\nMessage-ID: <s06-m01@jobswitch.example>\nAttachments: attachments/s06-northstar.pdf\n\nHi Alex,\n\nAttached is our fictional coverage-at-departure policy for your October 16 exit. It describes the general timing but does not confirm your personal or dependent enrollment. Please ask us for an individual end-date confirmation if needed.\n\nBest,\nMaya\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n"
+      ],
+      "addedAt": "2026-10-08T09:00:00-07:00"
+    },
+    {
+      "id": "s06-northstar",
+      "name": "s06-northstar.pdf",
+      "employer": "previous",
+      "kind": "policy",
+      "pages": [
+        "NORTHSTAR STUDIO\nJOBSWITCH / SYNTHETIC ATTACHMENT\nFICTIONAL DEMO DATA - NOT A REAL EMPLOYMENT RECORD\ns06-northstar | 06-coverage-gap\nPage 1\nCoverage at departure\nIssued 2026-10-08 | Alex Morgan | Document s06-northstar\nFictional policy\nFor this demo, active employee medical and dental coverage ends at 11:59 p.m. Pacific on the last working\nday. This differs from the source inspiration and is intentionally aligned to the current JobSwitch fixture.\nIndividual confirmation\nAlex Morgan is scheduled to leave October 16, 2026. Coverage and dependent participation must be verified\nseparately with HR. No continuation selection is recorded in this policy.\nNext action\nAsk for the exact end date and the available continuation information. Do not cancel existing coverage or\nselect a plan on the employee behalf.\n"
+      ],
+      "addedAt": "2026-10-04T20:00:00Z"
+    },
+    {
+      "id": "s06-m02",
+      "name": "Your Orbit health enrollment window.txt",
+      "employer": "next",
+      "kind": "other",
+      "pages": [
+        "From: Jordan Lee | Orbit People Team <people@orbit.example>\nTo: Alex Morgan <alex.morgan@personal.example>\nDate: 2026-10-08T10:00:00-07:00\nSubject: Your Orbit health enrollment window\nMessage-ID: <s06-m02@jobswitch.example>\nAttachments: attachments/s06-orbit.pdf\n\nHi Alex,\n\nFor your October 19 start, please review the attached benefits timing guide. November 1 is the projected start if you are eligible and elect coverage. Your election is due November 17. We have not received your selection.\n\nBest,\nJordan\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n"
+      ],
+      "addedAt": "2026-10-08T10:00:00-07:00"
+    },
+    {
+      "id": "s06-orbit",
+      "name": "s06-orbit.pdf",
+      "employer": "next",
+      "kind": "policy",
+      "pages": [
+        "ORBIT LABS\nJOBSWITCH / SYNTHETIC ATTACHMENT\nFICTIONAL DEMO DATA - NOT A REAL EMPLOYMENT RECORD\ns06-orbit | 06-coverage-gap\nPage 1\nNew-hire health enrollment\nIssued 2026-10-08 | Alex Morgan | Document s06-orbit\nCoverage rule\nFor an eligible employee who elects coverage, coverage begins on the first day of the month after the start\ndate.\nAlex schedule\nAlex Morgan starts October 19, 2026. The projected coverage start is November 1, 2026. The election\ndeadline is November 17, 2026: 30 calendar days counting October 19 as day one.\nNot an enrollment receipt\nThis guide does not establish that a plan was selected or activated. Ask HR to confirm eligibility and the\neffective date. The employee must review costs, networks and dependents before choosing.\n"
+      ],
+      "addedAt": "2026-10-04T20:00:00Z"
+    },
+    {
+      "id": "s06-m03",
+      "name": "Please confirm my active coverage end date.txt",
+      "employer": "personal",
+      "kind": "other",
+      "pages": [
+        "From: Alex Morgan <alex.morgan@personal.example>\nTo: Maya Chen | Northstar People Team <people@northstar.example>\nDate: 2026-10-08T13:00:00-07:00\nSubject: Please confirm my active coverage end date\nMessage-ID: <s06-m03@jobswitch.example>\nAttachments: (none)\n\nHi Maya,\n\nMy last Northstar day is October 16 and the Orbit guide projects November 1 coverage. Please confirm when my active Northstar medical coverage ends and send the continuation information. I have not selected any continuation option.\n\nThanks,\nAlex\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n"
+      ],
+      "addedAt": "2026-10-08T13:00:00-07:00"
+    },
+    {
+      "id": "s06-m04",
+      "name": "Re: Please confirm my active coverage end date.txt",
+      "employer": "previous",
+      "kind": "other",
+      "pages": [
+        "From: Maya Chen | Northstar People Team <people@northstar.example>\nTo: Alex Morgan <alex.morgan@personal.example>\nDate: 2026-10-09T09:00:00-07:00\nSubject: Re: Please confirm my active coverage end date\nMessage-ID: <s06-m04@jobswitch.example>\nAttachments: (none)\n\nHi Alex,\n\nWe confirm your currently enrolled employee medical coverage ends October 16 at 11:59 p.m. Pacific. No continuation election has been received. We will provide continuation materials separately; this email does not enroll you.\n\nBest,\nMaya\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n"
+      ],
+      "addedAt": "2026-10-09T09:00:00-07:00"
+    },
+    {
+      "id": "s06-m05",
+      "name": "Eligibility confirmed - plan selection still needed.txt",
+      "employer": "next",
+      "kind": "other",
+      "pages": [
+        "From: Jordan Lee | Orbit People Team <people@orbit.example>\nTo: Alex Morgan <alex.morgan@personal.example>\nDate: 2026-10-09T11:00:00-07:00\nSubject: Eligibility confirmed - plan selection still needed\nMessage-ID: <s06-m05@jobswitch.example>\nAttachments: (none)\n\nHi Alex,\n\nYou are eligible for our employee medical plan. With your October 19 start, the effective date would be November 1 if you complete an eligible election by November 17. You have not selected a plan, so we cannot confirm active coverage.\n\nBest,\nJordan\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n"
+      ],
+      "addedAt": "2026-10-09T11:00:00-07:00"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+From: Orbit Screening Desk <screening@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Subject: Evidence received - review remains pending
+Date: Wed, 07 Oct 2026 15:00:00 -0700
+Message-ID: <s02-m04@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 02-background-check
+X-JobSwitch-Stage: evidence-received
+In-Reply-To: <s02-m01@jobswitch.example>
+References: <s02-m01@jobswitch.example>
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="jobswitch-s02-m04-0"
+
+--jobswitch-s02-m04-0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Alex,
+
+The demo screening portal confirms receipt of your education attestation and =
+Northstar statement. No further documents are requested today. Your backgroun=
+d check is still under review; this receipt is not clearance.
+
+Orbit Screening Desk
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s02-m04-0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+i Alex,</p><p>The demo screening portal confirms receipt of your education at=
+testation and Northstar statement. No further documents are requested today. =
+Your background check is still under review; this receipt is not clearance.</=
+p><p>Orbit Screening Desk</p><p>---<br>Fictional JobSwitch demo. All people, =
+policies and events in this message are synthetic. Addresses use reserved .ex=
+ample domains. Do not deliver to real people.<br></p></div></body></html>
+
+--jobswitch-s02-m04-0--

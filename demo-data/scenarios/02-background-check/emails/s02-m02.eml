@@ -1,0 +1,43 @@
+From: Alex Morgan <alex.morgan@personal.example>
+To: Maya Chen | Northstar People Team <people@northstar.example>
+Subject: Employment statement for my Orbit onboarding
+Date: Mon, 05 Oct 2026 11:00:00 -0700
+Message-ID: <s02-m02@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 02-background-check
+X-JobSwitch-Stage: approved-inquiry
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="jobswitch-s02-m02-0"
+
+--jobswitch-s02-m02-0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Maya,
+
+Could you provide a statement confirming my Northstar employment start and cu=
+rrent status? Please label October 16 as my expected final day because I am s=
+till employed. I need it for my next employer screening by October 8.
+
+Thanks,
+Alex
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s02-m02-0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+i Maya,</p><p>Could you provide a statement confirming my Northstar employmen=
+t start and current status? Please label October 16 as my expected final day =
+because I am still employed. I need it for my next employer screening by Octo=
+ber 8.</p><p>Thanks,<br>Alex</p><p>---<br>Fictional JobSwitch demo. All peopl=
+e, policies and events in this message are synthetic. Addresses use reserved =
+.example domains. Do not deliver to real people.<br></p></div></body></html>
+
+--jobswitch-s02-m02-0--

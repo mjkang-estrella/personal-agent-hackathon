@@ -1,0 +1,45 @@
+From: Jordan Lee | Orbit People Team <people@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Subject: Profile verified - screening invitation released
+Date: Wed, 14 Oct 2026 09:00:00 -0700
+Message-ID: <s08-m03@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 08-onboarding-coordination
+X-JobSwitch-Stage: profile-verified
+In-Reply-To: <s08-m01@jobswitch.example>
+References: <s08-m01@jobswitch.example>
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="jobswitch-s08-m03-0"
+
+--jobswitch-s08-m03-0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Alex,
+
+Your People Portal profile is verified. We have released the screening invita=
+tion; the screening itself is not yet cleared. Payroll preference and employm=
+ent-verification paperwork remain separate open tasks.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s08-m03-0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+i Alex,</p><p>Your People Portal profile is verified. We have released the sc=
+reening invitation; the screening itself is not yet cleared. Payroll preferen=
+ce and employment-verification paperwork remain separate open tasks.</p><p>Be=
+st,<br>Jordan</p><p>---<br>Fictional JobSwitch demo. All people, policies and=
+ events in this message are synthetic. Addresses use reserved .example domain=
+s. Do not deliver to real people.<br></p></div></body></html>
+
+--jobswitch-s08-m03-0--

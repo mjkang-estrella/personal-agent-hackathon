@@ -1,0 +1,171 @@
+{
+  "id": "08-onboarding-coordination",
+  "title": "One onboarding plan across multiple systems",
+  "summary": "Merge overlapping HR and IT messages, respect dependencies, and ask only about missing appointment details.",
+  "inspiration": "Multiple people, onboarding, screening and IT systems sent separate tasks and first-day reminders. These synthetic messages recreate that coordination pattern.",
+  "initialClock": "2026-10-12T10:30:00-07:00",
+  "profile": {
+    "name": "Alex Morgan",
+    "previousEmployer": "Northstar Studio",
+    "nextEmployer": "Orbit Labs",
+    "lastDay": "2026-10-16",
+    "startDay": "2026-10-19"
+  },
+  "schemaVersion": "1.0",
+  "fictional": true,
+  "independentScenario": true,
+  "documents": [
+    {
+      "id": "s08-checklist",
+      "title": "Orbit Labs | First-week onboarding checklist",
+      "path": "attachments/s08-checklist.pdf",
+      "mimeType": "application/pdf",
+      "bytes": 2773,
+      "sha256": "5b2ac6f7415f5bc3ce071a3d1893a2a723e30bd49b7f7412b595c7c473670e28",
+      "pages": 1
+    },
+    {
+      "id": "s08-status",
+      "title": "Orbit Labs | Onboarding status receipt",
+      "path": "attachments/s08-status.pdf",
+      "mimeType": "application/pdf",
+      "bytes": 2527,
+      "sha256": "660582be47614c6c680d29cfee5babb2256ec2b9060fbd608da8f6de2db5f484",
+      "pages": 1
+    }
+  ],
+  "messagesFile": "messages.json",
+  "steps": [
+    {
+      "id": "initial",
+      "title": "Build one plan",
+      "trigger": "Load HR and IT welcome emails.",
+      "expected": "Create distinct tasks with deadlines, dependencies and missing appointment details.",
+      "mustNot": "Do not duplicate laptop setup or invent a location.",
+      "evidence": [
+        {
+          "sourceId": "s08-checklist",
+          "quote": "The laptop appointment time and location are not yet assigned."
+        }
+      ],
+      "releaseMessageIds": [
+        "s08-m01",
+        "s08-m02"
+      ],
+      "releaseDocumentIds": [
+        "s08-m01",
+        "s08-checklist",
+        "s08-m02"
+      ],
+      "inputBundle": "stages/initial.json",
+      "requiresUserApproval": false
+    },
+    {
+      "id": "profile-verified",
+      "title": "Advance one dependency",
+      "trigger": "Deliver profile verification.",
+      "expected": "Complete profile; release screening task without marking screening cleared.",
+      "mustNot": "Do not complete downstream tasks.",
+      "evidence": [
+        {
+          "sourceId": "s08-m03",
+          "quote": "the screening itself is not yet cleared."
+        }
+      ],
+      "releaseMessageIds": [
+        "s08-m03"
+      ],
+      "releaseDocumentIds": [
+        "s08-m03"
+      ],
+      "inputBundle": "stages/profile-verified.json",
+      "requiresUserApproval": false
+    },
+    {
+      "id": "duplicate-reminder",
+      "title": "Deduplicate stale reminders",
+      "trigger": "Deliver the scheduled reminder after confirmation.",
+      "expected": "Keep profile complete; associate reminder with existing task.",
+      "mustNot": "Do not reopen the profile without a substantive correction request.",
+      "evidence": [
+        {
+          "sourceId": "s08-m04",
+          "quote": "This reminder does not reverse that confirmation."
+        }
+      ],
+      "releaseMessageIds": [
+        "s08-m04"
+      ],
+      "releaseDocumentIds": [
+        "s08-m04"
+      ],
+      "inputBundle": "stages/duplicate-reminder.json",
+      "requiresUserApproval": false
+    },
+    {
+      "id": "approved-it-inquiry",
+      "title": "Ask only for missing details",
+      "trigger": "User approves the appointment inquiry.",
+      "expected": "Ask IT for time and location.",
+      "mustNot": "Do not ask HR to repeat already confirmed profile status.",
+      "evidence": [
+        {
+          "sourceId": "s08-m05",
+          "quote": "confirm the time and location"
+        }
+      ],
+      "releaseMessageIds": [
+        "s08-m05"
+      ],
+      "releaseDocumentIds": [
+        "s08-m05"
+      ],
+      "inputBundle": "stages/approved-it-inquiry.json",
+      "requiresUserApproval": true
+    },
+    {
+      "id": "appointment-confirmed",
+      "title": "Record an appointment",
+      "trigger": "Deliver IT confirmation.",
+      "expected": "Record 9 a.m. setup and 10 a.m. orientation on October 19.",
+      "mustNot": "Do not equate scheduling with attendance.",
+      "evidence": [
+        {
+          "sourceId": "s08-m06",
+          "quote": "not attendance or completed setup."
+        }
+      ],
+      "releaseMessageIds": [
+        "s08-m06"
+      ],
+      "releaseDocumentIds": [
+        "s08-m06"
+      ],
+      "inputBundle": "stages/appointment-confirmed.json",
+      "requiresUserApproval": false
+    },
+    {
+      "id": "partial-completion",
+      "title": "Keep remaining work visible",
+      "trigger": "Simulate first-day activities; deliver status receipt.",
+      "expected": "Close four confirmed items and retain payroll, paperwork and benefits tasks.",
+      "mustNot": "Do not mark all onboarding complete.",
+      "evidence": [
+        {
+          "sourceId": "s08-status",
+          "quote": "Payroll payment preference remains unconfirmed"
+        }
+      ],
+      "releaseMessageIds": [
+        "s08-m07"
+      ],
+      "releaseDocumentIds": [
+        "s08-m07",
+        "s08-status"
+      ],
+      "inputBundle": "stages/partial-completion.json",
+      "requiresUserApproval": false
+    }
+  ],
+  "initialBundle": "stages/initial.json"
+}

@@ -1,0 +1,4 @@
+# Preserve PDF bytes and SMTP CRLF line endings for embedded attachments.
+*.pdf binary
+*.zip binary
+*.eml -text whitespace=cr-at-eol

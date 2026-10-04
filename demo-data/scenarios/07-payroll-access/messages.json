@@ -1,0 +1,162 @@
+[
+  {
+    "id": "s07-m01",
+    "stage": "initial",
+    "date": "2026-10-20T09:00:00-07:00",
+    "sender": "payroll",
+    "to": [
+      "alex"
+    ],
+    "subject": "Keep access to your Northstar pay statements",
+    "body": "Hi Alex,\n\nYour company sign-in is disabled, but your pay records are available through Northstar Pay Archive. The attached guide explains personal registration. Our records show you have not finished registration.\n\nThe October 1 invitation expired on October 16. Please request a new invitation rather than reusing it.\n\nNorthstar Payroll\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [
+      {
+        "id": "s07-guide",
+        "title": "Northstar Studio | Former-employee payroll access",
+        "path": "attachments/s07-guide.pdf",
+        "mimeType": "application/pdf",
+        "bytes": 2704,
+        "sha256": "5399c2b1d124ee9ae9f4d7a1251240bfddb86986ceb0ec8cd9463d7a71e9d075",
+        "pages": 1
+      }
+    ],
+    "inReplyTo": null,
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Northstar Payroll",
+      "address": "payroll@northstar.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s07-m01@jobswitch.example>",
+    "emlPath": "emails/s07-m01.eml",
+    "textPath": "emails/s07-m01.txt"
+  },
+  {
+    "id": "s07-m02",
+    "stage": "approved-request",
+    "date": "2026-10-20T11:00:00-07:00",
+    "sender": "alex",
+    "to": [
+      "payroll"
+    ],
+    "subject": "Replacement Pay Archive registration invitation",
+    "body": "Hello Payroll,\n\nMy October 1 registration invitation has expired. Please send a replacement through the approved registration channel so I can access my pay statements after leaving. Please do not include any password or tax identifier in your email reply.\n\nThank you,\nAlex\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [],
+    "inReplyTo": null,
+    "direction": "outbound",
+    "delivery": "approved-action-fixture",
+    "from": {
+      "name": "Alex Morgan",
+      "address": "alex.morgan@personal.example"
+    },
+    "recipients": [
+      {
+        "name": "Northstar Payroll",
+        "address": "payroll@northstar.example"
+      }
+    ],
+    "messageId": "<s07-m02@jobswitch.example>",
+    "emlPath": "emails/s07-m02.eml",
+    "textPath": "emails/s07-m02.txt"
+  },
+  {
+    "id": "s07-m03",
+    "stage": "reissued",
+    "date": "2026-10-21T09:00:00-07:00",
+    "sender": "payroll",
+    "to": [
+      "alex"
+    ],
+    "subject": "Re: Replacement Pay Archive registration invitation",
+    "body": "Hi Alex,\n\nA replacement invitation has been issued through the secure registration channel. It expires November 5 at 5 p.m. Pacific. This notice does not contain the invitation or a usable access code.\n\nComplete registration yourself, then confirm whether you can view your statements.\n\nNorthstar Payroll\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [],
+    "inReplyTo": "s07-m02",
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Northstar Payroll",
+      "address": "payroll@northstar.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s07-m03@jobswitch.example>",
+    "emlPath": "emails/s07-m03.eml",
+    "textPath": "emails/s07-m03.txt"
+  },
+  {
+    "id": "s07-m04",
+    "stage": "registered",
+    "date": "2026-10-22T10:00:00-07:00",
+    "sender": "payroll",
+    "to": [
+      "alex"
+    ],
+    "subject": "Pay Archive registration complete",
+    "body": "Hi Alex,\n\nYour personal registration is complete and access to the October 16 pay statement is verified. The access confirmation is attached. This does not confirm a bank deposit, and the 2026 tax document is not yet published.\n\nNorthstar Payroll\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [
+      {
+        "id": "s07-access-receipt",
+        "title": "Northstar Pay Archive | Account access confirmation",
+        "path": "attachments/s07-access-receipt.pdf",
+        "mimeType": "application/pdf",
+        "bytes": 2464,
+        "sha256": "fc177e2b338bec56c14e6cc6d5824f42284b1130c67da004b9e1715249514e1a",
+        "pages": 1
+      }
+    ],
+    "inReplyTo": "s07-m03",
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Northstar Payroll",
+      "address": "payroll@northstar.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s07-m04@jobswitch.example>",
+    "emlPath": "emails/s07-m04.eml",
+    "textPath": "emails/s07-m04.txt"
+  },
+  {
+    "id": "s07-m05",
+    "stage": "tax-followup",
+    "date": "2026-10-22T14:00:00-07:00",
+    "sender": "payroll",
+    "to": [
+      "alex"
+    ],
+    "subject": "Your annual tax document will be a separate follow-up",
+    "body": "Hi Alex,\n\nYour 2026 annual tax document is scheduled for publication in January 2027. Please keep your personal contact information current in Pay Archive. No further account registration is needed now.\n\nWe will notify you when the document is available.\n\nNorthstar Payroll\n\n---\nFictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.\n",
+    "attachments": [],
+    "inReplyTo": "s07-m04",
+    "direction": "inbound",
+    "delivery": "incoming-fixture",
+    "from": {
+      "name": "Northstar Payroll",
+      "address": "payroll@northstar.example"
+    },
+    "recipients": [
+      {
+        "name": "Alex Morgan",
+        "address": "alex.morgan@personal.example"
+      }
+    ],
+    "messageId": "<s07-m05@jobswitch.example>",
+    "emlPath": "emails/s07-m05.eml",
+    "textPath": "emails/s07-m05.txt"
+  }
+]

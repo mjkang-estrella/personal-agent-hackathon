@@ -1,0 +1,107 @@
+From: Northstar Payroll <payroll@northstar.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Subject: Keep access to your Northstar pay statements
+Date: Tue, 20 Oct 2026 09:00:00 -0700
+Message-ID: <s07-m01@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 07-payroll-access
+X-JobSwitch-Stage: initial
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="jobswitch-s07-m01-0"
+
+--jobswitch-s07-m01-0
+Content-Type: multipart/alternative; boundary="jobswitch-s07-m01-1"
+
+--jobswitch-s07-m01-1
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Alex,
+
+Your company sign-in is disabled, but your pay records are available through =
+Northstar Pay Archive. The attached guide explains personal registration. Our=
+ records show you have not finished registration.
+
+The October 1 invitation expired on October 16. Please request a new invitati=
+on rather than reusing it.
+
+Northstar Payroll
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s07-m01-1
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+i Alex,</p><p>Your company sign-in is disabled, but your pay records are avai=
+lable through Northstar Pay Archive. The attached guide explains personal reg=
+istration. Our records show you have not finished registration.</p><p>The Oct=
+ober 1 invitation expired on October 16. Please request a new invitation rath=
+er than reusing it.</p><p>Northstar Payroll</p><p>---<br>Fictional JobSwitch =
+demo. All people, policies and events in this message are synthetic. Addresse=
+s use reserved .example domains. Do not deliver to real people.<br></p></div>=
+</body></html>
+
+--jobswitch-s07-m01-1--
+
+--jobswitch-s07-m01-0
+Content-Type: application/pdf
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="s07-guide.pdf"
+MIME-Version: 1.0
+
+JVBERi0xLjQKJZOMi54gUmVwb3J0TGFiIEdlbmVyYXRlZCBQREYgZG9jdW1lbnQgKG9wZW5zb3Vy
+Y2UpCjEgMCBvYmoKPDwKL0YxIDIgMCBSIC9GMiAzIDAgUgo+PgplbmRvYmoKMiAwIG9iago8PAov
+QmFzZUZvbnQgL0hlbHZldGljYSAvRW5jb2RpbmcgL1dpbkFuc2lFbmNvZGluZyAvTmFtZSAvRjEg
+L1N1YnR5cGUgL1R5cGUxIC9UeXBlIC9Gb250Cj4+CmVuZG9iagozIDAgb2JqCjw8Ci9CYXNlRm9u
+dCAvSGVsdmV0aWNhLUJvbGQgL0VuY29kaW5nIC9XaW5BbnNpRW5jb2RpbmcgL05hbWUgL0YyIC9T
+dWJ0eXBlIC9UeXBlMSAvVHlwZSAvRm9udAo+PgplbmRvYmoKNCAwIG9iago8PAovQ29udGVudHMg
+OCAwIFIgL01lZGlhQm94IFsgMCAwIDYxMiA3OTIgXSAvUGFyZW50IDcgMCBSIC9SZXNvdXJjZXMg
+PDwKL0ZvbnQgMSAwIFIgL1Byb2NTZXQgWyAvUERGIC9UZXh0IC9JbWFnZUIgL0ltYWdlQyAvSW1h
+Z2VJIF0KPj4gL1JvdGF0ZSAwIC9UcmFucyA8PAoKPj4gCiAgL1R5cGUgL1BhZ2UKPj4KZW5kb2Jq
+CjUgMCBvYmoKPDwKL1BhZ2VNb2RlIC9Vc2VOb25lIC9QYWdlcyA3IDAgUiAvVHlwZSAvQ2F0YWxv
+Zwo+PgplbmRvYmoKNiAwIG9iago8PAovQXV0aG9yIChKb2JTd2l0Y2ggU3ludGhldGljIERlbW8p
+IC9DcmVhdGlvbkRhdGUgKEQ6MjAwMDAxMDEwMDAwMDArMDAnMDAnKSAvQ3JlYXRvciAoSm9iU3dp
+dGNoIGRlbW8tZGF0YS9idWlsZC5weSkgL0tleXdvcmRzICgpIC9Nb2REYXRlIChEOjIwMDAwMTAx
+MDAwMDAwKzAwJzAwJykgL1Byb2R1Y2VyIChSZXBvcnRMYWIgUERGIExpYnJhcnkgLSBcKG9wZW5z
+b3VyY2VcKSkgCiAgL1N1YmplY3QgKEZJQ1RJT05BTCBERU1PIERBVEEgLSBOT1QgQSBSRUFMIEVN
+UExPWU1FTlQgUkVDT1JEKSAvVGl0bGUgKE5vcnRoc3RhciBTdHVkaW8gfCBGb3JtZXItZW1wbG95
+ZWUgcGF5cm9sbCBhY2Nlc3MpIC9UcmFwcGVkIC9GYWxzZQo+PgplbmRvYmoKNyAwIG9iago8PAov
+Q291bnQgMSAvS2lkcyBbIDQgMCBSIF0gL1R5cGUgL1BhZ2VzCj4+CmVuZG9iago4IDAgb2JqCjw8
+Ci9GaWx0ZXIgWyAvQVNDSUk4NURlY29kZSAvRmxhdGVEZWNvZGUgXSAvTGVuZ3RoIDEyMDYKPj4K
+c3RyZWFtCkdhdG04PkJBZF4nUm5CMzMwLy8vR1YuZ2RJNDUzRmNxL2BrbXJcLSFmRTBoYyZzWnVb
+MV0/aSxuaCNyPlJFZlVRIyVRP0xTNTgkMiJEbiF0bDhSTiNnYTJJY1NjRWFRPVRTJUQmIUJGIi1U
+P1A0PUVhJEMmcVQtS0ZyNUxMLSNWckErUC9PbE1vLjYlITZZWU4wTmBiN1dCMCEkV0IuU1VkcmBI
+TGRMPmRtI1gmdWUvYkdwSDdJbVpWInErTltoYVdnXzA5SCk4YWV1I081YC83LWZGIicqUTViKiU1
+bz8yM2EsJW09ZDM0dE0hSHIucVotdUdDQHM1P1pGLTZxUmklbHBWVm9jaDlSMSpNYyxfUCduZHMu
+PU85c2wyJk1lcl4jLXVyU01gRzZJSERAREhcRU91Sz1uNmNWZnJvMUQ7QVw2ZEZUU3RxYy9pU1xx
+S0FxPjg5SUArMWkiOEg9Vlx0RXRhVDIva1NMI3Q/YD5Gcl46XDJXW1pONWFSX3FBTWtTcktkbD5l
+Y2AmbScrNVdvOExMTUo6RGU4LFhrVCZCcHBmUi9tR2QnXi41OFxLUGNLKT5yKlU5WUM4bmJdWTRi
+PmtiKV1ARiM1RzFgWixJM0BHbm5fX2hQMW5pUTYpYSMrV2NtbihlQV5BWzlYal0wYCMpSypFZDs2
+aS1IciEmJjNpXC44JV0oayNkMzsoOzZfW1RDZCUmRClyRDdTZjZ1PVUnb1IiRlhiUio/Mk8tJ15R
+KiQ2RVZjWF05LFktL2BSYTEzai9ULy9ZTi0oYkUjSi47IV41YCdzJ0VaOG9YV1YuLkYhNEs1LHFv
+RUdtaiRISW1MJmQzNGg1O0YsLWorMy5FZWw/dVM+VkYnUi1kVCIpUlNtV1xpOXRrOEw1W2ZxVTNq
+MWZOaFdmZUBbKCYhWjdRXEQjYm1cNGwuKmswLSxAaDdBYig9OCdiJyQuY0s5NHRWamE6PmZdVz9C
+Y0UqdGZHNjRGZ2U7NW00MUlLZERuNVxoY0UuWWEhTVJBVyJMRnRIZFlYYEw9WSU4ZzsxLkomMVEm
+OD8sQiVoOlZHYDhVIjJjNUpvI2UsW1ZETU1pS0JjTStrZV5lYjJbbUhkdVVgPSVrcERDXm9QSyE9
+OGZRZmxacjZiISo3W1VFZmMvSkxDbjs9MENdaEdBL2M7ciVaTDJyOGwhQFJsOy5AJFVAdCZdclBi
+JSNCVVQhW0JFLCUmcSUrLXFAWi0vXXMjYD0hZEVIcEw+SUBMITQ5TlZUZ0dDVkowQEFjJzZmdGpR
+RUEuP05yaiYvXjY8JjRedCc7JTxIaD8waCpOWyxza21PLTdjdE08OWAiNGo6LDFRXlhqSW43JDRB
+cCRQSWRQViE8UGROSmcrQ2xLRTFuUmVPdUEvPnQucGRMRkNCSm0jPGNxalxcYktYJ2wnYi41Vz1s
+YDclQEBPWGRPYW5nL0k+bCxiUV0rWkw6VyciPylqYFdRWEo0cnM1L1NLXSleLFgrJG5BNWlvJGhW
+MUpHUTpUY1UmO01fU3FQNkRIQ1hBIjByJk1dUHElS1JjWWknWGNDJEwsbCVFNU0vJzJSPDFdNTUx
+MSY3LDpcRzZzOCVaTl5+PmVuZHN0cmVhbQplbmRvYmoKeHJlZgowIDkKMDAwMDAwMDAwMCA2NTUz
+NSBmIAowMDAwMDAwMDYxIDAwMDAwIG4gCjAwMDAwMDAxMDIgMDAwMDAgbiAKMDAwMDAwMDIwOSAw
+MDAwMCBuIAowMDAwMDAwMzIxIDAwMDAwIG4gCjAwMDAwMDA1MTQgMDAwMDAgbiAKMDAwMDAwMDU4
+MiAwMDAwMCBuIAowMDAwMDAwOTU3IDAwMDAwIG4gCjAwMDAwMDEwMTYgMDAwMDAgbiAKdHJhaWxl
+cgo8PAovSUQgCls8MDExOGMwYTVjZjRiYThlZjViZDcyOGUxMmZiMDNkMmY+PDAxMThjMGE1Y2Y0
+YmE4ZWY1YmQ3MjhlMTJmYjAzZDJmPl0KJSBSZXBvcnRMYWIgZ2VuZXJhdGVkIFBERiBkb2N1bWVu
+dCAtLSBkaWdlc3QgKG9wZW5zb3VyY2UpCgovSW5mbyA2IDAgUgovUm9vdCA1IDAgUgovU2l6ZSA5
+Cj4+CnN0YXJ0eHJlZgoyMzEzCiUlRU9GCg==
+
+--jobswitch-s07-m01-0--

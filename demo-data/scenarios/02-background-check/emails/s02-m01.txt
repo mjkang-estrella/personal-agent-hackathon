@@ -1,0 +1,17 @@
+From: Orbit Screening Desk <screening@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-05T09:00:00-07:00
+Subject: Action needed: two items for your Orbit background check
+Message-ID: <s02-m01@jobswitch.example>
+Attachments: attachments/s02-checklist.pdf
+
+Hi Alex,
+
+We need an education-completion attestation and a Northstar employment statement to continue your screening. Please follow the attached checklist and upload through the secure portal by October 8.
+
+Your review is pending. There is no clearance decision yet.
+
+Orbit Screening Desk
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

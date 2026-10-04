@@ -1,0 +1,43 @@
+From: Jordan Lee | Orbit People Team <people@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Subject: Your background screening is cleared
+Date: Fri, 09 Oct 2026 09:00:00 -0700
+Message-ID: <s02-m05@jobswitch.example>
+X-JobSwitch-Synthetic: true
+X-JobSwitch-Scenario: 02-background-check
+X-JobSwitch-Stage: cleared
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="jobswitch-s02-m05-0"
+
+--jobswitch-s02-m05-0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Alex,
+
+Your background screening has been cleared for your October 19 start. This cl=
+oses the screening task. Your profile, employment-verification onboarding ste=
+p, and benefits election are separate items.
+
+Welcome aboard,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are=
+ synthetic. Addresses use reserved .example domains. Do not deliver to real p=
+eople.
+
+--jobswitch-s02-m05-0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html lang=3D"en"><body><div style=3D"font-family:Arial;max-width:680px"><p>H=
+i Alex,</p><p>Your background screening has been cleared for your October 19 =
+start. This closes the screening task. Your profile, employment-verification =
+onboarding step, and benefits election are separate items.</p><p>Welcome aboa=
+rd,<br>Jordan</p><p>---<br>Fictional JobSwitch demo. All people, policies and=
+ events in this message are synthetic. Addresses use reserved .example domain=
+s. Do not deliver to real people.<br></p></div></body></html>
+
+--jobswitch-s02-m05-0--

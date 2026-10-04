@@ -1,0 +1,16 @@
+From: Jordan Lee | Orbit People Team <people@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-09T11:00:00-07:00
+Subject: Eligibility confirmed - plan selection still needed
+Message-ID: <s06-m05@jobswitch.example>
+Attachments: (none)
+
+Hi Alex,
+
+You are eligible for our employee medical plan. With your October 19 start, the effective date would be November 1 if you complete an eligible election by November 17. You have not selected a plan, so we cannot confirm active coverage.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

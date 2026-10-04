@@ -1,0 +1,148 @@
+{
+  "id": "01-start-date-change",
+  "title": "A changed start date leaves an old offer in circulation",
+  "summary": "Find conflicting dates, request a corrected offer, and review downstream deadlines without silently overwriting the signed version.",
+  "inspiration": "Employment dates had to be coordinated across an offer, authorization-related paperwork and onboarding. All dates and terms below are newly invented.",
+  "initialClock": "2026-10-08T09:30:00-07:00",
+  "profile": {
+    "name": "Alex Morgan",
+    "previousEmployer": "Northstar Studio",
+    "nextEmployer": "Orbit Labs",
+    "lastDay": "2026-10-16",
+    "startDay": "2026-10-19"
+  },
+  "schemaVersion": "1.0",
+  "fictional": true,
+  "independentScenario": true,
+  "documents": [
+    {
+      "id": "s01-offer-v1",
+      "title": "Orbit Labs | Offer schedule - version 1",
+      "path": "attachments/s01-offer-v1.pdf",
+      "mimeType": "application/pdf",
+      "bytes": 2679,
+      "sha256": "5de04ba0427da4d768c3f4aadc67522413b7da0baff7c96a03994504a8edabf6",
+      "pages": 1
+    },
+    {
+      "id": "s01-offer-v2",
+      "title": "Orbit Labs | Revised offer schedule - version 2",
+      "path": "attachments/s01-offer-v2.pdf",
+      "mimeType": "application/pdf",
+      "bytes": 2707,
+      "sha256": "c2645ad43506f4e4e8a7fb9f36e03e57cfcede11db686a7719a5bb91e97f3496",
+      "pages": 1
+    }
+  ],
+  "messagesFile": "messages.json",
+  "steps": [
+    {
+      "id": "initial",
+      "title": "Read the original schedule",
+      "trigger": "Load the initial email and its attachment.",
+      "expected": "Record October 19 as the current documented start.",
+      "mustNot": "Do not see the future revision.",
+      "evidence": [
+        {
+          "sourceId": "s01-offer-v1",
+          "quote": "Your first working day is October 19, 2026."
+        }
+      ],
+      "releaseMessageIds": [
+        "s01-m01"
+      ],
+      "releaseDocumentIds": [
+        "s01-m01",
+        "s01-offer-v1"
+      ],
+      "inputBundle": "stages/initial.json",
+      "requiresUserApproval": false
+    },
+    {
+      "id": "date-change",
+      "title": "Detect a conflict",
+      "trigger": "Deliver the date-change email.",
+      "expected": "Flag the stale offer; propose November 2 and dependent deadline review.",
+      "mustNot": "Do not invent a revised offer or mark acknowledgment complete.",
+      "evidence": [
+        {
+          "sourceId": "s01-m02",
+          "quote": "We have not yet issued the replacement document."
+        }
+      ],
+      "releaseMessageIds": [
+        "s01-m02"
+      ],
+      "releaseDocumentIds": [
+        "s01-m02"
+      ],
+      "inputBundle": "stages/date-change.json",
+      "requiresUserApproval": false
+    },
+    {
+      "id": "approved-inquiry",
+      "title": "Request corrections",
+      "trigger": "User approves the exact inquiry, then replay the outbound email.",
+      "expected": "Track a request awaiting HR.",
+      "mustNot": "Do not send without approval.",
+      "evidence": [
+        {
+          "sourceId": "s01-m03",
+          "quote": "Please send the revised November 2 schedule"
+        }
+      ],
+      "releaseMessageIds": [
+        "s01-m03"
+      ],
+      "releaseDocumentIds": [
+        "s01-m03"
+      ],
+      "inputBundle": "stages/approved-inquiry.json",
+      "requiresUserApproval": true
+    },
+    {
+      "id": "revised-offer",
+      "title": "Review replacement",
+      "trigger": "Deliver the revised offer email with version 2.",
+      "expected": "Preserve both versions; show November 2 start and December 1 conditional coverage/election dates; request acknowledgment.",
+      "mustNot": "Do not infer insurance enrollment.",
+      "evidence": [
+        {
+          "sourceId": "s01-offer-v2",
+          "quote": "Your first working day is November 2, 2026."
+        }
+      ],
+      "releaseMessageIds": [
+        "s01-m04"
+      ],
+      "releaseDocumentIds": [
+        "s01-m04",
+        "s01-offer-v2"
+      ],
+      "inputBundle": "stages/revised-offer.json",
+      "requiresUserApproval": false
+    },
+    {
+      "id": "acknowledged",
+      "title": "Close the document correction",
+      "trigger": "Deliver the acknowledgment confirmation.",
+      "expected": "Mark schedule acknowledgment complete while retaining the open benefits election task.",
+      "mustNot": "Do not mark all onboarding complete.",
+      "evidence": [
+        {
+          "sourceId": "s01-m05",
+          "quote": "benefits enrollment is still open."
+        }
+      ],
+      "releaseMessageIds": [
+        "s01-m05"
+      ],
+      "releaseDocumentIds": [
+        "s01-m05"
+      ],
+      "inputBundle": "stages/acknowledged.json",
+      "requiresUserApproval": false
+    }
+  ],
+  "initialBundle": "stages/initial.json"
+}

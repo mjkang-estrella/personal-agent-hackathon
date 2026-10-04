@@ -1,0 +1,129 @@
+{
+  "id": "06-coverage-gap",
+  "title": "Compare coverage dates across two employers",
+  "summary": "Separate policy timing from individual enrollment and expose an unresolved gap without choosing insurance for the user.",
+  "inspiration": "A departure packet described insurance end dates and continuation notices. Orbit policy and individual confirmations here are synthetic. The Northstar end rule follows the current app fixture, not the real employer policy.",
+  "initialClock": "2026-10-08T10:30:00-07:00",
+  "profile": {
+    "name": "Alex Morgan",
+    "previousEmployer": "Northstar Studio",
+    "nextEmployer": "Orbit Labs",
+    "lastDay": "2026-10-16",
+    "startDay": "2026-10-19"
+  },
+  "schemaVersion": "1.0",
+  "fictional": true,
+  "independentScenario": true,
+  "documents": [
+    {
+      "id": "s06-northstar",
+      "title": "Northstar Studio | Coverage at departure",
+      "path": "attachments/s06-northstar.pdf",
+      "mimeType": "application/pdf",
+      "bytes": 2590,
+      "sha256": "c4b0aaa26d7c8a5917426758c2fcf947a3ae0546536c5d4449341c06c04b1fe7",
+      "pages": 1
+    },
+    {
+      "id": "s06-orbit",
+      "title": "Orbit Labs | New-hire health enrollment",
+      "path": "attachments/s06-orbit.pdf",
+      "mimeType": "application/pdf",
+      "bytes": 2533,
+      "sha256": "af3db5d3d4e8b499adf723fcd30f9fa9e9b032ccc7fd201e18d8612a24a8f6ea",
+      "pages": 1
+    }
+  ],
+  "messagesFile": "messages.json",
+  "steps": [
+    {
+      "id": "initial",
+      "title": "Compare two policies",
+      "trigger": "Load both initial emails and guides.",
+      "expected": "Flag a potential October 17-31 gap (15 calendar days) and an unconfirmed new enrollment.",
+      "mustNot": "Do not assume policy eligibility means active insurance.",
+      "evidence": [
+        {
+          "sourceId": "s06-orbit",
+          "quote": "The projected coverage start is November 1, 2026."
+        }
+      ],
+      "releaseMessageIds": [
+        "s06-m01",
+        "s06-m02"
+      ],
+      "releaseDocumentIds": [
+        "s06-m01",
+        "s06-northstar",
+        "s06-m02",
+        "s06-orbit"
+      ],
+      "inputBundle": "stages/initial.json",
+      "requiresUserApproval": false
+    },
+    {
+      "id": "approved-inquiry",
+      "title": "Confirm the old end date",
+      "trigger": "User approves the HR inquiry.",
+      "expected": "Ask for date and continuation information.",
+      "mustNot": "Do not select or cancel coverage.",
+      "evidence": [
+        {
+          "sourceId": "s06-m03",
+          "quote": "I have not selected any continuation option."
+        }
+      ],
+      "releaseMessageIds": [
+        "s06-m03"
+      ],
+      "releaseDocumentIds": [
+        "s06-m03"
+      ],
+      "inputBundle": "stages/approved-inquiry.json",
+      "requiresUserApproval": true
+    },
+    {
+      "id": "old-coverage-confirmed",
+      "title": "Record the old coverage end",
+      "trigger": "Deliver individual confirmation.",
+      "expected": "Record October 16 active coverage end; keep gap unresolved.",
+      "mustNot": "Do not infer continuation was elected.",
+      "evidence": [
+        {
+          "sourceId": "s06-m04",
+          "quote": "No continuation election has been received."
+        }
+      ],
+      "releaseMessageIds": [
+        "s06-m04"
+      ],
+      "releaseDocumentIds": [
+        "s06-m04"
+      ],
+      "inputBundle": "stages/old-coverage-confirmed.json",
+      "requiresUserApproval": false
+    },
+    {
+      "id": "new-eligibility-confirmed",
+      "title": "Keep the decision with the employee",
+      "trigger": "Deliver Orbit eligibility confirmation.",
+      "expected": "Retain a conditional November 1 start, November 17 deadline and open gap task.",
+      "mustNot": "Do not mark the gap resolved or recommend a specific insurance purchase.",
+      "evidence": [
+        {
+          "sourceId": "s06-m05",
+          "quote": "we cannot confirm active coverage."
+        }
+      ],
+      "releaseMessageIds": [
+        "s06-m05"
+      ],
+      "releaseDocumentIds": [
+        "s06-m05"
+      ],
+      "inputBundle": "stages/new-eligibility-confirmed.json",
+      "requiresUserApproval": false
+    }
+  ],
+  "initialBundle": "stages/initial.json"
+}

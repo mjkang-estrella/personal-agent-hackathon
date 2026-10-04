@@ -1,0 +1,18 @@
+From: Jordan Lee | Orbit People Team <people@orbit.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-08T14:00:00-07:00
+Subject: Update: your start date is moving to November 2
+Message-ID: <s01-m02@jobswitch.example>
+Attachments: (none)
+
+Hi Alex,
+
+Following our scheduling conversation, your new start date will be November 2, 2026. Your October 19 offer schedule is now out of date. We have not yet issued the replacement document.
+
+Please keep your Northstar departure date unchanged unless you agree a separate change with them. I will send revised paperwork and confirm the benefits dates.
+
+Best,
+Jordan
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.

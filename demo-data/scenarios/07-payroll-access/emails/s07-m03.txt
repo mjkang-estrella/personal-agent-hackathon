@@ -1,0 +1,17 @@
+From: Northstar Payroll <payroll@northstar.example>
+To: Alex Morgan <alex.morgan@personal.example>
+Date: 2026-10-21T09:00:00-07:00
+Subject: Re: Replacement Pay Archive registration invitation
+Message-ID: <s07-m03@jobswitch.example>
+Attachments: (none)
+
+Hi Alex,
+
+A replacement invitation has been issued through the secure registration channel. It expires November 5 at 5 p.m. Pacific. This notice does not contain the invitation or a usable access code.
+
+Complete registration yourself, then confirm whether you can view your statements.
+
+Northstar Payroll
+
+---
+Fictional JobSwitch demo. All people, policies and events in this message are synthetic. Addresses use reserved .example domains. Do not deliver to real people.
