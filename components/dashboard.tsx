@@ -66,7 +66,7 @@ const date = (s: string | null) =>
       })
     : "Confirm with HR";
 const statuses: Record<Status, string> = {
-  todo: "Agent tracking",
+  todo: "Not started",
   ready: "Ready for approval",
   submitting: "Submitting",
   waiting: "Waiting for HR",
@@ -109,10 +109,11 @@ const stages: {
     icon: BriefcaseBusiness,
   },
 ];
-type Page = "board" | "documents" | "inbox" | "activity" | "settings";
+type Page =
+  "overview" | "board" | "documents" | "inbox" | "activity" | "settings";
 export default function Dashboard() {
   const [w, setW] = useState<Workspace | null>(null);
-  const [page, setPage] = useState<Page>("board");
+  const [page, setPage] = useState<Page>("overview");
   const [selected, setSelected] = useState<string | null>(null);
   const [viewDoc, setViewDoc] = useState<{ id: string; page: number } | null>(
     null,
@@ -224,7 +225,7 @@ export default function Dashboard() {
       setW(json);
       setAgentTransportError(false);
       if (action === "new_workspace") {
-        setPage("board");
+        setPage("overview");
         setSelected(null);
       }
       if (message) notify(message);
@@ -311,7 +312,11 @@ export default function Dashboard() {
   const reviews = w.tasks.filter((t) =>
     ["claim", "reply"].includes(reviewKind(t, w) || ""),
   );
-  const needsInput = w.tasks.filter((t) => reviewKind(t, w) === "input");
+  const needsInput = w.tasks
+    .filter((t) => reviewKind(t, w) === "input")
+    .sort((a, b) =>
+      (a.deadline || "9999-12-31").localeCompare(b.deadline || "9999-12-31"),
+    );
   const agentPaused = w.agent?.enabled === false;
   const agentError =
     w.agent?.error ||
@@ -332,7 +337,7 @@ export default function Dashboard() {
             : "Reading the details for you."
         : reviews.length
           ? "Prepared by your agent. Ready for you."
-          : "Your agent is keeping things moving.";
+          : "No preparation running right now.";
   const initials = w.profile.name
     .split(" ")
     .map((n) => n[0])
@@ -344,7 +349,8 @@ export default function Dashboard() {
       (certificateId || w.documents.find((d) => d.kind === "certificate")?.id),
   );
   const links: [Page, typeof LayoutDashboard, string][] = [
-    ["board", LayoutDashboard, "Transition board"],
+    ["overview", LayoutDashboard, "Overview"],
+    ["board", CalendarDays, "My plan"],
     ["documents", Files, "My documents"],
     ["inbox", Mail, "Inbox"],
     ["activity", Activity, "Agent activity"],
@@ -432,15 +438,17 @@ export default function Dashboard() {
           <div className="breadcrumbs">
             My workspace <ChevronRight size={13} />
             <span>
-              {page === "board"
-                ? "Transition board"
-                : page === "documents"
-                  ? "My documents"
-                  : page === "inbox"
-                    ? "Inbox"
-                    : page === "activity"
-                      ? "Agent activity"
-                      : "Settings"}
+              {page === "overview"
+                ? "Overview"
+                : page === "board"
+                  ? "My plan"
+                  : page === "documents"
+                    ? "My documents"
+                    : page === "inbox"
+                      ? "Inbox"
+                      : page === "activity"
+                        ? "Agent activity"
+                        : "Settings"}
             </span>
           </div>
           <div className="topbar-right">
@@ -466,11 +474,12 @@ export default function Dashboard() {
           <div className="page-heading">
             <div>
               <h1 id="workspace-heading" tabIndex={-1}>
-                {page === "board" ? (
+                {page === "overview" ? (
                   <>
-                    A little clarity,{" "}
-                    <span>{w.profile.name.split(" ")[0]}.</span>
+                    Your move to <span>{w.profile.nextEmployer}</span>
                   </>
+                ) : page === "board" ? (
+                  <>Your transition plan</>
                 ) : page === "documents" ? (
                   "Documents"
                 ) : page === "inbox" ? (
@@ -482,7 +491,7 @@ export default function Dashboard() {
                 )}
               </h1>
               <p>
-                {page === "board"
+                {page === "overview" || page === "board"
                   ? `${w.profile.previousEmployer} → ${w.profile.nextEmployer} · Your agent prepares. You review.`
                   : page === "documents"
                     ? "The source of truth for your transition. Every recommendation starts here."
@@ -495,50 +504,30 @@ export default function Dashboard() {
             </div>
           </div>
           {page === "inbox" && <Inbox openTask={openTask} />}
-          {page === "board" && (
+          {(page === "overview" || page === "board") && (
             <>
               {!w.documents.length && (
                 <section className="empty-start">
                   <div>
                     <h2>Let’s map out your transition.</h2>
                     <p>
-                      Set your name and employers in Settings, then add a
-                      handbook from each company. Your agent will connect the
-                      dots.
+                      1. Confirm your employers and dates. 2. Add your employer
+                      documents. 3. Review the plan your agent prepares.
                     </p>
                   </div>
-                  <button className="primary" onClick={openUpload}>
-                    <Upload size={16} /> Add your first document
-                  </button>
+                  <div className="setup-actions">
+                    <button
+                      className="secondary"
+                      onClick={() => setPage("settings")}
+                    >
+                      Confirm your details
+                    </button>
+                    <button className="primary" onClick={openUpload}>
+                      <Upload size={16} /> Add your first document
+                    </button>
+                  </div>
                 </section>
               )}
-              <div className="workspace-shortcuts" aria-label="Quick actions">
-                <button onClick={openUpload}>
-                  <Upload size={24} />
-                  <strong>Add documents</strong>
-                  <span>Give your plan some context</span>
-                </button>
-                <button
-                  onClick={() => {
-                    setPage("documents");
-                    setSearch("");
-                  }}
-                >
-                  <Files size={24} />
-                  <strong>Browse your sources</strong>
-                  <span>{w.documents.length} documents in your workspace</span>
-                </button>
-                <button
-                  onClick={() => {
-                    setChat(true);
-                    setSelected(null);
-                  }}
-                >
-                  <Sparkles size={24} />
-                  <strong>Ask your assistant</strong>
-                  <span>Make sense of the details</span>
-                </button>
-              </div>
               <section
                 className="transition-overview"
                 aria-label="Transition overview"
@@ -559,19 +548,118 @@ export default function Dashboard() {
                   </button>
                 </div>
               </section>
-              <section className="agent-desk" aria-label="Agent workspace">
-                <div className="agent-overview">
-                  <div className="agent-overview-top">
-                    <span className="agent-mode">
-                      <span className={agentWorking ? "agent-pulse" : ""} />{" "}
-                      {agentPaused
-                        ? "PREPARATION PAUSED"
-                        : agentError
-                          ? "NEEDS A RETRY"
-                          : "AGENT ON DUTY"}
-                    </span>
+              {page === "overview" && w.documents.length > 0 && (
+                <>
+                  <section
+                    className="attention-hub"
+                    aria-labelledby="attention-heading"
+                  >
+                    <div className="attention-heading">
+                      <div>
+                        <span className="clarity-eyebrow">YOUR NEXT STEP</span>
+                        <h2 id="attention-heading">
+                          Needs your attention <span>{attention}</span>
+                        </h2>
+                      </div>
+                      <span className="muted">
+                        Sending always needs your approval
+                      </span>
+                    </div>
+                    {reviews.map((t) => (
+                      <div className="decision-row" key={t.id}>
+                        <div>
+                          <span className="clarity-eyebrow">
+                            {reviewKind(t, w) === "reply"
+                              ? "REPLY READY"
+                              : "CLAIM READY"}
+                          </span>
+                          <h3>
+                            {reviewKind(t, w) === "reply"
+                              ? "HR requested a follow-up"
+                              : `Your ${money(t.claim!.amount)} reimbursement claim is ready`}
+                          </h3>
+                          <p>
+                            {t.claim?.course || t.title}
+                            {t.deadline ? ` · Due ${date(t.deadline)}` : ""}
+                          </p>
+                          <small>
+                            {reviewKind(t, w) === "reply"
+                              ? "Check the message and attachment before sending."
+                              : "Check the claim and receipt before submitting to the test HR portal."}
+                          </small>
+                        </div>
+                        <button
+                          className="primary"
+                          onClick={() => openTask(t.id)}
+                        >
+                          {reviewKind(t, w) === "reply"
+                            ? "Review reply"
+                            : "Review claim"}
+                          <ArrowRight size={16} />
+                        </button>
+                      </div>
+                    ))}
+                    {!attention && (
+                      <div className="attention-clear">
+                        <CheckCircle2 size={24} />
+                        <div>
+                          <h3>
+                            {agentWorking
+                              ? "Your documents are being checked"
+                              : "Nothing needs your attention right now"}
+                          </h3>
+                          <p>
+                            {agentWorking
+                              ? "We’ll show your next step here when it is ready."
+                              : "See your plan for upcoming tasks and items waiting on HR."}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                    {needsInput.slice(0, 3).map((t) => (
+                      <button
+                        className="input-request"
+                        key={t.id}
+                        onClick={() => openTask(t.id)}
+                      >
+                        <CircleHelp size={20} />
+                        <span>
+                          <strong>{t.title}</strong>
+                          <span>
+                            {t.missing[0] ||
+                              "Open this task to see what HR needs."}
+                          </span>
+                        </span>
+                        <span className="request-action">
+                          View request <ArrowRight size={15} />
+                        </span>
+                      </button>
+                    ))}
+                    {needsInput.length > 3 && (
+                      <button
+                        className="text-button attention-more"
+                        onClick={() => {
+                          setPage("board");
+                          setFilter("attention");
+                          setTaskSearch("");
+                        }}
+                      >
+                        View all {attention} items needing you{" "}
+                        <ArrowRight size={15} />
+                      </button>
+                    )}
+                  </section>
+                  <section className="agent-brief" aria-label="Agent progress">
+                    <Sparkles size={22} />
+                    <div>
+                      <strong aria-live="polite">{agentTitle}</strong>
+                      <p>
+                        {agentError ||
+                          `${w.documents.length} documents available · ${reviews.length} prepared for review. ${w.background?.enabled ? "Background HR checks are on." : "Automatic preparation runs while this workspace is open."}`}
+                      </p>
+                    </div>
                     <button
-                      className="agent-control"
+                      className="text-button"
                       disabled={!!busy}
                       onClick={() =>
                         act(
@@ -581,249 +669,169 @@ export default function Dashboard() {
                         )
                       }
                     >
-                      {agentPaused || agentError ? (
-                        <Play size={13} />
-                      ) : (
-                        <Pause size={13} />
-                      )}
                       {agentError ? "Retry" : agentPaused ? "Resume" : "Pause"}
                     </button>
-                  </div>
-                  <h2 aria-live="polite">{agentTitle}</h2>
-                  <p>
-                    {agentError ||
-                      "I’ll turn your documents into a plan, check the evidence, and prepare the next step. Nothing gets sent without your approval."}
-                  </p>
-                  <div className="agent-capabilities">
-                    <div>
-                      <FileText size={16} />
-                      <span>Read & compare</span>
-                      <small>
-                        {w.analyzedAt ? "Evidence checked" : "Documents queued"}
-                      </small>
-                    </div>
-                    <div>
-                      <Sparkles size={16} />
-                      <span>Prepare for review</span>
-                      <small>{reviews.length} ready for you</small>
-                    </div>
-                    <div>
-                      <Mail size={16} />
-                      <span>Track HR replies</span>
-                      <small>
-                        {w.inbox ? "Inbox connected" : "After demo HR connects"}
-                      </small>
-                    </div>
-                  </div>
-                  <div className="agent-scope">
-                    <ShieldCheck size={14} />
-                    {w.background?.enabled
-                      ? "Preparation while open · Background HR checks on"
-                      : "Active while open · Background checks off"}
                     <button
-                      className="agent-scope-settings"
+                      className="text-button"
                       onClick={() => setPage("settings")}
                     >
-                      Manage
+                      Settings
                     </button>
-                  </div>
-                </div>
-                <div className="review-inbox">
-                  <div className="review-inbox-heading">
-                    <div>
-                      <h2>
-                        Review & decide <span>{reviews.length}</span>
-                      </h2>
-                    </div>
-                    <CheckCheck size={22} />
-                  </div>
-                  {reviews.length ? (
-                    reviews.map((t) => (
+                  </section>
+                  <section
+                    className="plan-preview"
+                    aria-label="Your transition at a glance"
+                  >
+                    <div className="attention-heading">
+                      <h2>Your transition at a glance</h2>
                       <button
-                        className="review-item"
-                        key={t.id}
-                        onClick={() => openTask(t.id)}
+                        className="text-button"
+                        onClick={() => {
+                          setPage("board");
+                          setFilter("all");
+                          setTaskSearch("");
+                        }}
                       >
-                        <span className="review-item-icon">
-                          {reviewKind(t, w) === "reply" ? (
-                            <Mail size={20} />
-                          ) : (
-                            <Wallet size={20} />
-                          )}
-                        </span>
-                        <span>
-                          <small>
-                            {reviewKind(t, w) === "reply"
-                              ? "REPLY DRAFTED"
-                              : "CLAIM PREPARED"}
-                          </small>
-                          <strong>{t.claim?.course || t.title}</strong>
-                          <span>
-                            {reviewKind(t, w) === "reply"
-                              ? "Review message & attachment"
-                              : `${money(t.claim!.amount)} · Review claim & evidence`}
-                          </span>
-                        </span>
-                        <ArrowUpRight size={18} />
+                        View full plan <ArrowRight size={15} />
                       </button>
-                    ))
-                  ) : (
-                    <div className="review-empty">
-                      <ShieldCheck size={27} />
-                      <strong>
-                        {agentWorking
-                          ? "Your agent is doing the prep."
-                          : "Nothing to approve right now."}
-                      </strong>
-                      <p>
-                        Prepared claims and replies will appear here. You get
-                        the final say.
-                      </p>
                     </div>
-                  )}
-                  <div className="review-safety">
-                    <ShieldCheck size={14} /> Review the exact contents before
-                    approving.
-                  </div>
-                </div>
-              </section>
-              <section
-                className="agent-handoff"
-                aria-label="Missing information"
-              >
-                <div>
-                  <span className="summary-icon lavender">
-                    <CircleHelp size={19} />
-                  </span>
-                  <div>
-                    <strong>
-                      {needsInput.length
-                        ? `${needsInput.length} tasks need information only you can provide`
-                        : "Your agent has the information it needs for now"}
-                    </strong>
-                    <p>
-                      {needsInput.length
-                        ? "Eligibility, personal choices, and missing documents stay unconfirmed until there’s evidence."
-                        : "If a document or personal decision is missing, your agent will ask here."}
-                    </p>
-                  </div>
-                </div>
-                {needsInput.length > 0 && (
-                  <button
-                    className="text-button"
-                    onClick={() => {
-                      setFilter("attention");
-                      openTask(needsInput[0].id);
-                    }}
-                  >
-                    View requests <ArrowRight size={15} />
-                  </button>
-                )}
-              </section>
-              <div className="board-toolbar">
-                <div className="board-title">
-                  <h2>The plan your agent is tracking</h2>
-                  <span>{w.tasks.length}</span>
-                </div>
-                <div className="board-controls">
-                  <div className="segmented">
-                    <button
-                      aria-pressed={filter === "all"}
-                      className={filter === "all" ? "selected" : ""}
-                      onClick={() => setFilter("all")}
-                    >
-                      All tasks
-                    </button>
-                    <button
-                      aria-pressed={filter === "attention"}
-                      className={filter === "attention" ? "selected" : ""}
-                      onClick={() => setFilter("attention")}
-                    >
-                      Needs you{attention > 0 && <b>{attention}</b>}
-                    </button>
-                    <button
-                      aria-pressed={filter === "done"}
-                      className={filter === "done" ? "selected" : ""}
-                      onClick={() => setFilter("done")}
-                    >
-                      Resolved
-                    </button>
-                  </div>
-                  <button
-                    className="secondary small-button"
-                    onClick={openUpload}
-                  >
-                    <Plus size={15} /> Add documents
-                  </button>
-                </div>
-              </div>
-              <div className="plan-search">
-                <Search size={18} />
-                <input
-                  aria-label="Search your tasks"
-                  placeholder="Find a task in your plan…"
-                  value={taskSearch}
-                  onChange={(e) => setTaskSearch(e.target.value)}
-                />
-                {taskSearch && (
-                  <button
-                    className="icon-button"
-                    aria-label="Clear task search"
-                    onClick={() => setTaskSearch("")}
-                  >
-                    <X size={16} />
-                  </button>
-                )}
-              </div>
-              <section className="kanban">
-                {stages.map((stage) => {
-                  const tasks = visible.filter((t) => t.stage === stage.id);
-                  const Icon = stage.icon;
-                  return (
-                    <section
-                      className={`kanban-column stage-${stage.id}`}
-                      key={stage.id}
-                    >
-                      <header className="column-header">
-                        <div>
-                          <Icon size={16} />
-                          <h3>{stage.title}</h3>
-                          <span>{tasks.length}</span>
-                        </div>
-                        <p>{stage.caption}</p>
-                      </header>
-                      <div className="column-cards">
-                        {tasks.map((t) => (
-                          <TaskCard
-                            key={t.id}
-                            task={t}
-                            open={() => openTask(t.id)}
-                          />
-                        ))}
-                        {!tasks.length && (
-                          <div className="empty-column">
-                            <CheckCircle2 size={24} />
-                            <p>
-                              {filter === "all" && !taskSearch
-                                ? "Nothing here yet."
-                                : "No matching tasks."}
-                            </p>
-                          </div>
-                        )}
+                    <div className="phase-preview">
+                      {stages.map((stage) => {
+                        const tasks = w.tasks.filter(
+                          (t) => t.stage === stage.id,
+                        );
+                        const complete = tasks.filter(
+                          (t) => t.status === "done",
+                        ).length;
+                        return (
+                          <button
+                            key={stage.id}
+                            onClick={() => {
+                              setPage("board");
+                              setFilter("all");
+                              setTaskSearch("");
+                            }}
+                          >
+                            <stage.icon size={19} />
+                            <strong>{stage.title}</strong>
+                            <span>
+                              {complete} of {tasks.length} completed
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </section>
+                </>
+              )}
+              {page === "board" && (
+                <>
+                  <div className="board-toolbar">
+                    <div className="board-title">
+                      <h2>Your full transition plan</h2>
+                      <span>{w.tasks.length}</span>
+                    </div>
+                    <div className="board-controls">
+                      <div className="segmented">
+                        <button
+                          aria-pressed={filter === "all"}
+                          className={filter === "all" ? "selected" : ""}
+                          onClick={() => setFilter("all")}
+                        >
+                          All tasks
+                        </button>
+                        <button
+                          aria-pressed={filter === "attention"}
+                          className={filter === "attention" ? "selected" : ""}
+                          onClick={() => setFilter("attention")}
+                        >
+                          Needs you{attention > 0 && <b>{attention}</b>}
+                        </button>
+                        <button
+                          aria-pressed={filter === "done"}
+                          className={filter === "done" ? "selected" : ""}
+                          onClick={() => setFilter("done")}
+                        >
+                          Resolved
+                        </button>
                       </div>
-                    </section>
-                  );
-                })}
-              </section>
-              <div className="board-footer">
-                <span>
-                  <ShieldCheck size={14} /> Every recommendation has a source.
-                  Sending always needs your approval.
-                </span>
-                <a href="/api/export">
-                  <Download size={14} /> Export plan
-                </a>
-              </div>
+                      <button
+                        className="secondary small-button"
+                        onClick={openUpload}
+                      >
+                        <Plus size={15} /> Add documents
+                      </button>
+                    </div>
+                  </div>
+                  <div className="plan-search">
+                    <Search size={18} />
+                    <input
+                      aria-label="Search your tasks"
+                      placeholder="Find a task in your plan…"
+                      value={taskSearch}
+                      onChange={(e) => setTaskSearch(e.target.value)}
+                    />
+                    {taskSearch && (
+                      <button
+                        className="icon-button"
+                        aria-label="Clear task search"
+                        onClick={() => setTaskSearch("")}
+                      >
+                        <X size={16} />
+                      </button>
+                    )}
+                  </div>
+                  <section className="kanban">
+                    {stages.map((stage) => {
+                      const tasks = visible.filter((t) => t.stage === stage.id);
+                      const Icon = stage.icon;
+                      return (
+                        <section
+                          className={`kanban-column stage-${stage.id}`}
+                          key={stage.id}
+                        >
+                          <header className="column-header">
+                            <div>
+                              <Icon size={16} />
+                              <h3>{stage.title}</h3>
+                              <span>{tasks.length}</span>
+                            </div>
+                            <p>{stage.caption}</p>
+                          </header>
+                          <div className="column-cards">
+                            {tasks.map((t) => (
+                              <TaskCard
+                                key={t.id}
+                                task={t}
+                                open={() => openTask(t.id)}
+                              />
+                            ))}
+                            {!tasks.length && (
+                              <div className="empty-column">
+                                <CheckCircle2 size={24} />
+                                <p>
+                                  {filter === "all" && !taskSearch
+                                    ? "Nothing here yet."
+                                    : "No matching tasks."}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        </section>
+                      );
+                    })}
+                  </section>
+                  <div className="board-footer">
+                    <span>
+                      <ShieldCheck size={14} /> Every recommendation has a
+                      source. Sending always needs your approval.
+                    </span>
+                    <a href="/api/export">
+                      <Download size={14} /> Export plan
+                    </a>
+                  </div>
+                </>
+              )}
             </>
           )}
           {page === "documents" && (
@@ -894,7 +902,8 @@ export default function Dashboard() {
                         <span>
                           <strong>{d.name}</strong>
                           <small>
-                            {d.cloudSource && `${d.cloudSource.service === "google-drive" ? "Google Drive" : "OneDrive"} copy · `}
+                            {d.cloudSource &&
+                              `${d.cloudSource.service === "google-drive" ? "Google Drive" : "OneDrive"} copy · `}
                             {d.kind.charAt(0).toUpperCase() + d.kind.slice(1)} ·
                             Added{" "}
                             {new Date(d.addedAt).toLocaleDateString("en-US", {
@@ -1093,10 +1102,17 @@ export default function Dashboard() {
               >
                 {categories[task.category].label}
               </span>
-              <StatusBadge status={task.status} />
+              <StatusBadge
+                status={task.status}
+                needsInput={task.missing.length > 0}
+              />
             </div>
             <h2>{task.title}</h2>
-            <p className="task-description">{task.description}</p>
+            {!task.claim && (
+              <p className="task-description">
+                {task.nextAction || task.description}
+              </p>
+            )}
             <div className="detail-facts">
               <div>
                 <small>DEADLINE</small>
@@ -1112,6 +1128,47 @@ export default function Dashboard() {
                 </div>
               )}
             </div>
+            {task.claim && (
+              <section className="detail-section">
+                <h3>
+                  <FileText size={17} />
+                  {task.status === "ready"
+                    ? "Review your claim"
+                    : "Claim details"}
+                </h3>
+                <div className="claim-review">
+                  <dl>
+                    <dt>Employee</dt>
+                    <dd>{task.claim.employee}</dd>
+                    <dt>Course</dt>
+                    <dd>{task.claim.course}</dd>
+                    <dt>Amount</dt>
+                    <dd>{money(task.claim.amount)}</dd>
+                    <dt>Receipt</dt>
+                    <dd>
+                      {
+                        w.documents.find((d) => d.id === task.claim?.receiptId)
+                          ?.name
+                      }
+                    </dd>
+                    <dt>Attachment contents</dt>
+                    <dd>
+                      <button
+                        className="text-button"
+                        onClick={() =>
+                          setViewDoc({ id: task.claim!.receiptId, page: 1 })
+                        }
+                      >
+                        Review receipt <ArrowUpRight size={14} />
+                      </button>
+                    </dd>
+                    <dt>Destination</dt>
+                    <dd>Northstar test HR portal</dd>
+                  </dl>
+                  <p>{task.claim.note}</p>
+                </div>
+              </section>
+            )}
             {task.dateReview && (
               <div className="notice warning">
                 <CalendarDays size={18} />
@@ -1184,10 +1241,12 @@ export default function Dashboard() {
                 </ul>
               </section>
             )}
-            <section className="detail-section">
-              <h3>
-                <BookOpen size={17} /> Why this is on your plan
-              </h3>
+            <details className="detail-section evidence-disclosure">
+              <summary>
+                <BookOpen size={17} /> Why this is on your plan ·{" "}
+                {task.evidence.length} sources
+              </summary>
+              <p className="task-description">{task.description}</p>
               {task.evidence.map((e, i) => {
                 const d = w.documents.find((d) => d.id === e.documentId);
                 return (
@@ -1207,7 +1266,7 @@ export default function Dashboard() {
                   </button>
                 );
               })}
-            </section>
+            </details>
             {task.lastReply && (
               <section className="detail-section">
                 <h3>
@@ -1216,36 +1275,6 @@ export default function Dashboard() {
                 <div className="email-preview">
                   <span>Northstar People Team</span>
                   <p>{task.lastReply}</p>
-                </div>
-              </section>
-            )}
-            {task.claim && (
-              <section className="detail-section">
-                <h3>
-                  <FileText size={17} />
-                  {task.status === "ready"
-                    ? "Review your claim"
-                    : "Claim details"}
-                </h3>
-                <div className="claim-review">
-                  <dl>
-                    <dt>Employee</dt>
-                    <dd>{task.claim.employee}</dd>
-                    <dt>Course</dt>
-                    <dd>{task.claim.course}</dd>
-                    <dt>Amount</dt>
-                    <dd>{money(task.claim.amount)}</dd>
-                    <dt>Receipt</dt>
-                    <dd>
-                      {
-                        w.documents.find((d) => d.id === task.claim?.receiptId)
-                          ?.name
-                      }
-                    </dd>
-                    <dt>Destination</dt>
-                    <dd>Northstar test HR portal</dd>
-                  </dl>
-                  <p>{task.claim.note}</p>
                 </div>
               </section>
             )}
@@ -1724,11 +1753,19 @@ export default function Dashboard() {
 function Busy({ busy }: { busy: boolean }) {
   return busy ? <LoaderCircle size={15} className="spin" /> : null;
 }
-function StatusBadge({ status }: { status: Status }) {
+function StatusBadge({
+  status,
+  needsInput = false,
+}: {
+  status: Status;
+  needsInput?: boolean;
+}) {
   return (
     <span className={`status-badge status-${status}`}>
       <span />
-      {statuses[status]}
+      {status === "todo" && needsInput
+        ? "Needs confirmation"
+        : statuses[status]}
     </span>
   );
 }
@@ -1766,7 +1803,10 @@ function TaskCard({ task, open }: { task: Task; open: () => void }) {
         {task.evidence.length === 1 ? "source" : "sources"}
       </div>
       <div className="card-bottom">
-        <StatusBadge status={task.status} />
+        <StatusBadge
+          status={task.status}
+          needsInput={task.missing.length > 0}
+        />
         {task.deadline && (
           <span className="card-date">
             <CalendarDays size={12} />
