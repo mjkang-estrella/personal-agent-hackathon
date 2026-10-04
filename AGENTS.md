@@ -57,6 +57,14 @@ If checks fail, fix them before treating the task as complete. A necessary work-
 
 Nolan explicitly authorized agents to merge completed feature PRs after reviewing the diff and passing relevant checks. Use a separate task branch and PR for every feature; never bypass required GitHub reviews or checks. Incomplete work stays on its task branch. Repository administrators should enforce this with GitHub branch protection or a ruleset, required checks once CI exists, and blocked force pushes. This file guides agents; it cannot enforce GitHub permissions or schedule agents to run on its own.
 
+## UI work during feature development
+
+Read [the UI development guide](docs/ui-development.md) before changing user-facing screens. New features must fit the established light ivory, white, and blue editorial design and preserve the agent-work / human-review hierarchy. Include clear icons, plain-language actions, source evidence, and responsive states as appropriate; do not treat UI polish as a separate follow-up.
+
+Each completed UI version gets its own task branch and PR. Continue an open version on its assigned branch; after that PR is merged or closed, start the next version from current `origin/main` on a new branch and open a new PR. Never append a new UI version to an already merged PR's branch.
+
+Visually inspect affected screens at desktop and mobile sizes and exercise their key interactions before handoff. Include screenshots and honest validation limits in the PR. Use T3 when available; if unavailable, use the available browser preview and state that fallback. A passing build alone is not visual verification.
+
 ## Implementation requirements
 
 # JobSwitch

@@ -14,6 +14,13 @@ export interface Evidence {
   quote: string;
 }
 export interface Document {
+  emailSource?: {
+    id: string;
+    from: string;
+    subject: string;
+    at: string;
+    taskId: string;
+  };
   id: string;
   name: string;
   employer: "previous" | "next" | "personal";
@@ -35,6 +42,12 @@ export interface Task {
   missing: string[];
   nextAction: string;
   claim?: ClaimDraft;
+  gmail?: {
+    threadId: string;
+    sender: string;
+    generation: string;
+    bindingId: string;
+  };
   mailThreadId?: string;
   mailMessageId?: string;
   processedMessageIds?: string[];
@@ -121,6 +134,7 @@ export interface InboxMessage {
   body?: string;
 }
 export interface InboxSnapshot {
+  provider?: "gmail";
   connected: boolean;
   messages: InboxMessage[];
   limited: boolean;

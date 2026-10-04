@@ -1,3 +1,4 @@
+import { readImportedGmail } from "@/lib/gmail/inbox";
 import { AgentMailClient } from "agentmail";
 import { sessionId } from "@/lib/session";
 import { getWorkspace, pool } from "@/lib/db";
@@ -8,6 +9,17 @@ export async function GET(request: Request) {
   try {
     const id = await sessionId();
     const w = await getWorkspace(id);
+    if (!w.demo) {
+      const messageId =
+        new URL(request.url).searchParams.get("messageId") || undefined;
+      const snapshot = readImportedGmail(w, messageId);
+      if (messageId && !snapshot.message)
+        return Response.json(
+          { error: "Message not found in this workspace." },
+          { status: 404, headers },
+        );
+      return Response.json(snapshot, { headers });
+    }
     const claims = await pool.query<{ id: string; task_id: string }>(
       "SELECT id,task_id FROM jobswitch_claims WHERE workspace_id=$1",
       [id],
