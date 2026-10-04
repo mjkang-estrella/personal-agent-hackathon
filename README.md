@@ -1,5 +1,7 @@
 # JobSwitch
 
+Live app: https://jobswitch-sooty.vercel.app
+
 A personal agent for everything between two jobs. Compare employer handbooks, find benefits to claim, track missing information, and follow a reimbursement from discovery to HR confirmation.
 
 ## Run

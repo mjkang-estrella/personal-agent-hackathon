@@ -1,5 +1,4 @@
 import { randomUUID } from "node:crypto";
-import { PDFParse } from "pdf-parse";
 import { sessionId, sameOrigin, publicError } from "@/lib/session";
 import { mutate, getWorkspace, activity } from "@/lib/db";
 export async function POST(request: Request) {
@@ -16,7 +15,11 @@ export async function POST(request: Request) {
       throw new Error("Upload a file smaller than 4 MB.");
     let pages: string[];
     if (file.name.toLowerCase().endsWith(".pdf")) {
+      const { CanvasFactory, getData } = await import("pdf-parse/worker");
+      const { PDFParse } = await import("pdf-parse");
+      PDFParse.setWorker(getData());
       const parser = new PDFParse({
+        CanvasFactory,
         data: new Uint8Array(await file.arrayBuffer()),
       });
       try {
