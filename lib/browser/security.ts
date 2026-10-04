@@ -1,11 +1,5 @@
-import { createHash } from "node:crypto";
 import { isIP } from "node:net";
-import type {
-  BrowserAccount,
-  BrowserPage,
-  BrowserRun,
-  PublicBrowserAccount,
-} from "./types";
+import type { BrowserAccount, PublicBrowserAccount } from "./types";
 
 export function portalUrl(raw: string): URL {
   const url = new URL(raw);
@@ -29,31 +23,6 @@ export function portalUrl(raw: string): URL {
   return url;
 }
 
-export const pageFingerprint = (page: BrowserPage) =>
-  createHash("sha256").update(JSON.stringify(page)).digest("hex");
-
-export function assertApproval(
-  run: BrowserRun,
-  approval: string,
-  page: BrowserPage,
-  now = Date.now(),
-) {
-  const pending = run.pending;
-  if (
-    run.status !== "review" ||
-    !pending ||
-    pending.id !== approval ||
-    pending.expiresAt <= now ||
-    pending.fingerprint !== pageFingerprint(page) ||
-    page.blocked
-  ) {
-    throw new Error(
-      "The page or approval changed. Inspect the page again before continuing.",
-    );
-  }
-  return pending.action;
-}
-
 // Explicit projection: never serialize provider identifiers, login tokens, or profile names.
 export function publicAccount(a: BrowserAccount): PublicBrowserAccount {
   const r = a.run;
@@ -65,16 +34,15 @@ export function publicAccount(a: BrowserAccount): PublicBrowserAccount {
     status: a.status,
     run: r && {
       id: r.id,
-      goal: r.goal,
+      intent: r.intent,
+      intentHash: r.intentHash,
       status: r.status,
       message: r.message,
+      question: r.question,
       steps: r.steps,
-      pending: r.pending && {
-        id: r.pending.id,
-        action: r.pending.action,
-        page: r.pending.page,
-        expiresAt: r.pending.expiresAt,
-      },
+      history: r.history.slice(-30),
+      outcome: r.outcome,
+      confirmedAt: r.confirmedAt,
     },
   };
 }

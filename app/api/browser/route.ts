@@ -4,17 +4,21 @@ import { getWorkspace, withWorkspaceLock, WorkspaceBusyError } from "@/lib/db";
 import { account, accounts } from "@/lib/browser/store";
 import { publicAccount } from "@/lib/browser/security";
 import {
-  approveRun,
   browserConfigured,
   closeRun,
   connectAccount,
   deleteAccount,
-  inspectRun,
   loginAccount,
   refreshAccount,
-  resumeRun,
-  startRun,
 } from "@/lib/browser/service";
+import {
+  advanceRun,
+  confirmRun,
+  draftRun,
+  pauseRun,
+  resumeRun,
+} from "@/lib/browser/runner";
+import { intentSchema } from "@/lib/browser/intent";
 
 export const maxDuration = 180;
 const headers = { "Cache-Control": "no-store" };
@@ -34,22 +38,24 @@ const schema = z.discriminatedUnion("action", [
       "refresh",
       "login",
       "delete",
-      "inspect",
+      "advance",
+      "pause",
       "resume",
       "close",
     ]),
     id: z.string().uuid(),
   }),
   z.object({
-    action: z.literal("start"),
+    action: z.literal("draft"),
     id: z.string().uuid(),
     goal: z.string().trim().min(5).max(2000),
     consent: z.literal(true),
   }),
   z.object({
-    action: z.literal("approve"),
+    action: z.literal("confirm"),
     id: z.string().uuid(),
-    approval: z.string().uuid(),
+    intent: intentSchema,
+    intentHash: z.string().regex(/^[0-9a-f]{64}$/),
   }),
 ]);
 export async function GET() {
@@ -87,38 +93,48 @@ export async function POST(request: Request) {
         { status: 503, headers },
       );
     const raw = await request.text();
-    if (Buffer.byteLength(raw) > 16000)
+    if (Buffer.byteLength(raw) > 64000)
       return Response.json(
         { error: "Request is too large." },
         { status: 413, headers },
       );
     const data = schema.parse(JSON.parse(raw));
     const workspace = await sessionId();
-    await withWorkspaceLock(workspace, async () => {
-      await getWorkspace(workspace);
-      if (data.action === "connect") return connectAccount(workspace, data);
-      const a = await account(workspace, data.id);
-      if (a.status === "deleting" && data.action !== "delete")
-        throw new Error("Account is disconnected.");
-      switch (data.action) {
-        case "refresh":
-          return refreshAccount(workspace, a);
-        case "login":
-          return loginAccount(workspace, a);
-        case "delete":
-          return deleteAccount(workspace, a);
-        case "start":
-          return startRun(workspace, a, data.goal);
-        case "inspect":
-          return inspectRun(workspace, a);
-        case "approve":
-          return approveRun(workspace, a, data.approval);
-        case "resume":
-          return resumeRun(workspace, a);
-        case "close":
-          return closeRun(workspace, a);
-      }
-    });
+    if (data.action === "advance") {
+      // A per-account lock keeps long browser steps from blocking the
+      // workspace. Pause, close and new plans still win through fenced saves.
+      await account(workspace, data.id);
+      await withWorkspaceLock(`browser:${data.id}`, () =>
+        advanceRun(workspace, data.id),
+      );
+    } else
+      await withWorkspaceLock(workspace, async () => {
+        await getWorkspace(workspace);
+        if (data.action === "connect") return connectAccount(workspace, data);
+        const a = await account(workspace, data.id);
+        if (a.status === "deleting" && data.action !== "delete")
+          throw new Error("Account is disconnected.");
+        switch (data.action) {
+          case "refresh":
+            return refreshAccount(workspace, a);
+          case "login":
+            return loginAccount(workspace, a);
+          case "delete":
+            return deleteAccount(workspace, a);
+          case "draft":
+            if ((await refreshAccount(workspace, a)).status !== "connected")
+              throw new Error("Finish signing in first.");
+            return draftRun(workspace, a, data.goal);
+          case "confirm":
+            return confirmRun(workspace, a, data.intent, data.intentHash);
+          case "pause":
+            return pauseRun(workspace, a);
+          case "resume":
+            return resumeRun(workspace, a);
+          case "close":
+            return closeRun(workspace, a);
+        }
+      });
     return Response.json(
       {
         configured: true,
@@ -133,7 +149,7 @@ export async function POST(request: Request) {
       {
         error: busy
           ? "Another step is running. Try again shortly."
-          : "This step could not finish. Refresh the accounts, check the live browser if an action was running, and try again. No action is retried automatically.",
+          : "This step could not finish. Refresh the accounts, check the live browser if a task was running, and try again. Outcomes are never retried automatically.",
       },
       { status: busy ? 409 : 400, headers },
     );

@@ -94,3 +94,11 @@ The user-authorized OAuth client has callbacks for the personal Vercel deploymen
 Disconnect removes local access and tracked-thread bindings and attempts Google revocation. Previously imported evidence remains. If revocation fails, remove JobSwitch from your Google Account's third-party permissions. Returning to another workspace disconnects the previous one. OAuth state expires after ten minutes and cannot be replayed or transferred to another workspace.
 
 Validation: `npm test` covers encryption, scope, sender/date filtering, and quote boundaries. `node --env-file=.env --import tsx scripts/gmail-smoke.ts` exercises the configured development database using disposable workspaces and mocked Google HTTP responses, including refresh/revocation, replay/expiry, wrong-workspace callbacks, and disconnect races; it never accesses a real mailbox or sends email.
+
+## Connected portal accounts (browser agent)
+
+**Connected accounts** lets your agent work in a real portal on Kernel cloud browsers using [Stagehand v4](https://docs.stagehand.dev/v4). Connect a public HTTPS sign-in page. Kernel Managed Auth stores the signed-in session, and optionally a username and password; passwords never reach JobSwitch's model. Describe a task, and the agent drafts a plan: the exact values it will enter, any workspace documents to upload, and the single outcome it will complete (or none for read-only tasks). Confirm the plan once and the agent works on its own while the workspace is open.
+
+It pauses for sign-in, MFA, CAPTCHA or redirects off the portal, and for any value, file or consequential step outside the plan. The outcome is attempted at most once and never retried; an unclear result stays unconfirmed until you check the live browser. Submission is never reported as approval or payment. See [the decision record](docs/decisions/2026-10-04-201717-nolan-browser-agent.md).
+
+Setup: `npm run db:migrate` (adds `jobswitch_browser_accounts`), plus `KERNEL_API_KEY` and the Neon AI Gateway variables. `node --env-file=.env --import tsx scripts/stagehand-spike.ts` checks Stagehand on Kernel against a public test form without submitting it.

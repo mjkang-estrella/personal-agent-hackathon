@@ -91,13 +91,15 @@ export async function attachStagehand(
   kernel: Kernel,
   session: { session_id: string; cdp_ws_url: string },
   allowedDomains: string[],
+  uploadExtension = true,
 ) {
-  await kernel.browsers.fs.uploadZip(session.session_id, {
-    dest_path: join(distDir(), "extension"),
-    zip_file: createReadStream(
-      join(distDir(), "assets/stagehand-extension.zip"),
-    ),
-  });
+  if (uploadExtension)
+    await kernel.browsers.fs.uploadZip(session.session_id, {
+      dest_path: join(distDir(), "extension"),
+      zip_file: createReadStream(
+        join(distDir(), "assets/stagehand-extension.zip"),
+      ),
+    });
   const browser = await localBrowser.connect({ cdpUrl: session.cdp_ws_url });
   const stagehand = await Stagehand.create({
     browser,

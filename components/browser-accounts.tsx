@@ -8,11 +8,10 @@ import {
   ShieldCheck,
   RefreshCw,
   Trash2,
-  Hand,
-  ArrowRight,
 } from "lucide-react";
 import type { PublicBrowserAccount } from "@/lib/browser/types";
 import styles from "./browser-accounts.module.css";
+import RunPanel from "./browser-run";
 
 export default function BrowserAccounts() {
   const [accounts, setAccounts] = useState<PublicBrowserAccount[]>([]);
@@ -21,7 +20,6 @@ export default function BrowserAccounts() {
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
   const [remove, setRemove] = useState<string>();
-  const [goals, setGoals] = useState<Record<string, string>>({});
   const [passwordMode, setPasswordMode] = useState(false);
   async function load() {
     const r = await fetch("/api/browser", { cache: "no-store" });
@@ -35,6 +33,29 @@ export default function BrowserAccounts() {
       .catch((e) => setNotice(e.message))
       .finally(() => setLoading(false));
   }, []);
+  // Confirmed runs advance automatically while this page is open. Pause and
+  // close stay available because advancing does not mark the page busy.
+  const running = accounts.find((a) => a.run?.status === "running")?.id;
+  useEffect(() => {
+    if (!running) return;
+    let cancelled = false;
+    const tick = async () => {
+      const r = await fetch("/api/browser", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "advance", id: running }),
+      }).catch(() => null);
+      if (cancelled) return;
+      const data = r && (await r.json().catch(() => null));
+      if (r?.ok && data) setAccounts(data.accounts);
+      else if (r?.status !== 409) await load().catch(() => {});
+    };
+    const t = setTimeout(() => void tick(), 1500);
+    return () => {
+      cancelled = true;
+      clearTimeout(t);
+    };
+  }, [running, accounts]);
   async function run(data: Record<string, unknown>) {
     setBusy(true);
     setNotice("");
@@ -60,8 +81,9 @@ export default function BrowserAccounts() {
       <div className={styles.intro}>
         <ShieldCheck size={22} />
         <p>
-          Connect a portal once, then ask your agent to help. You review browser
-          steps before they run. Sign-in checks stay with you.
+          Connect a portal once, then tell your agent what you need. It shows
+          you its plan first; once you confirm, it does the work and only stops
+          for sign-in or anything outside the plan.
         </p>
       </div>
       {notice && (
@@ -283,156 +305,7 @@ export default function BrowserAccounts() {
                     </div>
                   </div>
                 )}
-                {a.status === "connected" &&
-                  (!a.run || a.run.status === "closed") && (
-                    <form
-                      className={styles.taskForm}
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        void run({
-                          action: "start",
-                          id: a.id,
-                          goal: goals[a.id],
-                          consent: true,
-                        });
-                      }}
-                    >
-                      <label>
-                        What should your agent do?
-                        <textarea
-                          required
-                          minLength={5}
-                          maxLength={2000}
-                          value={goals[a.id] || ""}
-                          onChange={(e) =>
-                            setGoals({ ...goals, [a.id]: e.target.value })
-                          }
-                          placeholder="Find my education reimbursement status"
-                        />
-                      </label>
-                      <p className={styles.small}>
-                        The planning model reads visible page text for this
-                        task. Keep passwords, one-time codes, and payment
-                        details out of your instructions. Browser support varies
-                        by portal.
-                      </p>
-                      <label className={styles.check}>
-                        <input type="checkbox" required /> Allow the agent to
-                        read this portal for this task.
-                      </label>
-                      <button disabled={busy} className={styles.primary}>
-                        Start browser task <ArrowRight size={16} />
-                      </button>
-                    </form>
-                  )}
-                {a.run && a.run.status !== "closed" && (
-                  <div className={styles.run}>
-                    <h4>{a.run.goal}</h4>
-                    <p role="status">
-                      {a.run.status === "reported_done"
-                        ? "Agent’s assessment — verify in the portal: "
-                        : ""}
-                      {a.run.message}
-                    </p>
-                    <div className={styles.actions}>
-                      <a
-                        href={`/api/browser/handoff?id=${a.id}&kind=browser`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <ExternalLink size={15} /> Open live browser
-                      </a>
-                      {["ready", "review", "reported_done"].includes(
-                        a.run.status,
-                      ) && (
-                        <button
-                          disabled={busy}
-                          onClick={() =>
-                            void run({ action: "inspect", id: a.id })
-                          }
-                        >
-                          <RefreshCw size={15} /> Inspect & prepare next step
-                        </button>
-                      )}
-                      {["handoff", "executing"].includes(a.run.status) && (
-                        <button
-                          disabled={busy}
-                          className={styles.primary}
-                          onClick={() =>
-                            void run({ action: "resume", id: a.id })
-                          }
-                        >
-                          <Hand size={15} /> I checked the browser — continue
-                        </button>
-                      )}
-                      <button
-                        disabled={busy}
-                        onClick={() => void run({ action: "close", id: a.id })}
-                      >
-                        Stop & close browser
-                      </button>
-                    </div>
-                    {a.run.pending && (
-                      <div className={styles.review}>
-                        <h4>Review & decide</h4>
-                        <p>{a.run.pending.action.explanation}</p>
-                        <dl>
-                          <dt>On this page</dt>
-                          <dd>{a.run.pending.page.url}</dd>
-                          <dt>Action</dt>
-                          <dd>
-                            {a.run.pending.action.kind} →{" "}
-                            {
-                              a.run.pending.page.controls.find(
-                                (c) => c.id === a.run!.pending!.action.target,
-                              )?.label
-                            }
-                          </dd>
-                          {a.run.pending.action.kind !== "click" && (
-                            <>
-                              <dt>Exact value</dt>
-                              <dd>
-                                <pre>{a.run.pending.action.value}</pre>
-                              </dd>
-                            </>
-                          )}
-                        </dl>
-                        <details>
-                          <summary>Review current page and form values</summary>
-                          <pre>{a.run.pending.page.text}</pre>
-                          {a.run.pending.page.controls
-                            .filter((c) =>
-                              ["input", "textarea", "select"].includes(c.tag),
-                            )
-                            .map((c) => (
-                              <p key={c.id}>
-                                <strong>{c.label}:</strong>{" "}
-                                {c.value || "(empty)"}
-                              </p>
-                            ))}
-                        </details>
-                        <p className={styles.small}>
-                          Approval applies to this step only and expires after
-                          five minutes. If the page changes, inspect it again.
-                          Review the live browser before approving a submission.
-                        </p>
-                        <button
-                          disabled={busy}
-                          className={styles.primary}
-                          onClick={() =>
-                            void run({
-                              action: "approve",
-                              id: a.id,
-                              approval: a.run!.pending!.id,
-                            })
-                          }
-                        >
-                          Approve & execute this step <ArrowRight size={16} />
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                )}
+                <RunPanel account={a} busy={busy} run={run} />
               </article>
             ))}
           </section>
