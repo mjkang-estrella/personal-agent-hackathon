@@ -74,8 +74,8 @@ const viewNames: Record<WorkspaceFocus["view"], string> = {
   inbox: "Inbox",
   activity: "Agent activity",
 };
-// Tool results are rendered in the thread; a focus result also moves the
-// workspace beside the chat, once per call.
+// Tool results remain in the conversation. A reference opens its full workspace
+// page only when the user clicks it.
 function ToolPart({ toolCallId, result, isError }: ToolCallMessagePartProps) {
   const { apply, applied } = useContext(FocusContext);
   const focus = isFocus(result) ? result.focus : undefined;
@@ -131,7 +131,7 @@ type AssistantProps = {
   briefing: Orientation;
   transition: string;
   busy: boolean;
-  contextOpen: boolean;
+  visible: boolean;
   openPlan: () => void;
   onAction: (action: OrientationAction) => void;
   onFocus: (focus: WorkspaceFocus, automatic?: boolean) => void;
@@ -150,7 +150,7 @@ function AssistantConversation({
   briefing,
   transition,
   busy,
-  contextOpen,
+  visible,
   openPlan,
   onAction,
   onFocus,
@@ -168,7 +168,11 @@ function AssistantConversation({
     onFocusRef.current(f, automatic),
   ).current;
   return (
-    <section className="assistant-primary" aria-label="Chat with JobSwitch">
+    <section
+      className="assistant-primary"
+      aria-label="Chat with JobSwitch"
+      hidden={!visible}
+    >
       <header>
         <span className="conversation-title">
           <Sparkles size={18} /> JobSwitch
@@ -191,11 +195,7 @@ function AssistantConversation({
           >
             <SquarePen size={16} /> New chat
           </button>
-          <button
-            className="text-button chat-plan-toggle"
-            onClick={openPlan}
-            aria-expanded={contextOpen}
-          >
+          <button className="text-button chat-plan-toggle" onClick={openPlan}>
             <LayoutDashboard size={16} /> Your plan
           </button>
         </div>

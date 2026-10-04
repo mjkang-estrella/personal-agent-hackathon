@@ -1790,9 +1790,6 @@
   padding: 12px 20px 20px 0;
   gap: 16px;
 }
-.app-shell.context-open .conversation-workspace {
-  grid-template-columns: minmax(0, 1.15fr) minmax(360px, 1fr);
-}
 .app-shell .assistant-primary {
   display: flex;
   flex-direction: column;
@@ -2018,68 +2015,6 @@
   flex-shrink: 0;
   margin-top: 2px;
 }
-.app-shell .workspace-context {
-  min-width: 0;
-  overflow: auto;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  scrollbar-color: #c7c1b8 transparent;
-}
-.app-shell .workspace-context[hidden] {
-  display: none;
-}
-.app-shell .context-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 8px 20px;
-  border-bottom: 1px solid var(--line);
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  background: var(--surface);
-}
-.app-shell .context-toolbar > span {
-  font-size: 11px;
-  color: var(--muted);
-}
-.app-shell .workspace-context .main-content {
-  padding: 24px 20px;
-}
-.app-shell .workspace-context .page-heading {
-  margin-bottom: 24px;
-}
-.app-shell .workspace-context .page-heading h1 {
-  font-size: 32px;
-  letter-spacing: -0.03em;
-}
-.app-shell .workspace-context .kanban {
-  grid-template-columns: 1fr;
-}
-.app-shell
-  .workspace-context
-  :is(.settings-grid, .practice-strip, .practice-cases ol) {
-  grid-template-columns: 1fr;
-}
-.app-shell .workspace-context .review-inbox {
-  padding: 20px;
-}
-.app-shell .workspace-context :is(.transition-dates, .agent-handoff) {
-  flex-wrap: wrap;
-}
-.app-shell .workspace-context .document-row {
-  grid-template-columns: minmax(0, 1fr) 25px 16px;
-}
-.app-shell .workspace-context .document-row > span:nth-child(2) {
-  display: none;
-}
-.app-shell .workspace-context .calendar-connection form {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-}
 .app-shell.chat-first .working-indicator {
   bottom: auto;
   top: 68px;
@@ -2091,19 +2026,12 @@
   color: #172e55;
 }
 @media (max-width: 1099px) {
-  .app-shell .conversation-workspace,
-  .app-shell.context-open .conversation-workspace {
+  .app-shell .conversation-workspace {
     grid-template-columns: minmax(0, 1fr);
     padding-right: 16px;
   }
   .app-shell .transition-summary {
     display: none;
-  }
-  .app-shell.context-open .assistant-primary {
-    display: none;
-  }
-  .app-shell .workspace-context .kanban {
-    grid-template-columns: 1fr;
   }
 }
 @media (max-width: 720px) {
@@ -2169,15 +2097,6 @@
     font-size: 10px;
     padding: 8px 8px 0;
   }
-  .app-shell .context-toolbar {
-    padding-inline: 12px;
-  }
-  .app-shell .context-toolbar > span {
-    display: none;
-  }
-  .app-shell .workspace-context .main-content {
-    padding: 20px 14px;
-  }
 }
 
 /* The first conversation turn tells the person what to do, from saved state. */
@@ -2242,3 +2161,23 @@
 @media (max-width: 720px) {
   .app-shell .briefing-ask { margin: 8px 0 0; }
 }
+
+.app-shell .review-examples-intro {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  padding: 4px 0 20px;
+}
+.app-shell .review-examples-intro p {
+  flex: 1 1 260px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.app-shell .review-examples-intro button {
+  flex-shrink: 0;
+}
+
+.app-shell .assistant-primary[hidden], .app-shell .workspace-pages[hidden] { display: none; }

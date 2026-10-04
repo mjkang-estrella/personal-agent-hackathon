@@ -41,3 +41,7 @@ The requested handoff is an open PR with screenshots. Do not merge this PR witho
 - [Previous assistant presentation](2026-10-04-213638-mj-workspace-assistant-focus.md)
 - [UI development guide](../ui-development.md)
 - [Assistant](../../components/assistant.tsx), [workspace](../../components/dashboard.tsx)
+
+## Subsequent navigation correction
+
+The side-panel presentation and automatic desktop navigation are superseded by [Chat as a tab with full workspace pages](2026-10-04-222054-codex-chat-tab-preserve-pages.md), following the user’s request to preserve the existing pages. The arrival briefing remains.

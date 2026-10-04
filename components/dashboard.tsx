@@ -8,7 +8,6 @@ import {
   ArrowLeftRight,
   LayoutDashboard,
   MessageCircle,
-  ArrowLeft,
   Files,
   Activity,
   Settings,
@@ -54,6 +53,8 @@ import CalendarControls from "./calendar-controls";
 import CloudDocuments from "./cloud-documents";
 import OutlookControls from "./outlook-controls";
 import GmailControls from "./gmail-controls";
+import BrowserAccounts from "./browser-accounts";
+import { isReviewExample } from "@/lib/review-examples";
 import AccountControls from "./account-controls";
 import { MODEL_LABEL } from "@/lib/model-config";
 import { reviewKind } from "@/lib/automation";
@@ -126,18 +127,20 @@ const stages: {
     icon: BriefcaseBusiness,
   },
 ];
-type Page = "board" | "documents" | "inbox" | "activity" | "settings";
+type Page =
+  | "chat"
+  | "accounts"
+  | "board"
+  | "documents"
+  | "inbox"
+  | "activity"
+  | "settings";
 export default function Dashboard() {
   const [w, setW] = useState<Workspace | null>(null);
-  const [page, setContextPage] = useState<Page>("board");
-  const [contextOpen, setContextOpen] = useState(false);
-  function setPage(next: Page) {
-    assistantMoved.current = false;
-    setContextPage(next);
-    setContextOpen(true);
-  }
+  const [page, setPage] = useState<Page>("chat");
+  const isChat = page === "chat";
   function backToChat() {
-    setContextOpen(false);
+    setPage("chat");
     requestAnimationFrame(() =>
       window.document
         .querySelector<HTMLTextAreaElement>(
@@ -157,7 +160,6 @@ export default function Dashboard() {
   const [inboxFocus, setInboxFocus] = useState<
     { id: string; label: string; n: number } | undefined
   >();
-  const assistantMoved = useRef(false);
   const [busy, setBusy] = useState("");
   const [agentTransportError, setAgentTransportError] = useState(false);
   const requestInFlight = useRef(false);
@@ -170,19 +172,13 @@ export default function Dashboard() {
   const [search, setSearch] = useState("");
   const [taskSearch, setTaskSearch] = useState("");
   const [loadError, setLoadError] = useState("");
-  const previousPage = useRef({ page, contextOpen });
+  const previousPage = useRef(page);
   useEffect(() => {
-    if (
-      previousPage.current.page === page &&
-      previousPage.current.contextOpen === contextOpen
-    )
-      return;
-    previousPage.current = { page, contextOpen };
-    if (!contextOpen) return;
-    // Keep the caret in the chat when the assistant changes the view.
-    if (assistantMoved.current) assistantMoved.current = false;
-    else window.document.getElementById("workspace-heading")?.focus();
-  }, [page, contextOpen]);
+    if (previousPage.current === page) return;
+    previousPage.current = page;
+    if (page !== "chat")
+      window.document.getElementById("workspace-heading")?.focus();
+  }, [page]);
   useEffect(() => {
     if (!highlight) return;
     window.document
@@ -316,6 +312,8 @@ export default function Dashboard() {
     setCertificateId("");
   }
   function showFocus(f: WorkspaceFocus, automatic = false) {
+    // References are available in the answer; only a deliberate click changes tabs.
+    if (automatic) return;
     const target: Page =
       f.view === "document"
         ? "documents"
@@ -324,11 +322,7 @@ export default function Dashboard() {
           : f.view === "activity"
             ? "activity"
             : "board";
-    assistantMoved.current = automatic;
-    setContextPage(target);
-    // Automatic references never take a phone user away from a streaming answer.
-    if (!automatic || window.matchMedia("(min-width: 1100px)").matches)
-      setContextOpen(true);
+    setPage(target);
     setSelected(null);
     setViewDoc(null);
     if (f.view === "task" && f.id) {
@@ -435,9 +429,10 @@ export default function Dashboard() {
       (certificateId || w.documents.find((d) => d.kind === "certificate")?.id),
   );
   const links: [Page, typeof LayoutDashboard, string][] = [
-    ["board", LayoutDashboard, "Your plan"],
+    ["board", LayoutDashboard, "Transition board"],
     ["documents", Files, "My documents"],
     ["inbox", Mail, "Inbox"],
+    ["accounts", ShieldCheck, "Connected accounts"],
     ["activity", Activity, "Agent activity"],
   ];
   const visible = w.tasks.filter(
@@ -451,9 +446,7 @@ export default function Dashboard() {
           .includes(taskSearch.toLowerCase())),
   );
   return (
-    <div
-      className={`app-shell chat-first ${contextOpen ? "context-open" : ""}`}
-    >
+    <div className={`app-shell ${isChat ? "chat-first" : ""}`}>
       <a href="#workspace-main" className="skip-link">
         Skip to workspace content
       </a>
@@ -466,20 +459,19 @@ export default function Dashboard() {
         </a>
         <nav aria-label="Workspace navigation">
           <button
-            className={`nav-item conversation-nav ${!contextOpen ? "active" : ""}`}
+            className={`nav-item conversation-nav ${isChat ? "active" : ""}`}
             aria-label="Chat"
-            aria-current={!contextOpen ? "page" : undefined}
+            aria-current={isChat ? "page" : undefined}
             onClick={backToChat}
           >
             <MessageCircle size={19} /> Chat
           </button>
-          <p className="nav-section-label">Your workspace</p>
           {links.map(([id, Icon, label]) => (
             <button
               key={id}
               aria-label={label}
-              aria-current={contextOpen && page === id ? "page" : undefined}
-              className={`nav-item ${contextOpen && page === id ? "active" : ""}`}
+              aria-current={page === id ? "page" : undefined}
+              className={`nav-item ${page === id ? "active" : ""}`}
               onClick={() => {
                 setPage(id);
                 setSelected(null);
@@ -499,10 +491,8 @@ export default function Dashboard() {
         <div className="sidebar-bottom">
           <button
             aria-label="Workspace settings"
-            aria-current={
-              contextOpen && page === "settings" ? "page" : undefined
-            }
-            className={`nav-item ${contextOpen && page === "settings" ? "active" : ""}`}
+            aria-current={page === "settings" ? "page" : undefined}
+            className={`nav-item ${page === "settings" ? "active" : ""}`}
             onClick={() => setPage("settings")}
           >
             <Settings size={18} />
@@ -523,17 +513,19 @@ export default function Dashboard() {
           <div className="breadcrumbs">
             My workspace <ChevronRight size={13} />
             <span>
-              {!contextOpen
+              {isChat
                 ? "Chat"
                 : page === "board"
-                  ? "Your plan"
+                  ? "Transition board"
                   : page === "documents"
                     ? "My documents"
                     : page === "inbox"
                       ? "Inbox"
-                      : page === "activity"
-                        ? "Agent activity"
-                        : "Settings"}
+                      : page === "accounts"
+                        ? "Connected accounts"
+                        : page === "activity"
+                          ? "Agent activity"
+                          : "Settings"}
             </span>
           </div>
           <div className="topbar-right">
@@ -596,7 +588,7 @@ export default function Dashboard() {
         <main
           id="workspace-main"
           tabIndex={-1}
-          className="conversation-workspace"
+          className={isChat ? "conversation-workspace" : "page-workspace"}
         >
           <Assistant
             onFocus={showFocus}
@@ -607,10 +599,10 @@ export default function Dashboard() {
             transition={`${w.profile.previousEmployer || "Your current job"} → ${w.profile.nextEmployer || "Your next job"} · Last day ${date(w.profile.lastDay)}`}
             busy={!!busy}
             onAction={runOrientationAction}
-            contextOpen={contextOpen}
+            visible={isChat}
             openPlan={() => setPage("board")}
           />
-          {!contextOpen && (
+          {isChat && (
             <aside
               className="transition-summary"
               aria-label="Your transition summary"
@@ -665,29 +657,30 @@ export default function Dashboard() {
             </aside>
           )}
           <section
-            className="workspace-context"
-            aria-label="Supporting workspace"
-            hidden={!contextOpen}
+            className="workspace-pages"
+            aria-label="Workspace page"
+            hidden={isChat}
           >
-            <div className="context-toolbar">
-              <button className="text-button" onClick={backToChat}>
-                <ArrowLeft size={16} /> Back to chat
-              </button>
-              <span>Supporting context</span>
-            </div>
             <div className="main-content">
               <div className="page-heading">
                 <div>
                   <h1 id="workspace-heading" tabIndex={-1}>
-                    {page === "board"
-                      ? "Your plan"
-                      : page === "documents"
-                        ? "Documents"
-                        : page === "inbox"
-                          ? "Inbox"
-                          : page === "activity"
-                            ? "Activity"
-                            : "Workspace settings"}
+                    {page === "board" ? (
+                      <>
+                        A little clarity,{" "}
+                        <span>{w.profile.name.split(" ")[0]}.</span>
+                      </>
+                    ) : page === "documents" ? (
+                      "Documents"
+                    ) : page === "inbox" ? (
+                      "Inbox"
+                    ) : page === "accounts" ? (
+                      "Connected accounts"
+                    ) : page === "activity" ? (
+                      "Activity"
+                    ) : (
+                      "Workspace settings"
+                    )}
                   </h1>
                   <p>
                     {page === "board"
@@ -696,9 +689,11 @@ export default function Dashboard() {
                         ? "The source of truth for your transition. Every recommendation starts here."
                         : page === "inbox"
                           ? "Read HR replies and keep track of the conversation."
-                          : page === "activity"
-                            ? "A clear record of what happened, what changed, and what comes next."
-                            : "Your dates and details keep every next step in sync."}
+                          : page === "accounts"
+                            ? "Your portals, your approval. Let your agent help with the next step."
+                            : page === "activity"
+                              ? "A clear record of what happened, what changed, and what comes next."
+                              : "Your dates and details keep every next step in sync."}
                   </p>
                 </div>
               </div>
@@ -710,6 +705,7 @@ export default function Dashboard() {
                   focus={inboxFocus}
                 />
               )}
+              {page === "accounts" && <BrowserAccounts />}
               {page === "board" && (
                 <>
                   {practice && (
@@ -791,6 +787,31 @@ export default function Dashboard() {
                       </div>
                       <CheckCheck size={22} />
                     </div>
+                    {w.demo && !practice && (
+                      <div className="review-examples-intro">
+                        <p>
+                          Try four fictional choices. Save a preference, then
+                          see your next step. Trying again resets only these
+                          examples.
+                        </p>
+                        <button
+                          className="secondary"
+                          disabled={!!busy}
+                          onClick={() =>
+                            act(
+                              "review_examples",
+                              {},
+                              "Four examples are ready to try.",
+                            )
+                          }
+                        >
+                          <RefreshCw size={15} />
+                          {w.tasks.some(isReviewExample)
+                            ? "Try examples again"
+                            : "Load 4 examples"}
+                        </button>
+                      </div>
+                    )}
                     {reviews.length ? (
                       reviews.map((t) => {
                         const kind = reviewKind(t, w);
@@ -815,15 +836,17 @@ export default function Dashboard() {
                             </span>
                             <span>
                               <small>
-                                {draft
-                                  ? draft.inReplyTo
-                                    ? "REPLY DRAFTED"
-                                    : "EMAIL DRAFTED"
-                                  : kind === "reply"
-                                    ? "REPLY DRAFTED"
-                                    : kind === "decision"
-                                      ? "YOUR CALL"
-                                      : "CLAIM PREPARED"}
+                                {isReviewExample(t)
+                                  ? "FICTIONAL EXAMPLE"
+                                  : draft
+                                    ? draft.inReplyTo
+                                      ? "REPLY DRAFTED"
+                                      : "EMAIL DRAFTED"
+                                    : kind === "reply"
+                                      ? "REPLY DRAFTED"
+                                      : kind === "decision"
+                                        ? "YOUR CALL"
+                                        : "CLAIM PREPARED"}
                               </small>
                               <strong>
                                 {draft?.subject ||
@@ -902,7 +925,7 @@ export default function Dashboard() {
                   </section>
                   <div className="board-toolbar">
                     <div className="board-title">
-                      <h2>Your plan</h2>
+                      <h2>The plan your agent is tracking</h2>
                       <span>{w.tasks.length}</span>
                     </div>
                     <div className="board-controls">
@@ -1213,6 +1236,12 @@ export default function Dashboard() {
                 />
               )}
             </div>
+            <footer className="app-footer">
+              <span>Built for the space between.</span>
+              <span>
+                JobSwitch <span>✦</span>
+              </span>
+            </footer>
           </section>
         </main>
       </div>
