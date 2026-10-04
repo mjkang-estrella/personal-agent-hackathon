@@ -129,14 +129,15 @@ export default function Dashboard() {
   const fileRef = useRef<HTMLInputElement>(null);
   const notify = (text: string, error = false) => setToast({ text, error });
   const load = useCallback(async () => {
+    setLoadError("");
     try {
-      const res = await fetch("/api/state");
+      const res = await fetch("/api/state", { signal: AbortSignal.timeout(15000) });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error);
       setW(json);
       setLoadError("");
-    } catch (e) {
-      setLoadError((e as Error).message);
+    } catch {
+      setLoadError("We couldn’t open your workspace. Please try again in a moment.");
     }
   }, []);
   useEffect(() => {
@@ -234,24 +235,30 @@ export default function Dashboard() {
   const document = w?.documents.find((d) => d.id === viewDoc?.id);
   if (!w)
     return (
-      <main className="loading-screen">
-        <span className="brand-mark">
-          <ArrowLeftRight size={24} />
-        </span>
-        <h2>JobSwitch</h2>
-        {loadError ? (
-          <>
-            <p>{loadError}</p>
-            <button className="primary" onClick={load}>
-              Try again
-            </button>
-          </>
-        ) : (
-          <p>
-            <LoaderCircle size={16} className="spin" /> Getting your next
-            chapter ready…
+      <main className="workspace-entry">
+        <a className="workspace-entry-brand" href="/">
+          <span><ArrowLeftRight size={23} /></span> jobswitch
+        </a>
+        <section className="workspace-entry-content" aria-live="polite" aria-busy={!loadError}>
+          <span className="workspace-entry-symbol">
+            {loadError ? <CircleHelp size={32} /> : <BriefcaseBusiness size={32} />}
+          </span>
+          <p className="workspace-entry-eyebrow">YOUR NEXT CHAPTER</p>
+          <h1>{loadError ? "Let’s try that again." : "A little clarity is on its way."}</h1>
+          <p className="workspace-entry-description">
+            {loadError || "Opening your workspace, so you can see your plan and what needs your attention."}
           </p>
-        )}
+          {loadError ? (
+            <button className="workspace-entry-retry" onClick={load}>
+              Try again <ArrowRight size={17} />
+            </button>
+          ) : (
+            <p className="workspace-entry-progress" role="status">
+              <LoaderCircle size={18} className="spin" /> Opening your workspace…
+            </p>
+          )}
+          <a className="workspace-entry-back" href="/">Back to JobSwitch <ArrowUpRight size={15} /></a>
+        </section>
       </main>
     );
   const attention = w.tasks.filter((t) => reviewKind(t, w) !== null).length;
