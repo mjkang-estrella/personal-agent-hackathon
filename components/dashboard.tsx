@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect, useCallback, useRef } from "react";
 import {
+  Pause,
+  Play,
   ArrowUpRight,
   ArrowRight,
   ArrowLeftRight,
@@ -11,6 +13,7 @@ import {
   ChevronRight,
   Plus,
   Check,
+  CheckCheck,
   CalendarDays,
   ShieldCheck,
   Heart,
@@ -41,6 +44,7 @@ import Assistant from "./assistant";
 import Inbox from "./inbox";
 import BackgroundControls from "./background-controls";
 import { MODEL_LABEL } from "@/lib/model-config";
+import { reviewKind } from "@/lib/automation";
 import { addDays, replyPayload } from "@/lib/domain";
 const money = (n: number) =>
   new Intl.NumberFormat("en-US", {
@@ -56,7 +60,7 @@ const date = (s: string | null) =>
       })
     : "Confirm with HR";
 const statuses: Record<Status, string> = {
-  todo: "To do",
+  todo: "Agent tracking",
   ready: "Ready for approval",
   submitting: "Submitting",
   waiting: "Waiting for HR",
@@ -109,6 +113,8 @@ export default function Dashboard() {
   );
   const [chat, setChat] = useState(false);
   const [busy, setBusy] = useState("");
+  const [agentTransportError, setAgentTransportError] = useState(false);
+  const requestInFlight = useRef(false);
   const [toast, setToast] = useState<{ text: string; error: boolean } | null>(
     null,
   );
@@ -153,10 +159,27 @@ export default function Dashboard() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
   useEffect(() => {
-    if (!busy.includes("submit")) return;
+    if (!busy.includes("submit") && busy !== "advance") return;
     const t = setInterval(load, 1800);
     return () => clearInterval(t);
   }, [busy, load]);
+  useEffect(() => {
+    if (
+      !w ||
+      busy ||
+      agentTransportError ||
+      w.agent?.enabled === false ||
+      w.agent?.error
+    )
+      return;
+    const timer = setTimeout(
+      () => {
+        void act("advance");
+      },
+      w.agent?.pending === false ? 20000 : 1000,
+    );
+    return () => clearTimeout(timer);
+  }, [w, busy, agentTransportError]);
   useEffect(() => {
     if (!w?.background?.enabled || busy) return;
     const timer = setInterval(load, 20000);
@@ -167,7 +190,8 @@ export default function Dashboard() {
     extra: Record<string, unknown> = {},
     message?: string,
   ) {
-    if (busy) return;
+    if (busy || requestInFlight.current) return;
+    requestInFlight.current = true;
     setBusy(action);
     try {
       const res = await fetch("/api/action", {
@@ -176,8 +200,13 @@ export default function Dashboard() {
         body: JSON.stringify({ action, ...extra }),
       });
       const json = await res.json();
+      if (res.status === 409 && action === "advance") {
+        await load();
+        return;
+      }
       if (!res.ok) throw new Error(json.error);
       setW(json);
+      setAgentTransportError(false);
       if (action === "new_workspace") {
         setPage("board");
         setSelected(null);
@@ -185,8 +214,10 @@ export default function Dashboard() {
       if (message) notify(message);
       return json as Workspace;
     } catch (e) {
-      notify((e as Error).message, true);
+      if (action === "advance") setAgentTransportError(true);
+      else notify((e as Error).message, true);
     } finally {
+      requestInFlight.current = false;
       setBusy("");
     }
   }
@@ -219,12 +250,32 @@ export default function Dashboard() {
         )}
       </main>
     );
-  const complete = w.tasks.filter((t) =>
-    ["done", "approved"].includes(t.status),
-  ).length;
-  const attention = w.tasks.filter(
-    (t) => t.status === "ready" || t.status === "needs_info",
-  ).length;
+  const attention = w.tasks.filter((t) => reviewKind(t, w) !== null).length;
+  const reviews = w.tasks.filter((t) =>
+    ["claim", "reply"].includes(reviewKind(t, w) || ""),
+  );
+  const needsInput = w.tasks.filter((t) => reviewKind(t, w) === "input");
+  const agentPaused = w.agent?.enabled === false;
+  const agentError =
+    w.agent?.error ||
+    (agentTransportError
+      ? "The agent connection was interrupted. Retry to continue from saved progress."
+      : "");
+  const agentWorking = busy === "advance";
+  const agentPhase = w.agent?.phase;
+  const agentTitle = agentError
+    ? "Your agent needs a retry"
+    : agentPaused
+      ? "Automatic preparation is paused"
+      : agentWorking
+        ? agentPhase === "prepare"
+          ? "Checking evidence. Preparing claims."
+          : agentPhase === "sync"
+            ? "Checking for the next HR reply."
+            : "Reading the details for you."
+        : reviews.length
+          ? "Prepared by your agent. Ready for you."
+          : "Your agent is keeping things moving.";
   const initials = w.profile.name
     .split(" ")
     .map((n) => n[0])
@@ -244,8 +295,7 @@ export default function Dashboard() {
   const visible = w.tasks.filter(
     (t) =>
       (filter === "all" ||
-        (filter === "attention" &&
-          ["ready", "needs_info"].includes(t.status)) ||
+        (filter === "attention" && reviewKind(t, w) !== null) ||
         (filter === "done" && ["approved", "done"].includes(t.status))) &&
       (!search ||
         `${t.title} ${t.description}`
@@ -366,7 +416,7 @@ export default function Dashboard() {
               </h1>
               <p>
                 {page === "board"
-                  ? `${w.profile.previousEmployer} → ${w.profile.nextEmployer}`
+                  ? `${w.profile.previousEmployer} → ${w.profile.nextEmployer} · Your agent prepares. You review.`
                   : page === "documents"
                     ? "The source of truth for your transition. Every recommendation starts here."
                     : page === "inbox"
@@ -414,59 +464,172 @@ export default function Dashboard() {
                     Edit dates
                   </button>
                 </div>
-                <div className="transition-summary">
-                  <span>
-                    <strong>{w.tasks.length - complete}</strong> tasks remaining
-                  </span>
-                  <span>
-                    <strong>{attention}</strong> need your review
-                  </span>
-                  <span>
-                    <strong>{complete}</strong> resolved
-                  </span>
+              </section>
+              <section className="agent-desk" aria-label="Agent workspace">
+                <div className="agent-overview">
+                  <div className="agent-overview-top">
+                    <span className="agent-mode">
+                      <span className={agentWorking ? "agent-pulse" : ""} />{" "}
+                      {agentPaused
+                        ? "PREPARATION PAUSED"
+                        : agentError
+                          ? "NEEDS A RETRY"
+                          : "AGENT ON DUTY"}
+                    </span>
+                    <button
+                      className="agent-control"
+                      disabled={!!busy}
+                      onClick={() =>
+                        act(
+                          agentPaused || agentError
+                            ? "agent_resume"
+                            : "agent_pause",
+                        )
+                      }
+                    >
+                      {agentPaused || agentError ? (
+                        <Play size={13} />
+                      ) : (
+                        <Pause size={13} />
+                      )}
+                      {agentError ? "Retry" : agentPaused ? "Resume" : "Pause"}
+                    </button>
+                  </div>
+                  <h2 aria-live="polite">{agentTitle}</h2>
+                  <p>
+                    {agentError ||
+                      "I’ll turn your documents into a plan, check the evidence, and prepare the next step. Nothing gets sent without your approval."}
+                  </p>
+                  <div className="agent-capabilities">
+                    <div>
+                      <FileText size={16} />
+                      <span>Read & compare</span>
+                      <small>
+                        {w.analyzedAt ? "Evidence checked" : "Documents queued"}
+                      </small>
+                    </div>
+                    <div>
+                      <Sparkles size={16} />
+                      <span>Prepare for review</span>
+                      <small>{reviews.length} ready for you</small>
+                    </div>
+                    <div>
+                      <Mail size={16} />
+                      <span>Track HR replies</span>
+                      <small>
+                        {w.inbox ? "Inbox connected" : "After demo HR connects"}
+                      </small>
+                    </div>
+                  </div>
+                  <div className="agent-scope">
+                    <ShieldCheck size={14} />
+                    {w.background?.enabled
+                      ? "Preparation while open · Background HR checks on"
+                      : "Active while open · Background checks off"}
+                    <button
+                      className="agent-scope-settings"
+                      onClick={() => setPage("settings")}
+                    >
+                      Manage
+                    </button>
+                  </div>
+                </div>
+                <div className="review-inbox">
+                  <div className="review-inbox-heading">
+                    <div>
+                      <span className="paper-eyebrow">YOUR PART</span>
+                      <h2>
+                        Review & decide <span>{reviews.length}</span>
+                      </h2>
+                    </div>
+                    <CheckCheck size={22} />
+                  </div>
+                  {reviews.length ? (
+                    reviews.map((t) => (
+                      <button
+                        className="review-item"
+                        key={t.id}
+                        onClick={() => openTask(t.id)}
+                      >
+                        <span className="review-item-icon">
+                          {reviewKind(t, w) === "reply" ? (
+                            <Mail size={20} />
+                          ) : (
+                            <Wallet size={20} />
+                          )}
+                        </span>
+                        <span>
+                          <small>
+                            {reviewKind(t, w) === "reply"
+                              ? "REPLY DRAFTED"
+                              : "CLAIM PREPARED"}
+                          </small>
+                          <strong>{t.claim?.course || t.title}</strong>
+                          <span>
+                            {reviewKind(t, w) === "reply"
+                              ? "Review message & attachment"
+                              : `${money(t.claim!.amount)} · Review claim & evidence`}
+                          </span>
+                        </span>
+                        <ArrowUpRight size={18} />
+                      </button>
+                    ))
+                  ) : (
+                    <div className="review-empty">
+                      <ShieldCheck size={27} />
+                      <strong>
+                        {agentWorking
+                          ? "Your agent is doing the prep."
+                          : "Nothing to approve right now."}
+                      </strong>
+                      <p>
+                        Prepared claims and replies will appear here. You get
+                        the final say.
+                      </p>
+                    </div>
+                  )}
+                  <div className="review-safety">
+                    <ShieldCheck size={14} /> Review the exact contents before
+                    approving.
+                  </div>
                 </div>
               </section>
-              <section className="insight">
-                <span className="insight-symbol">
-                  <Sparkles size={19} />
-                </span>
+              <section
+                className="agent-handoff"
+                aria-label="Missing information"
+              >
                 <div>
-                  <strong>
-                    {attention
-                      ? `${attention} ${attention === 1 ? "task needs" : "tasks need"} your review`
-                      : "Your next steps"}
-                  </strong>
-                  <p>
-                    {w.analyzedAt
-                      ? w.analysisSummary
-                      : w.documents.length
-                        ? w.demo
-                          ? "Your learning reimbursement has a deadline. Start there, then check your health coverage between jobs."
-                          : "Your documents are ready. Run analysis to build a plan grounded in your employer policies."
-                        : "Add both employers’ documents, then run analysis to generate your personal plan."}
-                  </p>
+                  <span className="summary-icon lavender">
+                    <CircleHelp size={19} />
+                  </span>
+                  <div>
+                    <strong>
+                      {needsInput.length
+                        ? `${needsInput.length} tasks need information only you can provide`
+                        : "Your agent has the information it needs for now"}
+                    </strong>
+                    <p>
+                      {needsInput.length
+                        ? "Eligibility, personal choices, and missing documents stay unconfirmed until there’s evidence."
+                        : "If a document or personal decision is missing, your agent will ask here."}
+                    </p>
+                  </div>
                 </div>
-                <button
-                  className="text-button"
-                  disabled={!!busy}
-                  onClick={() =>
-                    act(
-                      "analyze",
-                      {},
-                      "Your board is updated with verified document evidence.",
-                    )
-                  }
-                >
-                  <Busy busy={busy === "analyze"} />
-                  {busy === "analyze"
-                    ? "Reading documents…"
-                    : "Analyze documents"}
-                  <ArrowRight size={15} />
-                </button>
+                {needsInput.length > 0 && (
+                  <button
+                    className="text-button"
+                    onClick={() => {
+                      setFilter("attention");
+                      openTask(needsInput[0].id);
+                    }}
+                  >
+                    View requests <ArrowRight size={15} />
+                  </button>
+                )}
               </section>
               <div className="board-toolbar">
                 <div className="board-title">
-                  <h2>Your transition plan</h2>
+                  <h2>The plan your agent is tracking</h2>
                   <span>{w.tasks.length}</span>
                 </div>
                 <div className="board-controls">
@@ -541,7 +704,7 @@ export default function Dashboard() {
               <div className="board-footer">
                 <span>
                   <ShieldCheck size={14} /> Every recommendation has a source.
-                  Every action is your call.
+                  Sending always needs your approval.
                 </span>
                 <a href="/api/export">
                   <Download size={14} /> Export plan
@@ -637,14 +800,18 @@ export default function Dashboard() {
                   className="secondary"
                   disabled={!!busy}
                   onClick={() =>
-                    act("sync", {}, "Inbox checked for new HR replies.")
+                    act(
+                      "agent_resume",
+                      {},
+                      "Agent resumed. Replies are checked automatically.",
+                    )
                   }
                 >
                   <RefreshCw
                     size={16}
                     className={busy === "sync" ? "spin" : ""}
                   />{" "}
-                  Check for replies
+                  Resume agent
                 </button>
               </div>
               <div className="activity-feed">
@@ -720,17 +887,23 @@ export default function Dashboard() {
       {busy && (
         <div className="working-indicator">
           <LoaderCircle size={14} className="spin" />
-          {busy === "analyze"
-            ? "Reading your documents"
-            : busy === "submit"
-              ? "Submitting with Kernel"
-              : busy === "prepare"
-                ? "Checking your receipt and policy"
-                : busy.includes("hr_")
-                  ? "Sending demo HR email"
-                  : busy === "sync"
-                    ? "Checking HR replies"
-                    : "Working on it"}
+          {busy === "advance"
+            ? agentPhase === "prepare"
+              ? "Preparing work for your review"
+              : agentPhase === "sync"
+                ? "Checking HR replies"
+                : "Reading your documents"
+            : busy === "analyze"
+              ? "Reading your documents"
+              : busy === "submit"
+                ? "Submitting with Kernel"
+                : busy === "prepare"
+                  ? "Checking your receipt and policy"
+                  : busy.includes("hr_")
+                    ? "Sending demo HR email"
+                    : busy === "sync"
+                      ? "Checking HR replies"
+                      : "Working on it"}
           <span>…</span>
         </div>
       )}
@@ -786,9 +959,9 @@ export default function Dashboard() {
                 <div className="notice warning">
                   <CalendarDays size={18} />
                   <p>
-                    Your dates changed. This task needs review. Reanalyze
-                    documents for updated coverage details; confirm changes to
-                    submitted items with HR.
+                    Your dates changed. Your agent will recheck documents for
+                    updated coverage details; confirm changes to submitted items
+                    with HR.
                   </p>
                 </div>
               )}
@@ -923,7 +1096,10 @@ export default function Dashboard() {
               {task.status === "needs_info" && (
                 <section className="detail-section">
                   <h3>
-                    <Upload size={17} /> Add your completion certificate
+                    <Upload size={17} />{" "}
+                    {selectedCertificate
+                      ? "Review the prepared reply"
+                      : "Your agent needs a completion certificate"}
                   </h3>
                   {!w.documents.some((d) => d.kind === "certificate") ? (
                     <div className="certificate-actions">
@@ -969,8 +1145,16 @@ export default function Dashboard() {
                         </small>
                       </div>
                       <button
+                        className="text-button"
+                        onClick={() =>
+                          setViewDoc({ id: selectedCertificate!.id, page: 1 })
+                        }
+                      >
+                        <FileText size={14} /> Review attachment contents
+                      </button>
+                      <button
                         className="primary full"
-                        disabled={!!busy}
+                        disabled={!!busy || !w.demo}
                         onClick={() =>
                           act(
                             "send_certificate",
@@ -1049,7 +1233,7 @@ export default function Dashboard() {
                       act(
                         task.claim?.certificateId ? "hr_approve" : "hr_request",
                         { taskId: task.id },
-                        "Demo HR email sent. Check replies if it has not arrived yet.",
+                        "Demo HR email sent. Your agent will check for its arrival.",
                       )
                     }
                   >
@@ -1070,20 +1254,20 @@ export default function Dashboard() {
             </div>
             <footer className="panel-footer">
               {task.status === "todo" && task.category === "money" && (
-                <button
-                  className="primary full"
-                  disabled={!!busy}
-                  onClick={() =>
-                    act(
-                      "prepare",
-                      { taskId: task.id },
-                      "Claim checked against your documents.",
-                    )
-                  }
-                >
-                  <Busy busy={busy === "prepare"} />
-                  <Sparkles size={16} /> Check eligibility & prepare claim
-                </button>
+                <div className="agent-task-note">
+                  <Sparkles size={17} />
+                  <p>
+                    {task.missing.length
+                      ? "Add the missing evidence. Your agent will check eligibility again automatically."
+                      : "Your agent will check eligibility and prepare this claim for review."}
+                  </p>
+                  <button
+                    className="text-button"
+                    onClick={() => setUpload(true)}
+                  >
+                    Add evidence
+                  </button>
+                </div>
               )}
               {task.status === "ready" && w.demo && (
                 <>
