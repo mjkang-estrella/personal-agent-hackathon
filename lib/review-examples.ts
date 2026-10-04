@@ -167,8 +167,7 @@ export function reviewExamples(): Task[] {
   return definitions.map((d) => ({
     id: `review-example-${d.id}`,
     title: d.title,
-    description:
-      "Fictional review example. Try a choice and see the next step in your plan.",
+    description: d.why,
     stage: "after",
     category: d.category,
     status: "todo",

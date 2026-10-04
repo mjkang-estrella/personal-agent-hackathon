@@ -12,7 +12,7 @@ The user likes the new Chat tab but wants the existing pages preserved. The init
 
 Keep Chat as the initial tab, directly above Transition board. Keep the arrival briefing and its task-specific conversation entry point. Restore Transition board, Documents, Inbox, Connected accounts, Activity, and Settings as full workspace pages using the established main-page presentation. Keep the chat runtime mounted but hidden when another page is active, retaining messages and unsent drafts. Return through the Chat tab, which focuses the composer.
 
-Source and task references in chat open the relevant full page only on a deliberate click. Automatic tool results do not navigate away from the answer on any screen size. Preserve current-main additions, including review examples and Connected accounts, while adapting the navigation.
+Source and task references in chat open the relevant full page only on a deliberate click. Automatic tool results do not navigate away from the answer on any screen size. Preserve current-main additions, including the natural review-task presentation, Connected accounts, and blank signed-in workspaces, while adapting the navigation.
 
 The user chose the product structure. Keeping one mounted runtime and suppressing automatic tab changes are implementation choices.
 
@@ -26,7 +26,7 @@ This supersedes the side-panel layout and automatic desktop focusing in the [arr
 
 ## Validation
 
-Run typecheck, unit tests, production build, and T3 desktop/mobile inspection. Check full-width board, documents, inbox, accounts, activity, and settings; retain draft and conversation across tab switches. Include updated screenshots in PR #25. Portal execution and external sends remain outside this UI verification.
+Typecheck, all 87 unit tests, and production build passed. T3 inspection at 1280×800 and 390×844 confirmed full-page navigation and no horizontal overflow. All existing desktop pages remain reachable; the source link opens Documents at the cited passage on mobile. An unsent draft and a live assistant response survive tab switches. New chat resets the conversation. Updated desktop, tablet, and mobile screenshots are included in PR #25. Provider connections, authenticated sign-in, portal execution, and external sends were not exercised by this UI verification. The guest preview displays signed-out connection states.
 
 ## Links
 

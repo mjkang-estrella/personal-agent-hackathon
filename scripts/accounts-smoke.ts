@@ -214,11 +214,16 @@ try {
   guest.set(tokenName, "fixture-a");
   const a = guest;
   const adopted = await request(a, "/api/account");
-  assert.equal(adopted.data.activeWorkspace, guestId);
-  assert.equal(
-    (await request(a, "/api/state")).data.analysisSummary,
-    "Preserved guest progress",
+  const personalId = adopted.data.activeWorkspace;
+  assert.notEqual(personalId, guestId, "Accounts never open on demo data");
+  assert.ok(
+    adopted.data.workspaces.some((w: { id: string }) => w.id === guestId),
+    "Guest demo progress is saved as a secondary workspace",
   );
+  const blank = (await request(a, "/api/state")).data;
+  assert.equal(blank.demo, false);
+  assert.equal(blank.documents.length, 0);
+  assert.equal(blank.profile.name, "Your name");
   assert.equal(
     (await request(guestCopy, "/api/state")).status,
     401,
@@ -228,7 +233,7 @@ try {
   secondDevice.set(tokenName, "fixture-a");
   assert.equal(
     (await request(secondDevice, "/api/account")).data.activeWorkspace,
-    guestId,
+    personalId,
   );
   const concurrentGuest = jar();
   await request(concurrentGuest, "/api/state");
@@ -244,7 +249,9 @@ try {
     request(d, "/api/account"),
   ]);
   assert.equal(
-    concurrent.filter((r) => r.data.activeWorkspace === concurrentId).length,
+    concurrent.filter((r) =>
+      r.data.workspaces.some((w: { id: string }) => w.id === concurrentId),
+    ).length,
     1,
     "Only one account may adopt a guest workspace",
   );
@@ -291,7 +298,7 @@ try {
     200,
   );
   const personal = await request(a, "/api/account");
-  assert.equal(personal.data.workspaces.length, 2);
+  assert.equal(personal.data.workspaces.length, 3);
   assert.equal((await request(a, "/api/state")).data.demo, false);
   const upload = new FormData();
   upload.set(
