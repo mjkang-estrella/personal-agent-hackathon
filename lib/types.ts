@@ -39,6 +39,8 @@ export interface Task {
   mailMessageId?: string;
   processedMessageIds?: string[];
   lastReply?: string;
+  lastReplyAt?: string;
+  submittingAt?: string;
   browserSessionId?: string;
   browserUrl?: string;
   error?: string;
@@ -73,7 +75,18 @@ export interface Resource {
   url: string;
   description: string;
 }
+export interface BackgroundStatus {
+  enabled: boolean;
+  generation: string;
+  status: "starting" | "running" | "retrying" | "paused" | "attention";
+  startedAt: string;
+  runId?: string;
+  lastCheckedAt?: string;
+  failures?: number;
+  error?: string;
+}
 export interface Workspace {
+  background?: BackgroundStatus;
   profile: Profile;
   documents: Document[];
   tasks: Task[];

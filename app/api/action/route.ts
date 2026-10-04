@@ -1,3 +1,4 @@
+import { setBackground } from "@/lib/background";
 export const maxDuration = 300;
 import { z } from "zod";
 import { MODEL_LABEL } from "@/lib/model-config";
@@ -54,6 +55,7 @@ export async function POST(request: Request) {
     let w = await getWorkspace(id);
     switch (data.action) {
       case "new_workspace": {
+        if (w.background?.enabled) await setBackground(id, false);
         const next = await newSessionId();
         w = await getWorkspace(next);
         if (data.mode === "personal")

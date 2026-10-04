@@ -7,3 +7,7 @@ node_modules/
 
 *.tsbuildinfo
 .vercel/
+
+.workflow-data/
+app/.well-known/workflow/
+/.swc
