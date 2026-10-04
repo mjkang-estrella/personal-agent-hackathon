@@ -8,7 +8,7 @@ import {
 import { useChatRuntime } from "@assistant-ui/ai-sdk";
 import { DefaultChatTransport } from "ai";
 import ReactMarkdown from "react-markdown";
-import { ArrowUp, Sparkles, Square } from "lucide-react";
+import { ArrowUp, Sparkles, X, Square } from "lucide-react";
 function MarkdownText({ text }: { text: string }) {
   return <ReactMarkdown>{text}</ReactMarkdown>;
 }
@@ -32,7 +32,7 @@ function AssistantMessage() {
     </MessagePrimitive.Root>
   );
 }
-export default function Assistant() {
+export default function Assistant({ close }: { close: () => void }) {
   const runtime = useChatRuntime({
     transport: new DefaultChatTransport({ api: "/api/chat" }),
   });
@@ -45,9 +45,16 @@ export default function Assistant() {
           </span>
           <div>
             <strong>Your transition assistant</strong>
-            <small>Here to connect the dots.</small>
+            <small>Answers grounded in your documents.</small>
           </div>
         </div>
+        <button
+          className="icon-button"
+          onClick={close}
+          aria-label="Close assistant"
+        >
+          <X size={20} />
+        </button>
       </header>
       <AssistantRuntimeProvider runtime={runtime}>
         <ThreadPrimitive.Root className="chat-thread">
@@ -55,7 +62,7 @@ export default function Assistant() {
             <ThreadPrimitive.Empty>
               <div className="chat-welcome">
                 <Sparkles size={30} />
-                <h3>A little clarity goes a long way.</h3>
+                <h3>How can I help?</h3>
                 <p>
                   Ask about your documents, upcoming deadlines, or what to
                   handle next.

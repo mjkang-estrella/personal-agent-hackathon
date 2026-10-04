@@ -1,7 +1,7 @@
 # Read-only workspace inbox in the right panel
 
 - Date: 2026-10-04
-- Status: accepted
+- Status: superseded (placement only)
 - Owner: Codex / user-requested inbox UI
 
 ## Context
@@ -37,3 +37,5 @@ Only demo HR replies tied to claims in the current workspace appear. Personal ma
 - [MVP architecture](2026-10-04-190000-codex-jobswitch-mvp.md)
 - [Desktop message detail](../screenshots/inbox-desktop.png)
 - [Mobile inbox](../screenshots/inbox-mobile.png)
+
+The UI placement is superseded by [Inbox below documents](2026-10-04-191500-codex-left-inbox-navigation.md). The read-only access decisions still apply.

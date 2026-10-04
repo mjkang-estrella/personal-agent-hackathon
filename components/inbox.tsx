@@ -66,8 +66,8 @@ export default function Inbox({
           <Mail size={20} />
         </span>
         <div>
-          <h2>Your inbox</h2>
-          <p>HR replies, all in one place.</p>
+          <h2>HR replies</h2>
+          <p>Messages for your transition.</p>
         </div>
         <button
           className="icon-button"
