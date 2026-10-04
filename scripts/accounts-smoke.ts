@@ -108,7 +108,12 @@ async function request(
 try {
   await admin.query(`CREATE SCHEMA ${schema}`);
   await admin.query(`SET search_path TO ${schema}`);
-  for (const file of ["001_jobswitch.sql", "002_gmail.sql", "004_accounts.sql"])
+  for (const file of [
+    "001_jobswitch.sql",
+    "002_gmail.sql",
+    "003_outlook.sql",
+    "004_accounts.sql",
+  ])
     await admin.query(await readFile(`migrations/${file}`, "utf8"));
   const db = new URL(process.env.DATABASE_URL_UNPOOLED!);
   db.searchParams.set("options", `-c search_path=${schema}`);
@@ -143,6 +148,15 @@ try {
   const guest = jar();
   assert.equal((await request(guest, "/api/state")).status, 200);
   const guestCopy = new Map(guest);
+  assert.equal(
+    (await request(guest, "/api/account", { action: "demo" })).status,
+    200,
+  );
+  assert.equal(
+    guest.get("jobswitch_session"),
+    guestCopy.get("jobswitch_session"),
+    "Trying demo preserves existing guest progress",
+  );
   for (const path of [
     "/api/documents",
     "/api/gmail/connect",
@@ -194,6 +208,28 @@ try {
     (await request(secondDevice, "/api/account")).data.activeWorkspace,
     guestId,
   );
+  const concurrentGuest = jar();
+  await request(concurrentGuest, "/api/state");
+  const concurrentId = concurrentGuest.get("jobswitch_session")!.split(".")[0];
+  users.set("fixture-c", "account-c");
+  users.set("fixture-d", "account-d");
+  const c = new Map(concurrentGuest);
+  c.set(tokenName, "fixture-c");
+  const d = new Map(concurrentGuest);
+  d.set(tokenName, "fixture-d");
+  const concurrent = await Promise.all([
+    request(c, "/api/account"),
+    request(d, "/api/account"),
+  ]);
+  assert.equal(
+    concurrent.filter((r) => r.data.activeWorkspace === concurrentId).length,
+    1,
+    "Only one account may adopt a guest workspace",
+  );
+  assert.notEqual(
+    concurrent[0].data.activeWorkspace,
+    concurrent[1].data.activeWorkspace,
+  );
   const b = new Map(guestCopy);
   b.set(tokenName, "fixture-b");
   const bAccount = await request(b, "/api/account");
@@ -235,6 +271,28 @@ try {
   const personal = await request(a, "/api/account");
   assert.equal(personal.data.workspaces.length, 2);
   assert.equal((await request(a, "/api/state")).data.demo, false);
+  const upload = new FormData();
+  upload.set(
+    "file",
+    new File(
+      ["Fictional employee handbook: all eligibility remains unconfirmed."],
+      "fictional-policy.txt",
+      { type: "text/plain" },
+    ),
+  );
+  upload.set("employer", "previous");
+  upload.set("kind", "policy");
+  const uploadResponse = await fetch(`${origin}/api/documents`, {
+    method: "POST",
+    headers: { origin, cookie: [...a].map(([k, v]) => `${k}=${v}`).join("; ") },
+    body: upload,
+  });
+  assert.equal(
+    uploadResponse.status,
+    200,
+    "Authenticated personal upload succeeds",
+  );
+  assert.equal((await request(a, "/api/state")).data.documents.length, 1);
   assert.equal(
     (
       await request(a, "/api/account", {

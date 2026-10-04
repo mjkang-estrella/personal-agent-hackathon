@@ -18,7 +18,7 @@ Use plain, reassuring language that explains what happened and what the person c
 
 ## Landing page and imagery
 
-The landing at `/` explains the product; `/workspace` contains the browser-bound workspace. Promote capabilities that actually exist and state demo or opt-in limits. Do not imply authentication, guaranteed outcomes, real customers, or live integrations that are absent.
+The landing at `/` explains the product; `/workspace` contains the transition workspace. `/sign-in` offers Google accounts, while fictional demos remain available without login. Personal uploads and inbox connections require an account. Promote capabilities that actually exist and state demo or opt-in limits. Do not imply authentication, guaranteed outcomes, real customers, or live integrations that are absent.
 
 Use photography and small product previews to explain benefits, alongside feature summaries and clear calls to action. Original generated imagery is welcome when it adds value. Store optimized assets locally, provide useful alt text and stable dimensions, lazy-load below-the-fold photos, and check crops and text overlays at narrow widths. Do not present generated people as real customers or testimonials.
 

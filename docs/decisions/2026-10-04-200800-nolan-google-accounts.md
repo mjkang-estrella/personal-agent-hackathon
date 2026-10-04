@@ -42,3 +42,11 @@ Use the repository's typecheck, tests, and build. `scripts/accounts-smoke.ts` ru
 ## Upstream integration
 
 The Outlook connector merged during this task. Its private inbox routes now enforce the same account requirement as Gmail, with a sign-in callout in Settings. Outlook remains a separate mail connection; it is not a JobSwitch login provider. Existing loading timeout/recovery and connector UI changes are preserved.
+
+## Verification evidence
+
+- Node 24 typecheck, all 34 unit tests, production build, and isolated account lifecycle checks passed. Lifecycle checks include concurrent guest adoption, authenticated multipart upload, cross-account access rejection, provider outages, and revoked-cookie replay.
+- Live Neon Google initiation reaches Google's login page with only `openid email profile`. Human Google credential entry and consent were not completed by the agent.
+- T3 was unavailable; the Codex browser preview was used at 1440×1000 and 390×844. Inspected sign-in, anonymous continuation, account settings, and sign-in gating before upload.
+- [Desktop sign-in](../screenshots/accounts-desktop.png), [mobile sign-in](../screenshots/accounts-mobile.png), [desktop settings](../screenshots/accounts-settings-desktop.png), [mobile settings](../screenshots/accounts-settings-mobile.png).
+- No deployment was requested. Local ignored environment is configured; deployment Auth environment values and trusted domains still require the normal deployment setup.
