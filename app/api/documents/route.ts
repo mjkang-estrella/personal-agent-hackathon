@@ -1,3 +1,4 @@
+import { requireUser, SignInRequired } from "@/lib/auth/server";
 import { randomUUID } from "node:crypto";
 import { sessionId, sameOrigin, publicError } from "@/lib/session";
 import { mutate, getWorkspace, activity, withWorkspaceLock } from "@/lib/db";
@@ -5,6 +6,7 @@ import { queueAgent } from "@/lib/automation";
 export async function POST(request: Request) {
   try {
     await sameOrigin();
+    await requireUser();
     const id = await sessionId();
     const w = await getWorkspace(id);
     if (w.documents.length >= 20)
@@ -92,6 +94,9 @@ export async function POST(request: Request) {
       ),
     );
   } catch (e) {
-    return Response.json({ error: publicError(e) }, { status: 400 });
+    return Response.json(
+      { error: publicError(e) },
+      { status: e instanceof SignInRequired ? 401 : 400 },
+    );
   }
 }

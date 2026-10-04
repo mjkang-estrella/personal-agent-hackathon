@@ -1,3 +1,4 @@
+import { requireUser } from "@/lib/auth/server";
 import { setBackground } from "@/lib/background";
 export const maxDuration = 300;
 import { z } from "zod";
@@ -65,6 +66,7 @@ export async function POST(request: Request) {
       let w = await getWorkspace(id);
       switch (data.action) {
         case "new_workspace": {
+          if (data.mode === "personal") await requireUser();
           const { disconnect } = await import("@/lib/gmail/oauth");
           const { gmailConfigured } = await import("@/lib/gmail/security");
           if (gmailConfigured()) await disconnect(id);

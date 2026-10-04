@@ -100,8 +100,8 @@ export default function Page() {
           <a href="#your-transition">Your transition</a>
           <a href="#questions">Questions</a>
         </nav>
-        <Link href="/workspace" className={styles.login}>
-          Open workspace <ArrowUpRight size={17} />
+        <Link href="/sign-in" className={styles.login}>
+          Sign in <ArrowUpRight size={17} />
         </Link>
       </header>
       <main id="main">

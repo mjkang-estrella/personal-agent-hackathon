@@ -935,3 +935,47 @@
   min-width: 0;
   overflow-wrap: anywhere;
 }
+
+/* Account controls follow the workspace's existing action hierarchy. */
+.app-shell .account-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--ink, #233640);
+  font-size: 12px;
+  text-decoration: none;
+  min-height: 44px;
+  white-space: nowrap;
+}
+.app-shell .account-card h2 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.app-shell .account-card p {
+  line-height: 1.65;
+}
+.app-shell .account-email {
+  overflow-wrap: anywhere;
+}
+.app-shell .account-card .primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.app-shell .account-card select {
+  width: 100%;
+  min-width: 0;
+}
+.app-shell .account-error {
+  color: #a12f32;
+}
+@media (max-width: 600px) {
+  .app-shell .topbar-right {
+    gap: 8px;
+  }
+  .app-shell .topbar-right .avatar {
+    display: none;
+  }
+}

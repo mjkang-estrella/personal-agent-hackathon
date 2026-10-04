@@ -1,3 +1,4 @@
+import { requireUser, SignInRequired } from "@/lib/auth/server";
 import { z } from "zod";
 import { sessionId, sameOrigin, publicError } from "@/lib/session";
 import { senderAddress } from "@/lib/gmail/security";
@@ -5,6 +6,7 @@ import { listThreads } from "@/lib/gmail/sync";
 export const maxDuration = 60;
 export async function POST(request: Request) {
   try {
+    await requireUser();
     await sameOrigin();
     const data = z
       .object({ sender: z.string().max(254) })
@@ -16,6 +18,9 @@ export async function POST(request: Request) {
       { headers: { "Cache-Control": "no-store" } },
     );
   } catch (e) {
-    return Response.json({ error: publicError(e) }, { status: 400 });
+    return Response.json(
+      { error: publicError(e) },
+      { status: e instanceof SignInRequired ? 401 : 400 },
+    );
   }
 }

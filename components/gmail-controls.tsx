@@ -15,6 +15,7 @@ export default function GmailControls({
   w: Workspace;
   onUpdate: (w: Workspace) => void;
 }) {
+  const [signInRequired, setSignInRequired] = useState(false);
   const [connection, setConnection] = useState<ConnectionStatus>();
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
@@ -25,6 +26,11 @@ export default function GmailControls({
   const [confirmed, setConfirmed] = useState(false);
   async function refresh() {
     const r = await fetch("/api/gmail/status");
+    if (r.status === 401) {
+      setSignInRequired(true);
+      return;
+    }
+    setSignInRequired(false);
     if (!r.ok)
       throw new Error("Connection status unavailable. Please try again.");
     setConnection(await r.json());
@@ -86,7 +92,14 @@ export default function GmailControls({
         provider for analysis. This connection cannot send email.
       </p>
       {notice && <p role="status">{notice}</p>}
-      {!connection ? (
+      {signInRequired ? (
+        <p>
+          <a className="text-button" href="/sign-in">
+            Sign in to JobSwitch
+          </a>{" "}
+          before connecting Gmail. Inbox permission is requested separately.
+        </p>
+      ) : !connection ? (
         <p role="status">Loading connection…</p>
       ) : !connection.configured ? (
         <p>
