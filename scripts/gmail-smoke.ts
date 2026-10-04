@@ -103,7 +103,7 @@ try {
   assert.equal((await connection(ids[0]))?.status, "reconnect");
   invalidGrant = false;
   await disconnect(ids[0]);
-  assert.equal(revoke, true);
+  assert.equal(revoke, false);
   assert.equal(await connection(ids[0]), undefined);
   assert.equal((await getWorkspace(ids[0])).tasks[0].gmail, undefined);
   await assert.rejects(
@@ -126,7 +126,7 @@ try {
     finishConnect(ids[0], url.searchParams.get("state")!, "fake-code"),
   );
   console.log(
-    "Gmail smoke passed: OAuth replay/expiry/workspace isolation, encrypted storage, refresh/revocation, sender binding, disconnect race. All Google HTTP calls mocked.",
+    "Gmail smoke passed: OAuth replay/expiry/workspace isolation, encrypted storage, refresh/reconnect and local-only disconnect, sender binding, disconnect race. All Google HTTP calls mocked.",
   );
 } finally {
   globalThis.fetch = originalFetch;

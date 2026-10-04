@@ -15,6 +15,7 @@ export default function OutlookControls({
   w: Workspace;
   onUpdate: (w: Workspace) => void;
 }) {
+  const [signInRequired, setSignInRequired] = useState(false);
   const [connection, setConnection] = useState<ConnectionStatus>();
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
@@ -25,6 +26,11 @@ export default function OutlookControls({
   const [confirmed, setConfirmed] = useState(false);
   async function refresh() {
     const r = await fetch("/api/outlook/status");
+    if (r.status === 401) {
+      setSignInRequired(true);
+      return;
+    }
+    setSignInRequired(false);
     if (!r.ok)
       throw new Error("Connection status unavailable. Please try again.");
     setConnection(await r.json());
@@ -87,7 +93,14 @@ export default function OutlookControls({
         cannot send email.
       </p>
       {notice && <p role="status">{notice}</p>}
-      {!connection ? (
+      {signInRequired ? (
+        <p>
+          <a className="text-button" href="/sign-in">
+            Sign in to JobSwitch
+          </a>{" "}
+          before connecting Outlook. Inbox permission is requested separately.
+        </p>
+      ) : !connection ? (
         <p>Loading connection…</p>
       ) : !connection.configured ? (
         <p>
