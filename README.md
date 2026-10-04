@@ -111,3 +111,11 @@ Google is the only JobSwitch account login method. The fictional demo remains us
 4. Leave the existing Gmail OAuth client and read-only permission flow separate. Signing in to JobSwitch never grants mailbox access.
 
 For account integration verification, stop the local dev server and run `node --env-file=.env --import tsx scripts/accounts-smoke.ts`. It starts a temporary Next.js process on port 3006, uses the configured development database with an isolated disposable schema, and supplies a local fake identity service. It does not contact Google or send messages. This checks authorization and restoration; a real Google consent round trip still needs a human's Google login.
+
+## Connected portal accounts (browser agent)
+
+**Connected accounts** lets your agent work in a real portal on Kernel cloud browsers using [Stagehand v4](https://docs.stagehand.dev/v4). Connect a public HTTPS sign-in page. Kernel Managed Auth stores the signed-in session, and optionally a username and password; passwords never reach JobSwitch's model. Describe a task, and the agent drafts a plan: the exact values it will enter, any workspace documents to upload, and the single outcome it will complete (or none for read-only tasks). Confirm the plan once and the agent works on its own while the workspace is open.
+
+It pauses for sign-in, MFA, CAPTCHA or redirects off the portal, and for any value, file or consequential step outside the plan. The outcome is attempted at most once and never retried; an unclear result stays unconfirmed until you check the live browser. Submission is never reported as approval or payment. See [the decision record](docs/decisions/2026-10-04-201717-nolan-browser-agent.md).
+
+Setup: `npm run db:migrate` (adds `jobswitch_browser_accounts`), plus `KERNEL_API_KEY` and the Neon AI Gateway variables. `node --env-file=.env --import tsx scripts/stagehand-spike.ts` checks Stagehand on Kernel against a public test form without submitting it.

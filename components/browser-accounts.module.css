@@ -1,0 +1,260 @@
+.root {
+  max-width: 1000px;
+  color: #233247;
+}
+.root h2 {
+  font-size: 22px;
+  margin: 0 0 12px;
+}
+.root h3 {
+  margin: 0;
+  font-size: 20px;
+}
+.root h4 {
+  margin: 0 0 12px;
+  font-size: 17px;
+}
+.root h2,
+.root h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.root p {
+  line-height: 1.6;
+}
+.intro {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 4px 0 24px;
+}
+.intro svg {
+  flex-shrink: 0;
+  margin-top: 4px;
+  color: #245ec7;
+}
+.intro p {
+  margin: 0;
+  max-width: 720px;
+}
+.connect {
+  background: white;
+  border: 1px solid #e1e5eb;
+  border-radius: 16px;
+  padding: 28px;
+}
+.connect > p {
+  max-width: 700px;
+  color: #596777;
+}
+.fields {
+  border: 0;
+  padding: 0;
+  margin: 24px 0 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  min-width: 0;
+}
+.root label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 0;
+}
+.root input:not([type="checkbox"]),
+.root textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #cbd3de;
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  font: inherit;
+  color: #17283e;
+  min-width: 0;
+}
+.root textarea {
+  min-height: 95px;
+  resize: vertical;
+}
+.root input:focus-visible,
+.root textarea:focus-visible,
+.root button:focus-visible,
+.root a:focus-visible {
+  outline: 3px solid #90b9fa;
+  outline-offset: 3px;
+}
+.root .check {
+  flex-direction: row;
+  align-items: flex-start;
+  grid-column: 1 / -1;
+  font-weight: 400;
+  line-height: 1.6;
+}
+.check input {
+  margin-top: 4px;
+  flex-shrink: 0;
+  width: 17px;
+  height: 17px;
+}
+.root button,
+.root a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #cbd3de;
+  background: white;
+  color: #254466;
+  padding: 10px 14px;
+  border-radius: 8px;
+  min-height: 44px;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  width: fit-content;
+}
+.root button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+.root .primary {
+  background: #235ec5;
+  border-color: #235ec5;
+  color: white;
+}
+.small {
+  color: #5a697b;
+  font-size: 13px;
+  grid-column: 1 / -1;
+  margin: 0;
+}
+.accounts {
+  margin-top: 36px;
+}
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.heading h2 {
+  margin: 0;
+}
+.empty {
+  text-align: center;
+  padding: 42px 20px;
+  color: #667589;
+}
+.empty h3 {
+  justify-content: center;
+  margin: 15px 0;
+  color: #27394f;
+}
+.account {
+  padding: 28px 0;
+  border-bottom: 1px solid #dce1e8;
+}
+.domain {
+  margin: 6px 0;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.badge {
+  background: #eaf1fe;
+  color: #2458a4;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 18px 0;
+}
+.taskForm {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+}
+.run {
+  margin-top: 24px;
+}
+.review {
+  background: white;
+  padding: 24px;
+  border: 1px solid #c3d5f4;
+  border-radius: 12px;
+  margin-top: 20px;
+}
+.review dl {
+  display: grid;
+  grid-template-columns: 115px 1fr;
+  gap: 10px;
+  font-size: 14px;
+}
+.review dt {
+  color: #607087;
+}
+.review dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.review pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font: inherit;
+  max-height: 280px;
+  overflow: auto;
+}
+.review details {
+  margin: 18px 0;
+}
+.review summary {
+  cursor: pointer;
+  padding: 8px 0;
+  font-size: 14px;
+}
+.review > button {
+  margin-top: 18px;
+}
+.notice {
+  background: #fff4df;
+  border: 1px solid #e4c997;
+  border-radius: 10px;
+  padding: 16px;
+}
+.root > .small {
+  margin-top: 28px;
+}
+@media (max-width: 640px) {
+  .fields {
+    grid-template-columns: 1fr;
+  }
+  .connect,
+  .review {
+    padding: 18px;
+  }
+  .heading {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .review dl {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+  .review dd {
+    margin-bottom: 10px;
+  }
+  .root button,
+  .root a {
+    max-width: 100%;
+  }
+}

@@ -51,6 +51,7 @@ import CalendarControls from "./calendar-controls";
 import CloudDocuments from "./cloud-documents";
 import OutlookControls from "./outlook-controls";
 import GmailControls from "./gmail-controls";
+import BrowserAccounts from "./browser-accounts";
 import AccountControls from "./account-controls";
 import { MODEL_LABEL } from "@/lib/model-config";
 import { isReviewExample } from "@/lib/review-examples";
@@ -124,7 +125,8 @@ const stages: {
     icon: BriefcaseBusiness,
   },
 ];
-type Page = "board" | "documents" | "inbox" | "activity" | "settings";
+type Page =
+  "accounts" | "board" | "documents" | "inbox" | "activity" | "settings";
 export default function Dashboard() {
   const [w, setW] = useState<Workspace | null>(null);
   const [page, setPage] = useState<Page>("board");
@@ -421,6 +423,7 @@ export default function Dashboard() {
     ["board", LayoutDashboard, "Transition board"],
     ["documents", Files, "My documents"],
     ["inbox", Mail, "Inbox"],
+    ["accounts", ShieldCheck, "Connected accounts"],
     ["activity", Activity, "Agent activity"],
   ];
   const visible = w.tasks.filter(
@@ -511,9 +514,11 @@ export default function Dashboard() {
                   ? "My documents"
                   : page === "inbox"
                     ? "Inbox"
-                    : page === "activity"
-                      ? "Agent activity"
-                      : "Settings"}
+                    : page === "accounts"
+                      ? "Connected accounts"
+                      : page === "activity"
+                        ? "Agent activity"
+                        : "Settings"}
             </span>
           </div>
           <div className="topbar-right">
@@ -585,6 +590,8 @@ export default function Dashboard() {
                   "Documents"
                 ) : page === "inbox" ? (
                   "Inbox"
+                ) : page === "accounts" ? (
+                  "Connected accounts"
                 ) : page === "activity" ? (
                   "Activity"
                 ) : (
@@ -598,9 +605,11 @@ export default function Dashboard() {
                     ? "The source of truth for your transition. Every recommendation starts here."
                     : page === "inbox"
                       ? "Read HR replies and keep track of the conversation."
-                      : page === "activity"
-                        ? "A clear record of what happened, what changed, and what comes next."
-                        : "Your dates and details keep every next step in sync."}
+                      : page === "accounts"
+                        ? "Your portals, your approval. Let your agent help with the next step."
+                        : page === "activity"
+                          ? "A clear record of what happened, what changed, and what comes next."
+                          : "Your dates and details keep every next step in sync."}
               </p>
             </div>
           </div>
@@ -612,6 +621,7 @@ export default function Dashboard() {
               focus={inboxFocus}
             />
           )}
+          {page === "accounts" && <BrowserAccounts />}
           {page === "board" && (
             <>
               {practice && (
