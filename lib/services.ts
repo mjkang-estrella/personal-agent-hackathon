@@ -327,7 +327,12 @@ export async function syncMail(id: string, generation?: string) {
   );
   for (const claim of claims.rows) {
     const task = w.tasks.find((t) => t.id === claim.task_id);
-    if (!task || task.gmail || !["waiting", "needs_info"].includes(task.status))
+    if (
+      !task ||
+      task.gmail ||
+      task.outlook ||
+      !["waiting", "needs_info"].includes(task.status)
+    )
       continue;
     const response = await mail().inboxes.messages.list(w.inbox, {
       limit: 30,
@@ -370,6 +375,7 @@ export async function syncMail(id: string, generation?: string) {
         if (
           !t ||
           t.gmail ||
+          t.outlook ||
           !applyHRReply(t, {
             ...parsed,
             id: msg.messageId,

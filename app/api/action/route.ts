@@ -68,6 +68,8 @@ export async function POST(request: Request) {
           const { disconnect } = await import("@/lib/gmail/oauth");
           const { gmailConfigured } = await import("@/lib/gmail/security");
           if (gmailConfigured()) await disconnect(id);
+          const outlook = await import("@/lib/outlook/oauth");
+          await outlook.disconnect(id);
           if (w.background?.enabled) await setBackground(id, false);
           const next = await newSessionId();
           w = await getWorkspace(next);

@@ -69,7 +69,7 @@ export default function Inbox({
           <h2>HR replies</h2>
           <p>
             {data?.provider === "gmail"
-              ? "Saved replies from your selected Gmail threads."
+              ? "Saved replies from your selected email threads."
               : "Messages for your transition."}
           </p>
         </div>
@@ -176,7 +176,7 @@ export default function Inbox({
                       </h3>
                       <p>
                         {data.provider === "gmail"
-                          ? "Connect Gmail and choose HR threads in workspace settings. Replies appear here after checking. Refresh reloads saved replies."
+                          ? "Connect email and choose HR threads in workspace settings. Replies appear here after checking. Refresh reloads saved replies."
                           : data.connected
                             ? "No HR replies for this workspace yet. Refresh when you’re ready to check again."
                             : "Demo HR replies will appear here once the reimbursement workflow connects your test inbox."}

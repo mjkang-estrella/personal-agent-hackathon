@@ -44,6 +44,7 @@ import Assistant from "./assistant";
 import Modal, { ModalNotice } from "./modal";
 import Inbox from "./inbox";
 import BackgroundControls from "./background-controls";
+import OutlookControls from "./outlook-controls";
 import GmailControls from "./gmail-controls";
 import { MODEL_LABEL } from "@/lib/model-config";
 import { reviewKind } from "@/lib/automation";
@@ -148,7 +149,10 @@ export default function Dashboard() {
   }, []);
   useEffect(() => {
     load();
-    if (new URLSearchParams(window.location.search).has("gmail"))
+    if (
+      new URLSearchParams(window.location.search).has("gmail") ||
+      new URLSearchParams(window.location.search).has("outlook")
+    )
       setPage("settings");
   }, [load]);
   useEffect(() => {
@@ -1824,6 +1828,7 @@ function SettingsForm({
         </button>
       </form>
       <GmailControls w={w} onUpdate={onUpdate} />
+      <OutlookControls w={w} onUpdate={onUpdate} />
       <BackgroundControls w={w} onUpdate={onUpdate} />
       <div className="settings-card">
         <h2>Workspace services</h2>
