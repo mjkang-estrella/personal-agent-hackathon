@@ -12,6 +12,9 @@ import {
   BriefcaseBusiness,
   Coffee,
   Smile,
+  MessageCircle,
+  Bell,
+  Download,
 } from "lucide-react";
 import LandingJourney from "@/components/landing-journey";
 import styles from "./landing.module.css";
@@ -37,6 +40,27 @@ const features = [
     copy: "Prepare your reimbursement, review the details, and follow its progress. You approve the action before anything is sent.",
     icon: ShieldCheck,
     tags: ["Review before sending", "Clear claim status"],
+  },
+  {
+    number: "04",
+    title: "Ask the question on your mind.",
+    copy: "Get help understanding your documents, deadlines, and what to prioritize. A conversational way to find a little clarity.",
+    icon: MessageCircle,
+    tags: ["Document-grounded answers", "Your transition context"],
+  },
+  {
+    number: "05",
+    title: "Keep the follow-ups in view.",
+    copy: "Opt into background HR reply checks for seven days. Follow progress without keeping the workspace open. Outgoing messages still need approval.",
+    icon: Bell,
+    tags: ["Optional background checks", "Pause whenever you need"],
+  },
+  {
+    number: "06",
+    title: "Take your plan with you.",
+    copy: "Keep your documents, task history, and next steps together. Export your plan when you want a copy outside the workspace.",
+    icon: Download,
+    tags: ["An organized task history", "Export your plan"],
   },
 ];
 const faqs = [
@@ -203,13 +227,31 @@ export default function Page() {
                       <span className={styles.exampleLine} />
                       <span>First hello</span>
                     </>
-                  ) : (
+                  ) : number === "03" ? (
                     <>
                       <ShieldCheck size={18} />
                       <span>Prepared for you</span>
                       <span className={styles.exampleChip}>
                         You review <Check size={12} />
                       </span>
+                    </>
+                  ) : number === "04" ? (
+                    <>
+                      <MessageCircle size={18} />
+                      <span>“What should I do next?”</span>
+                      <Sparkles size={16} />
+                    </>
+                  ) : number === "05" ? (
+                    <>
+                      <Bell size={18} />
+                      <span>HR reply checks</span>
+                      <span className={styles.exampleChip}>You opt in</span>
+                    </>
+                  ) : (
+                    <>
+                      <FileText size={18} />
+                      <span>Your transition plan</span>
+                      <Download size={16} />
                     </>
                   )}
                 </div>
@@ -224,6 +266,139 @@ export default function Page() {
               </article>
             ))}
           </div>
+        </section>
+        <section
+          className={styles.photoFeatures}
+          aria-label="A closer look at JobSwitch"
+        >
+          <div className={styles.sectionHeading}>
+            <p className={styles.eyebrow}>
+              THOUGHTFUL HELP. PRACTICAL DETAILS.
+            </p>
+            <h2>
+              Less to chase.
+              <br />
+              <em>More to look forward to.</em>
+            </h2>
+          </div>
+          <article className={styles.photoFeatureRow}>
+            <div className={styles.featurePhoto}>
+              <img
+                src="/images/document-clarity.jpg"
+                alt="A professional thoughtfully reviewing documents in a sunlit cafe"
+                width="1536"
+                height="1024"
+                loading="lazy"
+              />
+              <div className={styles.photoOverlay}>
+                <span className={styles.overlaySymbol}>
+                  <FileText size={22} />
+                </span>
+                <div>
+                  <small>FROM THE FICTIONAL DEMO</small>
+                  <strong>An answer you can trace.</strong>
+                  <p>Northstar handbook · Page 2</p>
+                  <span className={styles.sourcePill}>
+                    <Paperclip size={12} /> Source attached
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className={styles.photoFeatureCopy}>
+              <span className={styles.featureKicker}>
+                <FileText size={18} /> DOCUMENT CLARITY
+              </span>
+              <h3>
+                From “where do I find that?”
+                <br />
+                <em>to “now I understand.”</em>
+              </h3>
+              <p>
+                Benefits documents can be a lot to take in—especially when
+                you’re already thinking about your next move. JobSwitch brings
+                the relevant details together and points you back to the source.
+              </p>
+              <ul>
+                <li>
+                  <Check size={17} /> Compare what changes between employers
+                </li>
+                <li>
+                  <Check size={17} /> Open the exact page behind a
+                  recommendation
+                </li>
+                <li>
+                  <Check size={17} /> See what’s known and what needs confirming
+                </li>
+              </ul>
+              <Link href="/workspace" className={styles.textLink}>
+                See the document-to-plan demo <ArrowUpRight size={18} />
+              </Link>
+            </div>
+          </article>
+          <article
+            className={`${styles.photoFeatureRow} ${styles.photoFeatureReverse}`}
+          >
+            <div className={styles.featurePhoto}>
+              <img
+                src="/images/life-in-between.jpg"
+                alt="A professional checking his phone over coffee on a leafy outdoor terrace"
+                width="1536"
+                height="1024"
+                loading="lazy"
+              />
+              <div
+                className={`${styles.photoOverlay} ${styles.followupOverlay}`}
+              >
+                <span className={styles.overlaySymbol}>
+                  <Bell size={22} />
+                </span>
+                <div>
+                  <small>ONE LESS TAB TO KEEP OPEN</small>
+                  <strong>Follow-ups, in view.</strong>
+                  <p>Optional background HR reply checks</p>
+                  <span className={styles.sourcePill}>
+                    <ShieldCheck size={12} /> You stay in control
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className={styles.photoFeatureCopy}>
+              <span className={styles.featureKicker}>
+                <Bell size={18} /> A LITTLE LESS CHASING
+              </span>
+              <h3>
+                Your life keeps moving.
+                <br />
+                <em>Your plan can, too.</em>
+              </h3>
+              <p>
+                There’s more to a job change than checking for replies. Turn on
+                background monitoring to check demo HR updates while you get on
+                with your day, then return to a clear record of what happened.
+              </p>
+              <ul>
+                <li>
+                  <Check size={17} /> Opt into checks that run while the page is
+                  closed
+                </li>
+                <li>
+                  <Check size={17} /> See requests for information and claim
+                  status
+                </li>
+                <li>
+                  <Check size={17} /> Review every outgoing message before it’s
+                  sent
+                </li>
+              </ul>
+              <Link href="/workspace" className={styles.textLink}>
+                Explore your workspace <ArrowUpRight size={18} />
+              </Link>
+              <small className={styles.featureFootnote}>
+                Demo HR workflow. Checks run for up to seven days and can be
+                paused.
+              </small>
+            </div>
+          </article>
         </section>
         <LandingJourney />
         <section id="your-transition" className={styles.planSection}>
@@ -296,39 +471,6 @@ export default function Page() {
                 <strong>A decision that stays yours.</strong>
               </p>
             </div>
-          </div>
-        </section>
-        <section className={styles.controlSection}>
-          <div className={styles.controlArt} aria-hidden="true">
-            <div className={styles.paper}>
-              <FileText size={30} />
-              <span>Ready for your review</span>
-              <div />
-              <div />
-              <div />
-              <strong>
-                You’re in control. <Check size={23} />
-              </strong>
-            </div>
-            <span className={styles.seal}>
-              <ShieldCheck size={46} strokeWidth={1.3} />
-            </span>
-          </div>
-          <div>
-            <p className={styles.eyebrow}>HELPFUL BY DESIGN</p>
-            <h2>
-              A helping hand.
-              <br />
-              <em>Not a leap of faith.</em>
-            </h2>
-            <p>
-              See the exact policy page behind a recommendation. Know what’s
-              confirmed and what still needs checking. Review the details before
-              approving an action.
-            </p>
-            <a href="#questions" className={styles.textLink}>
-              A few things worth knowing <ArrowRight size={19} />
-            </a>
           </div>
         </section>
         <section id="questions" className={styles.faq}>

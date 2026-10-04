@@ -10,7 +10,7 @@ Nolan supplied Osome landing-page and signed-in screenshots and requested a simi
 
 ## Decision
 
-Use cream surfaces, blue actions, large serif display headings, rounded sections, original generated lifestyle photography, and original JobSwitch copy. Place the public landing page at `/` and the existing browser-bound workspace at `/workspace`. The landing uses scoped CSS modules; workspace styling is scoped to `.app-shell` so route transitions do not restyle the landing.
+Use light ivory and white surfaces, blue actions, large serif display headings, rounded sections, original generated lifestyle photography, and original JobSwitch copy. Place the public landing page at `/` and the existing browser-bound workspace at `/workspace`. The landing uses scoped CSS modules; workspace styling is scoped to `.app-shell` so route transitions do not restyle the landing.
 
 Organize the workspace around quick document access, one suggested next action, analysis controls, and the complete three-stage plan. Suggest tasks requiring input first, then those ready for approval, then ordinary to-do tasks ordered by deadline. Exclude waiting, submitting, approved, and completed tasks from new-action suggestions. Use separate task and document search state.
 
@@ -22,7 +22,7 @@ The user chose a more expressive editorial identity. A clear hierarchy helps peo
 
 ## Consequences
 
-Existing root bookmarks now open the landing; users can enter through Open workspace. The dashboard remains browser-bound, not a new login system. Generated photography is committed as an optimized local JPEG. Native FAQ disclosures need no client JavaScript. No dependency, database, provider, or authorization changes.
+Existing root bookmarks now open the landing; users can enter through Open workspace. The dashboard remains browser-bound, not a new login system. Three original generated lifestyle photos are committed as optimized local JPEGs. Alternating photo sections explain document evidence and optional background monitoring; six feature cards introduce the actual demo capabilities. Native FAQ disclosures need no client JavaScript. No dependency, database, provider, or authorization changes.
 
 The workspace presentation supersedes the green palette and top-level hierarchy in [the minimal UI decision](2026-10-04-190648-codex-minimal-ui.md), while preserving its evidence and state requirements.
 
