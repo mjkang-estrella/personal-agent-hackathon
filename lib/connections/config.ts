@@ -1,7 +1,22 @@
 import { z } from "zod";
-export const serviceSchema = z.enum(["google-calendar", "microsoft-calendar"]);
+export const calendarServiceSchema = z.enum([
+  "google-calendar",
+  "microsoft-calendar",
+]);
+export type CalendarService = z.infer<typeof calendarServiceSchema>;
+export const fileServiceSchema = z.enum(["google-drive", "microsoft-drive"]);
+export type FileService = z.infer<typeof fileServiceSchema>;
+export const serviceSchema = z.enum([
+  ...calendarServiceSchema.options,
+  ...fileServiceSchema.options,
+]);
 export type Service = z.infer<typeof serviceSchema>;
 export const services: Record<Service, { label: string; scope: string }> = {
+  "google-drive": {
+    label: "Google Drive",
+    scope: "https://www.googleapis.com/auth/drive.readonly",
+  },
+  "microsoft-drive": { label: "OneDrive", scope: "Files.Read" },
   "google-calendar": {
     label: "Google Calendar",
     scope: "https://www.googleapis.com/auth/calendar.events.owned",
