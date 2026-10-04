@@ -705,7 +705,7 @@ export default function Dashboard() {
               {page === "inbox" && (
                 <Inbox
                   openTask={openTask}
-                  openDocument={(id) => setViewDoc({ id, page: 1 })}
+                  openDocument={(id, page = 1) => setViewDoc({ id, page })}
                   refreshKey={(w.mail || []).length}
                   focus={inboxFocus}
                 />
