@@ -24,10 +24,12 @@ export default function Inbox({
   openTask,
   openDocument,
   refreshKey,
+  focus,
 }: {
   openTask: (id: string) => void;
   openDocument: (id: string) => void;
   refreshKey?: number;
+  focus?: { id: string; label: string; n: number };
 }) {
   const [data, setData] = useState<InboxSnapshot | null>(null);
   const [selected, setSelected] = useState<InboxMessage | null>(null);
@@ -66,6 +68,16 @@ export default function Inbox({
     load();
     return () => request.current?.abort();
   }, [load, refreshKey]);
+  useEffect(() => {
+    if (!focus) return;
+    load({
+      id: focus.id,
+      from: "",
+      subject: focus.label,
+      preview: "",
+      at: new Date().toISOString(),
+    });
+  }, [load, focus]);
   const practice = data?.provider === "scenario";
   const timestamp = (at: string) =>
     practice ? caseTime(at, true) : localTime(at);

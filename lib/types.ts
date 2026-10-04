@@ -72,6 +72,22 @@ export interface Task {
   error?: string;
   dateReview?: boolean;
   history?: TaskEvent[];
+  decision?: Decision;
+}
+// A personal choice the agent lays out but never makes or ranks.
+export interface Decision {
+  question: string;
+  why: string;
+  options: DecisionOption[];
+  chosenId?: string;
+  chosenAt?: string;
+}
+export interface DecisionOption {
+  id: string;
+  label: string;
+  detail: string;
+  nextStep: string;
+  evidence?: Evidence;
 }
 export interface TaskEvent {
   at: string;
