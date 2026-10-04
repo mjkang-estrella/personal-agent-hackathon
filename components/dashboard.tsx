@@ -53,6 +53,7 @@ import OutlookControls from "./outlook-controls";
 import GmailControls from "./gmail-controls";
 import AccountControls from "./account-controls";
 import { MODEL_LABEL } from "@/lib/model-config";
+import { isReviewExample } from "@/lib/review-examples";
 import { reviewKind } from "@/lib/automation";
 import { addDays, replyPayload } from "@/lib/domain";
 import { openDraft } from "@/lib/drafts";
@@ -689,6 +690,24 @@ export default function Dashboard() {
                     </div>
                     <CheckCheck size={22} />
                   </div>
+                  {w.demo && !practice && (
+                    <div className="review-examples-intro">
+                      <p>
+                        Try four fictional choices. Save a preference, then see your
+                        next step. Trying again resets only these examples.
+                      </p>
+                      <button
+                        className="secondary"
+                        disabled={!!busy}
+                        onClick={() => act("review_examples", {}, "Four examples are ready to try.")}
+                      >
+                        <RefreshCw size={15} />
+                        {w.tasks.some(isReviewExample)
+                          ? "Try examples again"
+                          : "Load 4 examples"}
+                      </button>
+                    </div>
+                  )}
                   {reviews.length ? (
                     reviews.map((t) => {
                       const kind = reviewKind(t, w);
@@ -713,7 +732,9 @@ export default function Dashboard() {
                           </span>
                           <span>
                             <small>
-                              {draft
+                              {isReviewExample(t)
+                                ? "FICTIONAL EXAMPLE"
+                                : draft
                                 ? draft.inReplyTo
                                   ? "REPLY DRAFTED"
                                   : "EMAIL DRAFTED"

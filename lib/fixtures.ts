@@ -1,4 +1,5 @@
 import type { Workspace, Document, Task } from "./types";
+import { reviewExamples } from "./review-examples";
 import { randomUUID } from "node:crypto";
 export function makeWorkspace(): Workspace {
   const now = new Date().toISOString();
@@ -282,7 +283,7 @@ export function makeWorkspace(): Workspace {
       startDay: "2026-10-19",
     },
     documents,
-    tasks,
+    tasks: [...tasks, ...reviewExamples()],
     activity: [
       {
         id: randomUUID(),
