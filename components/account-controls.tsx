@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { ArrowRight, LogOut, ShieldCheck, UserRound } from "lucide-react";
 import { authClient } from "@/lib/auth/client";
 
@@ -36,17 +37,23 @@ export function GoogleSignIn({ configured }: { configured: boolean }) {
   return (
     <>
       <button
-        className="primary account-google"
+        className="account-google"
+        aria-busy={busy}
         disabled={!configured || busy}
         onClick={signIn}
       >
-        <UserRound size={19} aria-hidden="true" />{" "}
-        {busy ? "Opening Google…" : "Continue with Google"}{" "}
-        <ArrowRight size={18} aria-hidden="true" />
+        <Image
+          src="/brand/google-g.png"
+          width={20}
+          height={20}
+          alt=""
+          unoptimized
+        />
+        {busy ? "Opening Google…" : "Continue with Google"}
       </button>
       {!configured && (
         <p role="status">
-          Sign-in is being set up. You can still explore the fictional demo.
+          Sign-in is unavailable on this site right now. Try the demo below.
         </p>
       )}
       {error && (
@@ -82,8 +89,7 @@ export function TryDemo() {
           }
         }}
       >
-        {busy ? "Opening demo…" : "Try the demo without an account"}{" "}
-        <ArrowRight size={16} />
+        {busy ? "Opening demo…" : "Try the demo"} <ArrowRight size={16} />
       </button>
       {error && <p role="alert">{error}</p>}
     </>

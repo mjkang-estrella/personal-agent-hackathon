@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, Check, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ArrowLeftRight } from "lucide-react";
 import { authConfigured, currentUser } from "@/lib/auth/server";
 import { GoogleSignIn, TryDemo } from "@/components/account-controls";
 import "./sign-in.css";
@@ -18,40 +18,21 @@ export default async function SignIn({
   }
   return (
     <main className="signin-page">
-      <Link className="signin-brand" href="/">
-        jobswitch<span>®</span>
-      </Link>
       <div className="signin-layout">
-        <section className="signin-story">
-          <span className="signin-eyebrow">ONE LESS THING TO START OVER</span>
-          <h1>
-            Your next chapter.
-            <br />
-            <em>Right where you left it.</em>
+        <Link className="signin-brand" href="/" aria-label="JobSwitch home">
+          <span className="signin-brand-icon">
+            <ArrowLeftRight size={19} aria-hidden="true" />
+          </span>
+          JobSwitch
+        </Link>
+        <section className="signin-card" aria-labelledby="signin-title">
+          <h1 id="signin-title">
+            {user ? "You’re signed in" : "Sign in to JobSwitch"}
           </h1>
-          <p>
-            Keep your documents, decisions, and next steps together as you move
-            between jobs.
-          </p>
-          <ul>
-            <li>
-              <Check size={18} /> Pick up on any device
-            </li>
-            <li>
-              <Check size={18} /> Keep your current workspace progress
-            </li>
-            <li>
-              <Check size={18} /> Connect your inbox only when you choose
-            </li>
-          </ul>
-        </section>
-        <section className="signin-card" aria-label="Sign in">
-          <ShieldCheck className="signin-shield" size={28} />
-          <h2>{user ? "You’re signed in" : "Make this workspace yours"}</h2>
-          <p>
+          <p className="signin-intro">
             {user
               ? `Continue as ${user.email}.`
-              : "Sign in or create your account with Google. Your first sign-in saves this browser’s existing workspace to your account."}
+              : "Your next chapter, all in one place."}
           </p>
           {error && (
             <p role="alert" className="account-error">
@@ -61,27 +42,31 @@ export default async function SignIn({
             </p>
           )}
           {user ? (
-            <Link className="primary" href="/workspace">
+            <Link className="signin-continue" href="/workspace">
               Open my workspace
             </Link>
           ) : (
-            <GoogleSignIn configured={authConfigured()} />
+            <>
+              <GoogleSignIn configured={authConfigured()} />
+              <p className="signin-signup">
+                New here? The same button creates your account.
+              </p>
+            </>
           )}
           <p className="signin-privacy">
-            We use your Google name and email to identify your account. Signing
-            in does not give JobSwitch access to Gmail.
+            Signing in doesn’t grant access to your inbox.
           </p>
           {!user && (
             <div className="signin-demo">
               <TryDemo />
-              <small>Fictional documents. No account required.</small>
+              <small>Fictional documents. No account needed.</small>
             </div>
           )}
         </section>
+        <Link className="signin-back" href="/">
+          <ArrowLeft size={14} aria-hidden="true" /> Back to JobSwitch
+        </Link>
       </div>
-      <Link className="signin-back" href="/">
-        <ArrowLeft size={16} /> Back to JobSwitch
-      </Link>
     </main>
   );
 }
