@@ -1,0 +1,7 @@
+.env
+.env.*
+.neon
+.agents
+.git
+node_modules
+.next

@@ -1,0 +1,87 @@
+export type Stage = "before" | "between" | "after";
+export type Status =
+  | "todo"
+  | "ready"
+  | "submitting"
+  | "waiting"
+  | "needs_info"
+  | "approved"
+  | "done";
+export type Category = "money" | "health" | "retirement" | "onboarding";
+export interface Evidence {
+  documentId: string;
+  page: number;
+  quote: string;
+}
+export interface Document {
+  id: string;
+  name: string;
+  employer: "previous" | "next" | "personal";
+  kind: "policy" | "receipt" | "certificate" | "other";
+  pages: string[];
+  addedAt: string;
+}
+export interface Task {
+  id: string;
+  title: string;
+  description: string;
+  stage: Stage;
+  category: Category;
+  status: Status;
+  deadline: string | null;
+  deadlineRule: "departure" | "start" | "enrollment" | "fixed" | "unknown";
+  amount: number | null;
+  evidence: Evidence[];
+  missing: string[];
+  nextAction: string;
+  claim?: ClaimDraft;
+  mailThreadId?: string;
+  mailMessageId?: string;
+  processedMessageIds?: string[];
+  lastReply?: string;
+  browserSessionId?: string;
+  browserUrl?: string;
+  error?: string;
+  dateReview?: boolean;
+}
+export interface ClaimDraft {
+  employee: string;
+  course: string;
+  amount: number;
+  receiptId: string;
+  certificateId: string | null;
+  policyDocumentId: string;
+  policyPage: number;
+  note: string;
+}
+export interface Profile {
+  name: string;
+  previousEmployer: string;
+  nextEmployer: string;
+  lastDay: string;
+  startDay: string;
+}
+export interface Activity {
+  id: string;
+  at: string;
+  title: string;
+  detail: string;
+  type: "agent" | "user" | "mail" | "browser" | "system";
+}
+export interface Resource {
+  title: string;
+  url: string;
+  description: string;
+}
+export interface Workspace {
+  profile: Profile;
+  documents: Document[];
+  tasks: Task[];
+  activity: Activity[];
+  resources: Resource[];
+  demo: boolean;
+  analyzedAt: string | null;
+  analysisSummary: string;
+  inbox?: string;
+  hrInbox?: string;
+}
