@@ -474,6 +474,8 @@ export default function Dashboard() {
           aria-label="Ask JobSwitch"
           className="sidebar-assistant"
           aria-pressed={chat}
+          aria-controls="assistant-dock"
+          aria-expanded={chat}
           onClick={() => toggleAssistant(!chat)}
         >
           <Sparkles size={18} />
@@ -613,7 +615,7 @@ export default function Dashboard() {
           {page === "inbox" && (
             <Inbox
               openTask={openTask}
-              openDocument={(id) => setViewDoc({ id, page: 1 })}
+              openDocument={(id, page = 1) => setViewDoc({ id, page })}
               refreshKey={(w.mail || []).length}
               focus={inboxFocus}
             />
@@ -1646,6 +1648,8 @@ export default function Dashboard() {
       {!chat && (
         <button
           className="assistant-launcher"
+          aria-controls="assistant-dock"
+          aria-expanded={chat}
           onClick={() => toggleAssistant(true)}
         >
           <Sparkles size={18} /> Ask JobSwitch
