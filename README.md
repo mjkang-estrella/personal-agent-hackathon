@@ -21,7 +21,7 @@ The workspace is linked to the `jobswitch-dev` branch of the configured Neon pro
 ## Demo
 
 1. The default workspace includes fictional Northstar and Orbit handbooks, a receipt, and an HR eligibility confirmation.
-2. Click **Analyze documents** to regenerate the board using Mastra and `gpt-6-luna`.
+2. Click **Analyze documents** to regenerate the board using Mastra and Neon’s `gpt-5-6-luna`.
 3. Open the learning reimbursement task. **Check eligibility & prepare claim**.
 4. Review the claim and source documents. **Approve & submit claim** sends the approved fields through a Kernel browser to the test portal.
 5. **Send demo HR document request** sends a real AgentMail message between dedicated demo-owned inboxes. **Check replies** runs the HR reply through Mastra.
@@ -35,13 +35,13 @@ Use **Workspace settings → Start with my own documents** for an empty personal
 ## Architecture
 
 - **Next.js + assistant-ui:** transition board, evidence viewer, approval controls, streaming assistant.
-- **Mastra + OpenAI gpt-6-luna:** structured document analysis, claim validation, HR reply interpretation, and conversational help. Exa is a Mastra tool.
+- **Mastra + Neon AI Gateway (gpt-5-6-luna):** structured document analysis, claim validation, HR reply interpretation, and conversational help. Exa is a Mastra tool.
 - **Neon Postgres:** durable workspaces, task states, source text, history, and idempotent claim records.
 - **Kernel:** real browser form filling and submission to the deployed test portal.
 - **AgentMail:** dedicated demo inboxes, real email delivery, threaded replies, and certificate attachments.
 - **Exa:** public official guidance. Private documents never become search queries.
 
-Workspaces are isolated by signed, random HttpOnly cookies. This is a browser-bound hackathon workspace, not a production cross-device account system. Neon Auth is provisioned but not used by the MVP UI. Configure a separate `SESSION_SECRET` before deployment. The portal uses a per-claim capability and validates submitted fields against the saved approved payload. Never share capability URLs.
+Workspaces are isolated by signed, random HttpOnly cookies. This is a browser-bound hackathon workspace, not a production cross-device account system. Neon Auth is provisioned but not used by the MVP UI. A separate `SESSION_SECRET` is required for cookies and portal capabilities. The portal uses a per-claim capability and validates submitted fields against the saved approved payload. Never share capability URLs.
 
 ## Verification
 
@@ -54,3 +54,9 @@ node --import tsx scripts/smoke.ts
 ```
 
 The live smoke test verifies claim preparation, browser submission, duplicate prevention, an HR request, a certificate reply, HR approval, and persisted state. Do not run it against real employee data.
+
+## Model billing
+
+All model calls go through Neon AI Gateway using `NEON_AI_GATEWAY_TOKEN` and the branch host in `NEON_AI_GATEWAY_BASE_URL`. The OpenAI-compatible SDK is only the transport; no `OPENAI_API_KEY` is used or required. The selected model is `gpt-5-6-luna`. A paid Neon plan with AI Gateway credits is required. Missing Neon credentials fail closed rather than falling back to another provider.
+
+Pull gateway credentials with `neon env pull --service ai-gateway --file .env`. This updates the gateway variables without changing the app database. On Vercel, configure both gateway variables as server-side environment variables in production and preview.

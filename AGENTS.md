@@ -61,7 +61,7 @@ Nolan explicitly authorized agents to merge completed feature PRs after reviewin
 
 # JobSwitch
 
-Next.js/TypeScript app. Mastra + OpenAI gpt-6-luna, Exa, Kernel, AgentMail, and Neon Postgres.
+Next.js/TypeScript app. Mastra + Neon AI Gateway gpt-5-6-luna, Exa, Kernel, AgentMail, and Neon Postgres.
 Use the authorized .env keys without printing secrets. Never commit .env or .neon.
 Keep public sources distinct from employer policy. Cite exact document pages and verbatim supporting quotes. Missing evidence means unknown, never assumed eligibility.
 Only explicitly approved payloads may be submitted. Changed payloads invalidate approval. Never duplicate submissions on retries. Distinguish submitted, approved, and paid.

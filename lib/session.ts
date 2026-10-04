@@ -1,8 +1,8 @@
 import { cookies, headers } from "next/headers";
-import { randomBytes, createHmac, timingSafeEqual } from "node:crypto";
-const secret = process.env.SESSION_SECRET || process.env.OPENAI_API_KEY!;
+import { createHmac, timingSafeEqual } from "node:crypto";
+import { sessionSigningSecret } from "./secrets";
 const sign = (id: string) =>
-  createHmac("sha256", secret).update(id).digest("hex");
+  createHmac("sha256", sessionSigningSecret()).update(id).digest("hex");
 export async function sessionId() {
   const c = await cookies();
   const raw = c.get("jobswitch_session")?.value;

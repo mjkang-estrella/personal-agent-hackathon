@@ -1,3 +1,4 @@
+import { sessionSigningSecret } from "./secrets";
 import Kernel from "@onkernel/sdk";
 import { AgentMailClient } from "agentmail";
 import { createHmac, createHash, randomUUID } from "node:crypto";
@@ -173,7 +174,7 @@ export async function submitClaim(
     );
   });
   const claimId = prior.rows[0]?.id || randomUUID();
-  const token = createHmac("sha256", process.env.OPENAI_API_KEY!)
+  const token = createHmac("sha256", sessionSigningSecret())
     .update("portal:" + claimId)
     .digest("hex");
   const receipt = w.documents.find((d) => d.id === claim.receiptId)!;

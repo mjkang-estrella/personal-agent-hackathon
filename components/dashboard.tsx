@@ -42,6 +42,7 @@ import {
 } from "lucide-react";
 import type { Workspace, Task, Document, Stage, Status } from "@/lib/types";
 import Assistant from "./assistant";
+import { MODEL_LABEL } from "@/lib/model-config";
 import { addDays, replyPayload } from "@/lib/domain";
 const money = (n: number) =>
   new Intl.NumberFormat("en-US", {
@@ -1648,7 +1649,7 @@ function SettingsForm({
         <h2>Connected to your next chapter</h2>
         <p className="muted">Live services powering this workspace.</p>
         {[
-          ["Mastra + gpt-6-luna", "Document reasoning & your assistant"],
+          [`Mastra + ${MODEL_LABEL}`, "Document reasoning & your assistant"],
           ["Neon", "Documents, evidence & task history"],
           ["Exa", "Official public guidance"],
           ["Kernel", "Approved test portal submissions"],
