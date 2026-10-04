@@ -14,7 +14,7 @@ PDF, TXT and Markdown: 4 MB, 40 PDF pages, 120,000 text characters per file; 20 
 
 All tokens stay server-side. Signed ten-minute selections and pagination bind the workspace, connection generation and account. File metadata is rechecked before and after download; changed versions are rejected. Repeated imports of the same account/file/version do not duplicate evidence. OneDrive redirects are validated against HTTPS Microsoft storage hosts; OAuth credentials never follow the redirect. Download streams are bounded even without Content-Length. No provider file is edited, deleted or shared.
 
-The normal document ingestion path invalidates prepared claim approvals and queues analysis; it never submits claims. User content does not become an Exa search query. Disconnect removes credentials and pending sign-ins but retains imported evidence. The browser workspace cookie remains the access boundary.
+The normal document ingestion path invalidates prepared claim approvals and queues analysis; it never submits claims. User content does not become an Exa search query. Disconnect removes credentials and pending sign-ins but retains imported evidence. Routes require a verified signed-in account and resolve workspace ownership through the shared session helper; a guest cookie cannot import personal files.
 
 ## Validation
 

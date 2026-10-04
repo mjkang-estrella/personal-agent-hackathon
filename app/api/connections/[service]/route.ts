@@ -1,3 +1,4 @@
+import { requireUser, SignInRequired } from "@/lib/auth/server";
 import { z } from "zod";
 import { sessionId, sameOrigin, publicError } from "@/lib/session";
 import { withWorkspaceLock, getWorkspace, WorkspaceBusyError } from "@/lib/db";
@@ -13,6 +14,7 @@ export const maxDuration = 60;
 type Context = { params: Promise<{ service: string }> };
 export async function GET(_: Request, context: Context) {
   try {
+    await requireUser();
     const service = serviceSchema.parse((await context.params).service),
       id = await sessionId();
     const c = await connection(id, service);
@@ -28,15 +30,21 @@ export async function GET(_: Request, context: Context) {
       },
       { headers: { "Cache-Control": "no-store" } },
     );
-  } catch {
+  } catch (e) {
     return Response.json(
-      { error: "Connection status unavailable." },
-      { status: 503 },
+      {
+        error:
+          e instanceof SignInRequired
+            ? e.message
+            : "Connection status unavailable.",
+      },
+      { status: e instanceof SignInRequired ? 401 : 503 },
     );
   }
 }
 export async function POST(request: Request, context: Context) {
   try {
+    await requireUser();
     await sameOrigin();
     const service = serviceSchema.parse((await context.params).service),
       id = await sessionId();
@@ -66,7 +74,14 @@ export async function POST(request: Request, context: Context) {
   } catch (e) {
     return Response.json(
       { error: publicError(e) },
-      { status: e instanceof WorkspaceBusyError ? 409 : 400 },
+      {
+        status:
+          e instanceof SignInRequired
+            ? 401
+            : e instanceof WorkspaceBusyError
+              ? 409
+              : 400,
+      },
     );
   }
 }

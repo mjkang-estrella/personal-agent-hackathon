@@ -26,3 +26,7 @@ Google testing limits remain; wider release needs the applicable verification/se
 
 - [Setup, limits and validation](../connectors/documents.md)
 - [Shared connection framework](2026-10-04-200244-nolan-calendar-approval.md)
+
+## Account integration
+
+[PR #16](https://github.com/mjkang-estrella/personal-agent-hackathon/pull/16) landed during implementation. Preserve its account ownership checks on upload and all shared connections, and require a verified user on the new file-list/import route. This follows the accepted [account decision](2026-10-04-200800-nolan-google-accounts.md); guest demos cannot import personal cloud files.

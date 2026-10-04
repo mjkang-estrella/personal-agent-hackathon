@@ -67,6 +67,10 @@ function CloudPicker({
   const label = labels[service];
   async function status() {
     const r = await fetch(`/api/connections/${service}`);
+    if (r.status === 401)
+      throw new Error(
+        "Please sign in with Google in Settings before connecting your files.",
+      );
     if (!r.ok)
       throw new Error(
         "Connection status unavailable. Reopen My documents to retry.",
@@ -124,7 +128,11 @@ function CloudPicker({
       </p>
       {notice && <p role="status">{notice}</p>}
       {!state ? (
-        <p>Loading connection…</p>
+        <p>
+          {notice
+            ? "Open Settings to sign in or retry the connection."
+            : "Loading connection…"}
+        </p>
       ) : !state.configured ? (
         <p>{label} is awaiting setup.</p>
       ) : w.demo ? (

@@ -94,3 +94,14 @@ The user-authorized OAuth client has callbacks for the personal Vercel deploymen
 Disconnect removes local access and tracked-thread bindings. Previously imported evidence remains. To revoke the entire app grant, remove JobSwitch from your Google Account's third-party permissions; this also disconnects other JobSwitch services using that Google account. Returning to another workspace disconnects the previous one. OAuth state expires after ten minutes and cannot be replayed or transferred to another workspace.
 
 Validation: `npm test` covers encryption, scope, sender/date filtering, and quote boundaries. `node --env-file=.env --import tsx scripts/gmail-smoke.ts` exercises the configured development database using disposable workspaces and mocked Google HTTP responses, including refresh/reconnect and local disconnect, replay/expiry, wrong-workspace callbacks, and disconnect races; it never accesses a real mailbox or sends email.
+
+### Google accounts
+
+Google is the only JobSwitch account login method. The fictional demo remains usable without an account; personal document uploads and inbox connections require sign-in. The first sign-in adopts this browser's existing unowned workspace. Later sign-ins restore the user's account across devices. Settings → Your account lists saved workspaces and offers sign-out. Starting a fresh workspace preserves account-owned history.
+
+1. Apply `npm run db:migrate` (includes `004_accounts.sql`).
+2. Set `NEON_AUTH_BASE_URL` to the existing branch's managed Auth URL, and generate a separate `NEON_AUTH_COOKIE_SECRET` of at least 32 characters. Keep both in server environment configuration; do not reuse `SESSION_SECRET` or a provider key.
+3. In Neon Auth, enable Google and register each application origin as a trusted domain. For production, configure the project's Google OAuth client with `${NEON_AUTH_BASE_URL}/callback/google` as the provider callback. The app's subsequent callback is `/auth/callback`. Localhost is supported by Neon's development configuration.
+4. Leave the existing Gmail OAuth client and read-only permission flow separate. Signing in to JobSwitch never grants mailbox access.
+
+For account integration verification, stop the local dev server and run `node --env-file=.env --import tsx scripts/accounts-smoke.ts`. It starts a temporary Next.js process on port 3006, uses the configured development database with an isolated disposable schema, and supplies a local fake identity service. It does not contact Google or send messages. This checks authorization and restoration; a real Google consent round trip still needs a human's Google login.

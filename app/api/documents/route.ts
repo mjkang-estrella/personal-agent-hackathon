@@ -1,3 +1,4 @@
+import { requireUser, SignInRequired } from "@/lib/auth/server";
 import { sessionId, sameOrigin, publicError } from "@/lib/session";
 import { mutate, withWorkspaceLock } from "@/lib/db";
 import {
@@ -9,6 +10,7 @@ import {
 export async function POST(request: Request) {
   try {
     await sameOrigin();
+    await requireUser();
     const id = await sessionId();
     const form = await request.formData();
     const file = form.get("file");
@@ -31,6 +33,9 @@ export async function POST(request: Request) {
       ),
     );
   } catch (e) {
-    return Response.json({ error: publicError(e) }, { status: 400 });
+    return Response.json(
+      { error: publicError(e) },
+      { status: e instanceof SignInRequired ? 401 : 400 },
+    );
   }
 }

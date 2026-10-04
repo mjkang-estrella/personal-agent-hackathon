@@ -1,8 +1,10 @@
+import { requireUser, SignInRequired } from "@/lib/auth/server";
 import { sessionId } from "@/lib/session";
 import { connection } from "@/lib/outlook/store";
 import { outlookConfigured } from "@/lib/outlook/security";
 export async function GET() {
   try {
+    await requireUser();
     if (!outlookConfigured())
       return Response.json(
         { configured: false, connected: false },
@@ -18,10 +20,15 @@ export async function GET() {
       },
       { headers: { "Cache-Control": "no-store" } },
     );
-  } catch {
+  } catch (e) {
     return Response.json(
-      { error: "Outlook connection status is unavailable." },
-      { status: 503 },
+      {
+        error:
+          e instanceof SignInRequired
+            ? e.message
+            : "Outlook connection status is unavailable.",
+      },
+      { status: e instanceof SignInRequired ? 401 : 503 },
     );
   }
 }

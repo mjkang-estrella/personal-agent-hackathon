@@ -1,3 +1,4 @@
+import { requireUser, SignInRequired } from "@/lib/auth/server";
 import { z } from "zod";
 import { sessionId, sameOrigin, publicError } from "@/lib/session";
 import { withWorkspaceLock, getWorkspace, WorkspaceBusyError } from "@/lib/db";
@@ -9,6 +10,7 @@ export async function POST(
   context: { params: Promise<{ service: string }> },
 ) {
   try {
+    await requireUser();
     await sameOrigin();
     const id = await sessionId(),
       service = fileServiceSchema.parse((await context.params).service);
@@ -32,7 +34,14 @@ export async function POST(
   } catch (e) {
     return Response.json(
       { error: publicError(e) },
-      { status: e instanceof WorkspaceBusyError ? 409 : 400 },
+      {
+        status:
+          e instanceof SignInRequired
+            ? 401
+            : e instanceof WorkspaceBusyError
+              ? 409
+              : 400,
+      },
     );
   }
 }
