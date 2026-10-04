@@ -12,13 +12,13 @@ Nolan supplied Osome landing-page and signed-in screenshots and requested a simi
 
 Use light ivory and white surfaces, blue actions, large serif display headings, rounded sections, original generated lifestyle photography, and original JobSwitch copy. Place the public landing page at `/` and the existing browser-bound workspace at `/workspace`. The landing uses scoped CSS modules; workspace styling is scoped to `.app-shell` so route transitions do not restyle the landing.
 
-Organize the workspace around quick document access, one suggested next action, analysis controls, and the complete three-stage plan. Suggest tasks requiring input first, then those ready for approval, then ordinary to-do tasks ordered by deadline. Exclude waiting, submitting, approved, and completed tasks from new-action suggestions. Use separate task and document search state.
+Organize the workspace around quick document access and the complete three-stage plan. Integrate the agent preparation and human review queue that landed on main during this task, preserving its inbox and missing-information handoff rather than duplicating its prioritization with another next-action panel. Use separate task and document search state.
 
 Preserve evidence pages, uncertainty, explicit approvals, idempotent submissions, and all existing backend contracts. The landing's demo CTA opens the current browser workspace; it never resets existing data. The product illustration uses fictional employers and is labeled Demo. No customer counts, testimonials, authentication, or service promises are fabricated.
 
 ## Rationale
 
-The user chose a more expressive editorial identity. A clear hierarchy helps people understand the product before entering and find actionable work once inside. Deterministic task presentation can improve clarity without adding model calls or generating approval controls dynamically.
+The user chose a more expressive editorial identity. A clear hierarchy helps people understand the product before entering and find actionable work once inside. The existing review queue keeps consequential decisions explicit without generating approval controls dynamically.
 
 ## Consequences
 
@@ -31,4 +31,3 @@ The workspace presentation supersedes the green palette and top-level hierarchy 
 - [Reference](https://osome.com/)
 - [Landing](../../app/page.tsx)
 - [Workspace](../../app/workspace/page.tsx)
-- [Task prioritization](../../lib/presentation.ts)

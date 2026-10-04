@@ -75,6 +75,16 @@ export interface Resource {
   url: string;
   description: string;
 }
+export interface AgentState {
+  enabled: boolean;
+  phase?: "analyze" | "prepare" | "sync" | "idle";
+  pending?: boolean;
+  analyzedInput?: string;
+  preparedInputs?: Record<string, string>;
+  lastSyncedAt?: string;
+  lastRunAt?: string;
+  error?: string;
+}
 export interface BackgroundStatus {
   enabled: boolean;
   generation: string;
@@ -86,6 +96,7 @@ export interface BackgroundStatus {
   error?: string;
 }
 export interface Workspace {
+  agent?: AgentState;
   background?: BackgroundStatus;
   profile: Profile;
   documents: Document[];
@@ -97,4 +108,21 @@ export interface Workspace {
   analysisSummary: string;
   inbox?: string;
   hrInbox?: string;
+}
+
+export interface InboxMessage {
+  id: string;
+  from: string;
+  subject: string;
+  preview: string;
+  at: string;
+  taskId: string;
+  taskTitle: string;
+  body?: string;
+}
+export interface InboxSnapshot {
+  connected: boolean;
+  messages: InboxMessage[];
+  limited: boolean;
+  message?: InboxMessage;
 }

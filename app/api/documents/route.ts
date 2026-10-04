@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { sessionId, sameOrigin, publicError } from "@/lib/session";
-import { mutate, getWorkspace, activity } from "@/lib/db";
+import { mutate, getWorkspace, activity, withWorkspaceLock } from "@/lib/db";
+import { queueAgent } from "@/lib/automation";
 export async function POST(request: Request) {
   try {
     await sameOrigin();
@@ -48,40 +49,47 @@ export async function POST(request: Request) {
     )
       throw new Error("Choose a valid document category.");
     return Response.json(
-      await mutate(id, (s) => {
-        if (s.tasks.some((t) => t.status === "submitting"))
-          throw new Error("Please wait for the current submission to finish.");
-        if (s.documents.length >= 20)
-          throw new Error("Upload limit reached: 20 documents per workspace.");
-        if (
-          s.documents.reduce((n, d) => n + d.pages.join("").length, 0) +
-            pages.join("").length >
-          250000
-        )
-          throw new Error("Upload limit reached for this workspace.");
-        s.documents.push({
-          id: randomUUID(),
-          name: file.name,
-          employer: employer as "personal",
-          kind: kind as "other",
-          pages,
-          addedAt: new Date().toISOString(),
-        });
-        for (const t of s.tasks) {
-          if (t.status === "ready") {
-            t.status = "todo";
-            delete t.claim;
-            t.nextAction = "New document added. Review the claim again.";
+      await withWorkspaceLock(id, () =>
+        mutate(id, (s) => {
+          if (s.tasks.some((t) => t.status === "submitting"))
+            throw new Error(
+              "Please wait for the current submission to finish.",
+            );
+          if (s.documents.length >= 20)
+            throw new Error(
+              "Upload limit reached: 20 documents per workspace.",
+            );
+          if (
+            s.documents.reduce((n, d) => n + d.pages.join("").length, 0) +
+              pages.join("").length >
+            250000
+          )
+            throw new Error("Upload limit reached for this workspace.");
+          s.documents.push({
+            id: randomUUID(),
+            name: file.name,
+            employer: employer as "personal",
+            kind: kind as "other",
+            pages,
+            addedAt: new Date().toISOString(),
+          });
+          for (const t of s.tasks) {
+            if (t.status === "ready") {
+              t.status = "todo";
+              delete t.claim;
+              t.nextAction = "New document added. Review the claim again.";
+            }
           }
-        }
-        s.demo = false;
-        activity(
-          s,
-          "Document added",
-          `${file.name} · ${pages.length} page${pages.length === 1 ? "" : "s"}. Run analysis to update the board.`,
-          "user",
-        );
-      }),
+          s.demo = false;
+          queueAgent(s);
+          activity(
+            s,
+            "Document added",
+            `${file.name} · ${pages.length} page${pages.length === 1 ? "" : "s"}. Your agent will update the board automatically.`,
+            "user",
+          );
+        }),
+      ),
     );
   } catch (e) {
     return Response.json({ error: publicError(e) }, { status: 400 });
