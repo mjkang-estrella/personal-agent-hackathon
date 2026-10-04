@@ -25,7 +25,7 @@ import {
 } from "@/lib/services";
 import { loadReviewExamples } from "@/lib/review-examples";
 import { chooseOption, updateDates } from "@/lib/domain";
-import { completionCertificate } from "@/lib/fixtures";
+import { completionCertificate, makeWorkspace } from "@/lib/fixtures";
 import { advanceAgent, analyzeWorkspace, workflowInput } from "@/lib/workflow";
 import { queueAgent } from "@/lib/automation";
 import {
@@ -114,26 +114,8 @@ export async function POST(request: Request) {
             w = await mutate(next, (s) =>
               replaceWorkspace(s, makeScenarioWorkspace(data.scenarioId!)),
             );
-          if (data.mode === "personal")
-            w = await mutate(next, (s) => {
-              s.demo = false;
-              s.documents = [];
-              s.tasks = [];
-              s.activity = [];
-              s.profile = {
-                name: "Your name",
-                previousEmployer: "Previous employer",
-                nextEmployer: "New employer",
-                lastDay: s.profile.lastDay,
-                startDay: s.profile.startDay,
-              };
-              s.analysisSummary = "Add your handbooks and dates to begin.";
-              activity(
-                s,
-                "Your personal workspace is ready",
-                "Add your dates, both employer handbooks, and any supporting documents.",
-              );
-            });
+          if (data.mode === "demo")
+            w = await mutate(next, (s) => replaceWorkspace(s, makeWorkspace()));
           break;
         }
         case "advance":
