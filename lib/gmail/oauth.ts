@@ -88,14 +88,12 @@ export async function finishConnect(
 }
 export async function disconnect(id: string) {
   const db = await pool.connect();
-  let encrypted: string | undefined;
   try {
     await db.query("BEGIN");
-    const r = await db.query(
-      "DELETE FROM jobswitch_gmail_connections WHERE workspace_id=$1 RETURNING encrypted_refresh",
+    await db.query(
+      "DELETE FROM jobswitch_gmail_connections WHERE workspace_id=$1",
       [id],
     );
-    encrypted = r.rows[0]?.encrypted_refresh;
     await db.query(
       "DELETE FROM jobswitch_gmail_oauth_states WHERE workspace_id=$1",
       [id],
@@ -119,19 +117,8 @@ export async function disconnect(id: string) {
   } finally {
     db.release();
   }
-  let revoked = true;
-  if (encrypted) {
-    try {
-      const r = await fetch("https://oauth2.googleapis.com/revoke", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({ token: unseal(encrypted, id) }),
-        signal: AbortSignal.timeout(10_000),
-      });
-      revoked = r.ok;
-    } catch {
-      revoked = false;
-    }
-  }
-  return { disconnected: true, revoked };
+  // Google revokes the whole app grant, including other services/workspaces.
+  // Local disconnect preserves those connections; users can revoke the whole
+  // app explicitly in Google Account permissions.
+  return { disconnected: true, revoked: false };
 }

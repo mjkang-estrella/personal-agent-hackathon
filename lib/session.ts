@@ -1,31 +1,38 @@
 import { cookies, headers } from "next/headers";
-import { createHmac, timingSafeEqual } from "node:crypto";
 import { sessionSigningSecret } from "./secrets";
-const sign = (id: string) =>
-  createHmac("sha256", sessionSigningSecret()).update(id).digest("hex");
+import { currentUser, SignInRequired } from "./auth/server";
+import { accountWorkspace, workspaceOwner } from "./auth/workspaces";
+import { signedWorkspace, verifiedWorkspace } from "./auth/workspace-cookie";
+
 export async function sessionId() {
   const c = await cookies();
-  const raw = c.get("jobswitch_session")?.value;
-  let id: string;
-  if (raw) {
-    const [value, sig] = raw.split(".");
-    const expected = sign(value);
-    if (
-      /^[0-9a-f-]{36}$/.test(value) &&
-      sig?.length === expected.length &&
-      timingSafeEqual(Buffer.from(sig), Buffer.from(expected))
-    )
-      return value;
+  const candidate = verifiedWorkspace(
+    c.get("jobswitch_session")?.value,
+    sessionSigningSecret(),
+  );
+  const user = await currentUser();
+  if (user) {
+    const id = await accountWorkspace(user.id, candidate);
+    if (id !== candidate) await setWorkspaceCookie(id);
+    return id;
   }
-  id = crypto.randomUUID();
-  c.set("jobswitch_session", `${id}.${sign(id)}`, {
+  if (candidate) {
+    // A previously valid guest cookie cannot access an adopted workspace.
+    if (await workspaceOwner(candidate)) throw new SignInRequired();
+    return candidate;
+  }
+  return await newSessionId();
+}
+
+export async function setWorkspaceCookie(id: string) {
+  const c = await cookies();
+  c.set("jobswitch_session", signedWorkspace(id, sessionSigningSecret()), {
     httpOnly: true,
     sameSite: "lax",
     secure: (await headers()).get("x-forwarded-proto") === "https",
     path: "/",
     maxAge: 60 * 60 * 24 * 30,
   });
-  return id;
 }
 export async function sameOrigin() {
   const h = await headers();
@@ -47,14 +54,10 @@ export function publicError(error: unknown) {
 }
 
 export async function newSessionId() {
-  const c = await cookies();
-  const id = crypto.randomUUID();
-  c.set("jobswitch_session", `${id}.${sign(id)}`, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: (await headers()).get("x-forwarded-proto") === "https",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 30,
-  });
+  const user = await currentUser();
+  const id = user
+    ? await accountWorkspace(user.id, undefined, true)
+    : crypto.randomUUID();
+  await setWorkspaceCookie(id);
   return id;
 }

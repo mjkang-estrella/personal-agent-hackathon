@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { sessionId } from "@/lib/session";
+import { requireUser, SignInRequired } from "@/lib/auth/server";
 import { getWorkspace, withWorkspaceLock, WorkspaceBusyError } from "@/lib/db";
 import { account, accounts } from "@/lib/browser/store";
 import { publicAccount } from "@/lib/browser/security";
@@ -60,6 +61,9 @@ const schema = z.discriminatedUnion("action", [
 ]);
 export async function GET() {
   try {
+    // Saved portal access is personal: require a verified account, as for
+    // uploads and inbox connectors.
+    await requireUser();
     if (!browserConfigured())
       return Response.json({ configured: false, accounts: [] }, { headers });
     return Response.json(
@@ -69,7 +73,9 @@ export async function GET() {
       },
       { headers },
     );
-  } catch {
+  } catch (e) {
+    if (e instanceof SignInRequired)
+      return Response.json({ error: e.message }, { status: 401, headers });
     return Response.json(
       {
         error:
@@ -99,6 +105,7 @@ export async function POST(request: Request) {
         { status: 413, headers },
       );
     const data = schema.parse(JSON.parse(raw));
+    await requireUser();
     const workspace = await sessionId();
     if (data.action === "advance") {
       // A per-account lock keeps long browser steps from blocking the
@@ -143,6 +150,8 @@ export async function POST(request: Request) {
       { headers },
     );
   } catch (e) {
+    if (e instanceof SignInRequired)
+      return Response.json({ error: e.message }, { status: 401, headers });
     // Provider and validation errors may include passwords or page contents. Never echo them.
     const busy = e instanceof WorkspaceBusyError;
     return Response.json(

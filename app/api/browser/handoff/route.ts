@@ -1,4 +1,5 @@
 import { sessionId } from "@/lib/session";
+import { requireUser } from "@/lib/auth/server";
 import { handoffUrl } from "@/lib/browser/service";
 import { z } from "zod";
 
@@ -13,6 +14,7 @@ export async function GET(request: Request) {
     const kind = z
       .enum(["login", "browser"])
       .parse(url.searchParams.get("kind"));
+    await requireUser();
     const location = await handoffUrl(await sessionId(), id, kind);
     return new Response(null, {
       status: 303,

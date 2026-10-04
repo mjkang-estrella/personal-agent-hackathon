@@ -44,9 +44,11 @@ import Assistant from "./assistant";
 import Modal, { ModalNotice } from "./modal";
 import Inbox from "./inbox";
 import BackgroundControls from "./background-controls";
+import CalendarControls from "./calendar-controls";
 import OutlookControls from "./outlook-controls";
 import GmailControls from "./gmail-controls";
 import BrowserAccounts from "./browser-accounts";
+import AccountControls from "./account-controls";
 import { MODEL_LABEL } from "@/lib/model-config";
 import { reviewKind } from "@/lib/automation";
 import { addDays, replyPayload } from "@/lib/domain";
@@ -141,20 +143,30 @@ export default function Dashboard() {
   const load = useCallback(async () => {
     setLoadError("");
     try {
-      const res = await fetch("/api/state", { signal: AbortSignal.timeout(15000) });
+      const res = await fetch("/api/state", {
+        signal: AbortSignal.timeout(15000),
+      });
       const json = await res.json();
+      if (res.status === 401) {
+        window.location.assign("/sign-in");
+        return;
+      }
       if (!res.ok) throw new Error(json.error);
       setW(json);
       setLoadError("");
     } catch {
-      setLoadError("We couldn’t open your workspace. Please try again in a moment.");
+      setLoadError(
+        "We couldn’t open your workspace. Please try again in a moment.",
+      );
     }
   }, []);
   useEffect(() => {
     load();
     if (
       new URLSearchParams(window.location.search).has("gmail") ||
-      new URLSearchParams(window.location.search).has("outlook")
+      new URLSearchParams(window.location.search).has("account") ||
+      new URLSearchParams(window.location.search).has("outlook") ||
+      new URLSearchParams(window.location.search).has("connection")
     )
       setPage("settings");
   }, [load]);
@@ -226,6 +238,19 @@ export default function Dashboard() {
       setBusy("");
     }
   }
+  async function openUpload() {
+    try {
+      const r = await fetch("/api/account");
+      if (!r.ok) throw new Error();
+      if (!(await r.json()).user) {
+        window.location.assign("/sign-in");
+        return;
+      }
+      setUpload(true);
+    } catch {
+      notify("Account status is unavailable. Please try again.", true);
+    }
+  }
   function openTask(id: string) {
     setSelected(id);
     setChat(false);
@@ -237,16 +262,35 @@ export default function Dashboard() {
     return (
       <main className="workspace-entry">
         <a className="workspace-entry-brand" href="/">
-          <span><ArrowLeftRight size={23} /></span> jobswitch
+          <span>
+            <ArrowLeftRight size={23} />
+          </span>{" "}
+          jobswitch
         </a>
-        <section className="workspace-entry-content" aria-live="polite" aria-busy={!loadError}>
+        <section
+          className="workspace-entry-content"
+          aria-live="polite"
+          aria-busy={!loadError}
+        >
           <span className="workspace-entry-symbol">
-            {loadError ? <CircleHelp size={32} /> : <BriefcaseBusiness size={32} />}
+            {loadError ? (
+              <CircleHelp size={32} />
+            ) : (
+              <BriefcaseBusiness size={32} />
+            )}
           </span>
           <p className="workspace-entry-eyebrow">YOUR NEXT CHAPTER</p>
-          <h1>{loadError ? "Let’s try that again." : "A little clarity is on its way."}</h1>
-          <p className="workspace-entry-description" role={loadError ? "alert" : undefined}>
-            {loadError || "Opening your workspace, so you can see your plan and what needs your attention."}
+          <h1>
+            {loadError
+              ? "Let’s try that again."
+              : "A little clarity is on its way."}
+          </h1>
+          <p
+            className="workspace-entry-description"
+            role={loadError ? "alert" : undefined}
+          >
+            {loadError ||
+              "Opening your workspace, so you can see your plan and what needs your attention."}
           </p>
           {loadError ? (
             <button className="workspace-entry-retry" onClick={load}>
@@ -254,10 +298,13 @@ export default function Dashboard() {
             </button>
           ) : (
             <p className="workspace-entry-progress" role="status">
-              <LoaderCircle size={18} className="spin" /> Opening your workspace…
+              <LoaderCircle size={18} className="spin" /> Opening your
+              workspace…
             </p>
           )}
-          <a className="workspace-entry-back" href="/">Back to JobSwitch <ArrowUpRight size={15} /></a>
+          <a className="workspace-entry-back" href="/">
+            Back to JobSwitch <ArrowUpRight size={15} />
+          </a>
         </section>
       </main>
     );
@@ -415,6 +462,7 @@ export default function Dashboard() {
             >
               <CircleHelp size={19} />
             </button>
+            <AccountControls compact />
             <span className="avatar small">{initials}</span>
           </div>
         </header>
@@ -468,13 +516,13 @@ export default function Dashboard() {
                       dots.
                     </p>
                   </div>
-                  <button className="primary" onClick={() => setUpload(true)}>
+                  <button className="primary" onClick={openUpload}>
                     <Upload size={16} /> Add your first document
                   </button>
                 </section>
               )}
               <div className="workspace-shortcuts" aria-label="Quick actions">
-                <button onClick={() => setUpload(true)}>
+                <button onClick={openUpload}>
                   <Upload size={24} />
                   <strong>Add documents</strong>
                   <span>Give your plan some context</span>
@@ -712,7 +760,7 @@ export default function Dashboard() {
                   </div>
                   <button
                     className="secondary small-button"
-                    onClick={() => setUpload(true)}
+                    onClick={openUpload}
                   >
                     <Plus size={15} /> Add documents
                   </button>
@@ -799,7 +847,7 @@ export default function Dashboard() {
                     aria-label="Search documents"
                   />
                 </div>
-                <button className="primary" onClick={() => setUpload(true)}>
+                <button className="primary" onClick={openUpload}>
                   <Upload size={16} /> Add document
                 </button>
               </div>
@@ -1218,10 +1266,7 @@ export default function Dashboard() {
                 </h3>
                 {!w.documents.some((d) => d.kind === "certificate") ? (
                   <div className="certificate-actions">
-                    <button
-                      className="secondary"
-                      onClick={() => setUpload(true)}
-                    >
+                    <button className="secondary" onClick={openUpload}>
                       Upload certificate
                     </button>
                     {w.demo && (
@@ -1376,7 +1421,7 @@ export default function Dashboard() {
                     ? "Add the missing evidence. Your agent will check eligibility again automatically."
                     : "Your agent will check eligibility and prepare this claim for review."}
                 </p>
-                <button className="text-button" onClick={() => setUpload(true)}>
+                <button className="text-button" onClick={openUpload}>
                   Add evidence
                 </button>
               </div>
@@ -1757,8 +1802,10 @@ function SettingsForm({
   onUpdate: (w: Workspace) => void;
 }) {
   const [confirmWorkspace, setConfirmWorkspace] = useState(false);
+  const [accountError, setAccountError] = useState("");
   return (
     <div className="settings-grid">
+      <AccountControls />
       {confirmWorkspace && (
         <Modal
           className="modal-frame"
@@ -1768,10 +1815,11 @@ function SettingsForm({
           <div className="form-modal">
             <h2>Create a new workspace?</h2>
             <p>
-              This replaces the workspace linked to this browser. You won’t be
-              able to return to the current documents and history from here.
-              Export your plan first if you need a copy. Any Gmail connection
-              for this workspace will be disconnected.
+              Your signed-in workspaces stay saved under Your account. You can
+              return to them using Saved workspaces. Background monitoring for
+              this workspace will pause and its inbox connections will
+              disconnect. Anonymous demo history stays only in this browser
+              until you sign in.
             </p>
             <a className="text-button" href="/api/export">
               <Download size={16} /> Export current plan
@@ -1846,6 +1894,7 @@ function SettingsForm({
       </form>
       <GmailControls w={w} onUpdate={onUpdate} />
       <OutlookControls w={w} onUpdate={onUpdate} />
+      <CalendarControls w={w} onUpdate={onUpdate} />
       <BackgroundControls w={w} onUpdate={onUpdate} />
       <div className="settings-card">
         <h2>Workspace services</h2>
@@ -1871,7 +1920,23 @@ function SettingsForm({
           className="secondary full"
           style={{ marginTop: 20 }}
           disabled={!!busy}
-          onClick={() => setConfirmWorkspace(true)}
+          onClick={async () => {
+            setAccountError("");
+            try {
+              if (w.demo) {
+                const r = await fetch("/api/account");
+                if (!r.ok || !(await r.json()).user) {
+                  window.location.assign("/sign-in");
+                  return;
+                }
+              }
+              setConfirmWorkspace(true);
+            } catch {
+              setAccountError(
+                "Account status is unavailable. Please try again.",
+              );
+            }
+          }}
           type="button"
         >
           {w.demo
@@ -1879,11 +1944,13 @@ function SettingsForm({
             : "Open a fresh demo workspace"}{" "}
           <ArrowRight size={15} />
         </button>
+        {accountError && <p role="alert">{accountError}</p>}
         <div className="notice">
           <ShieldCheck size={18} />
           <p>
-            This workspace is private to this browser. The demo uses fictional
-            employers and dedicated test email inboxes.
+            Signed-in workspaces are saved to your account. Anonymous demos stay
+            in this browser. The demo uses fictional employers and dedicated
+            test email inboxes.
           </p>
         </div>
       </div>
