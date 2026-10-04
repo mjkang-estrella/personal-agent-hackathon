@@ -700,24 +700,6 @@ export default function Dashboard() {
                     </div>
                     <CheckCheck size={22} />
                   </div>
-                  {w.demo && !practice && (
-                    <div className="review-examples-intro">
-                      <p>
-                        Try four fictional choices. Save a preference, then see your
-                        next step. Trying again resets only these examples.
-                      </p>
-                      <button
-                        className="secondary"
-                        disabled={!!busy}
-                        onClick={() => act("review_examples", {}, "Four examples are ready to try.")}
-                      >
-                        <RefreshCw size={15} />
-                        {w.tasks.some(isReviewExample)
-                          ? "Try examples again"
-                          : "Load 4 examples"}
-                      </button>
-                    </div>
-                  )}
                   {reviews.length ? (
                     reviews.map((t) => {
                       const kind = reviewKind(t, w);
@@ -742,9 +724,7 @@ export default function Dashboard() {
                           </span>
                           <span>
                             <small>
-                              {isReviewExample(t)
-                                ? "FICTIONAL EXAMPLE"
-                                : draft
+                              {draft
                                 ? draft.inReplyTo
                                   ? "REPLY DRAFTED"
                                   : "EMAIL DRAFTED"
@@ -1224,7 +1204,11 @@ export default function Dashboard() {
               <StatusBadge status={task.status} />
             </div>
             <h2>{task.title}</h2>
-            <p className="task-description">{task.description}</p>
+            <p className="task-description">
+              {isReviewExample(task)
+                ? task.decision?.why || task.description
+                : task.description}
+            </p>
             <div className="detail-facts">
               <div>
                 <small>DEADLINE</small>
