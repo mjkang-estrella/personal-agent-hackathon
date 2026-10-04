@@ -38,6 +38,7 @@ import {
   Send,
   CheckSquare,
   BookOpen,
+  PenLine,
 } from "lucide-react";
 import type { Workspace, Task, Document, Stage, Status } from "@/lib/types";
 import Assistant from "./assistant";
@@ -49,6 +50,16 @@ import GmailControls from "./gmail-controls";
 import { MODEL_LABEL } from "@/lib/model-config";
 import { reviewKind } from "@/lib/automation";
 import { addDays, replyPayload } from "@/lib/domain";
+import { openDraft } from "@/lib/drafts";
+import {
+  DateProposalNotice,
+  DraftReview,
+  PracticeCases,
+  PracticeStrip,
+  RequestDraft,
+  TaskTimeline,
+  contactName,
+} from "./practice";
 const money = (n: number) =>
   new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -66,7 +77,7 @@ const statuses: Record<Status, string> = {
   todo: "Agent tracking",
   ready: "Ready for approval",
   submitting: "Submitting",
-  waiting: "Waiting for HR",
+  waiting: "Waiting for a reply",
   needs_info: "Needs your input",
   approved: "Approved · unpaid",
   done: "Completed",
@@ -80,6 +91,7 @@ const categories = {
     icon: BriefcaseBusiness,
     color: "blue",
   },
+  offboarding: { label: "Leaving well", icon: LogOut, color: "peach" },
 };
 const stages: {
   id: Stage;
@@ -230,6 +242,7 @@ export default function Dashboard() {
     setCertificateId("");
   }
   const task = w?.tasks.find((t) => t.id === selected);
+  const taskDraft = w && task ? openDraft(w, task.id) : undefined;
   const document = w?.documents.find((d) => d.id === viewDoc?.id);
   if (!w)
     return (
@@ -261,8 +274,9 @@ export default function Dashboard() {
     );
   const attention = w.tasks.filter((t) => reviewKind(t, w) !== null).length;
   const reviews = w.tasks.filter((t) =>
-    ["claim", "reply"].includes(reviewKind(t, w) || ""),
+    ["claim", "reply", "draft"].includes(reviewKind(t, w) || ""),
   );
+  const practice = !!w.scenario;
   const needsInput = w.tasks.filter((t) => reviewKind(t, w) === "input");
   const agentPaused = w.agent?.enabled === false;
   const agentError =
@@ -281,7 +295,9 @@ export default function Dashboard() {
           ? "Checking evidence. Preparing claims."
           : agentPhase === "sync"
             ? "Checking for the next HR reply."
-            : "Reading the details for you."
+            : agentPhase === "triage"
+              ? "Reading your new email."
+              : "Reading the details for you."
         : reviews.length
           ? "Prepared by your agent. Ready for you."
           : "Your agent is keeping things moving.";
@@ -397,7 +413,11 @@ export default function Dashboard() {
           </div>
           <div className="topbar-right">
             <button className="demo-pill" onClick={() => setPage("settings")}>
-              {w.demo ? "Demo workspace" : "Personal workspace"}
+              {practice
+                ? "Practice case"
+                : w.demo
+                  ? "Demo workspace"
+                  : "Personal workspace"}
             </button>
             <button
               className="icon-button"
@@ -445,9 +465,24 @@ export default function Dashboard() {
               </p>
             </div>
           </div>
-          {page === "inbox" && <Inbox openTask={openTask} />}
+          {page === "inbox" && (
+            <Inbox
+              openTask={openTask}
+              openDocument={(id) => setViewDoc({ id, page: 1 })}
+              refreshKey={(w.mail || []).length}
+            />
+          )}
           {page === "board" && (
             <>
+              {practice && (
+                <PracticeStrip
+                  w={w}
+                  busy={busy}
+                  act={act}
+                  openTask={openTask}
+                  chooseCase={() => setPage("settings")}
+                />
+              )}
               {!w.documents.length && (
                 <section className="empty-start">
                   <div>
@@ -510,6 +545,16 @@ export default function Dashboard() {
                   </button>
                 </div>
               </section>
+              {w.dateProposal && (
+                <DateProposalNotice
+                  w={w}
+                  busy={busy}
+                  act={act}
+                  viewEvidence={(e) =>
+                    setViewDoc({ id: e.documentId, page: e.page })
+                  }
+                />
+              )}
               <section className="agent-desk" aria-label="Agent workspace">
                 <div className="agent-overview">
                   <div className="agent-overview-top">
@@ -543,7 +588,9 @@ export default function Dashboard() {
                   <h2 aria-live="polite">{agentTitle}</h2>
                   <p>
                     {agentError ||
-                      "I’ll turn your documents into a plan, check the evidence, and prepare the next step. Nothing gets sent without your approval."}
+                      (practice
+                        ? "I read each new email, update your plan with the exact quote, and draft the emails you’ll need. Nothing is sent without your approval."
+                        : "I’ll turn your documents into a plan, check the evidence, and prepare the next step. Nothing gets sent without your approval.")}
                   </p>
                   <div className="agent-capabilities">
                     <div>
@@ -560,17 +607,25 @@ export default function Dashboard() {
                     </div>
                     <div>
                       <Mail size={16} />
-                      <span>Track HR replies</span>
+                      <span>
+                        {practice ? "Read & draft email" : "Track HR replies"}
+                      </span>
                       <small>
-                        {w.inbox ? "Inbox connected" : "After demo HR connects"}
+                        {practice
+                          ? `${(w.mail || []).length} emails in this case`
+                          : w.inbox
+                            ? "Inbox connected"
+                            : "After demo HR connects"}
                       </small>
                     </div>
                   </div>
                   <div className="agent-scope">
                     <ShieldCheck size={14} />
-                    {w.background?.enabled
-                      ? "Preparation while open · Background HR checks on"
-                      : "Active while open · Background checks off"}
+                    {practice
+                      ? "Practice case · Simulated email, never delivered"
+                      : w.background?.enabled
+                        ? "Preparation while open · Background HR checks on"
+                        : "Active while open · Background checks off"}
                     <button
                       className="agent-scope-settings"
                       onClick={() => setPage("settings")}
@@ -589,35 +644,50 @@ export default function Dashboard() {
                     <CheckCheck size={22} />
                   </div>
                   {reviews.length ? (
-                    reviews.map((t) => (
-                      <button
-                        className="review-item"
-                        key={t.id}
-                        onClick={() => openTask(t.id)}
-                      >
-                        <span className="review-item-icon">
-                          {reviewKind(t, w) === "reply" ? (
-                            <Mail size={20} />
-                          ) : (
-                            <Wallet size={20} />
-                          )}
-                        </span>
-                        <span>
-                          <small>
-                            {reviewKind(t, w) === "reply"
-                              ? "REPLY DRAFTED"
-                              : "CLAIM PREPARED"}
-                          </small>
-                          <strong>{t.claim?.course || t.title}</strong>
-                          <span>
-                            {reviewKind(t, w) === "reply"
-                              ? "Review message & attachment"
-                              : `${money(t.claim!.amount)} · Review claim & evidence`}
+                    reviews.map((t) => {
+                      const kind = reviewKind(t, w);
+                      const draft =
+                        kind === "draft" ? openDraft(w, t.id) : undefined;
+                      return (
+                        <button
+                          className="review-item"
+                          key={t.id}
+                          onClick={() => openTask(t.id)}
+                        >
+                          <span className="review-item-icon">
+                            {kind === "draft" ? (
+                              <PenLine size={20} />
+                            ) : kind === "reply" ? (
+                              <Mail size={20} />
+                            ) : (
+                              <Wallet size={20} />
+                            )}
                           </span>
-                        </span>
-                        <ArrowUpRight size={18} />
-                      </button>
-                    ))
+                          <span>
+                            <small>
+                              {draft
+                                ? draft.inReplyTo
+                                  ? "REPLY DRAFTED"
+                                  : "EMAIL DRAFTED"
+                                : kind === "reply"
+                                  ? "REPLY DRAFTED"
+                                  : "CLAIM PREPARED"}
+                            </small>
+                            <strong>
+                              {draft?.subject || t.claim?.course || t.title}
+                            </strong>
+                            <span>
+                              {draft
+                                ? `To ${draft.to.map(contactName).join(", ")} · Review & approve`
+                                : kind === "reply"
+                                  ? "Review message & attachment"
+                                  : `${money(t.claim!.amount)} · Review claim & evidence`}
+                            </span>
+                          </span>
+                          <ArrowUpRight size={18} />
+                        </button>
+                      );
+                    })
                   ) : (
                     <div className="review-empty">
                       <ShieldCheck size={27} />
@@ -627,8 +697,9 @@ export default function Dashboard() {
                           : "Nothing to approve right now."}
                       </strong>
                       <p>
-                        Prepared claims and replies will appear here. You get
-                        the final say.
+                        {practice
+                          ? "Emails your agent drafts will appear here. You get the final say."
+                          : "Prepared claims and replies will appear here. You get the final say."}
                       </p>
                     </div>
                   )}
@@ -748,6 +819,7 @@ export default function Dashboard() {
                           <TaskCard
                             key={t.id}
                             task={t}
+                            drafted={!!openDraft(w, t.id)}
                             open={() => openTask(t.id)}
                           />
                         ))}
@@ -944,7 +1016,9 @@ export default function Dashboard() {
                         {a.type === "user"
                           ? "You"
                           : a.type === "mail"
-                            ? "AgentMail"
+                            ? practice
+                              ? "Practice inbox"
+                              : "AgentMail"
                             : a.type === "browser"
                               ? "Kernel"
                               : "JobSwitch"}
@@ -1001,18 +1075,26 @@ export default function Dashboard() {
               ? "Preparing work for your review"
               : agentPhase === "sync"
                 ? "Checking HR replies"
-                : "Reading your documents"
-            : busy === "analyze"
-              ? "Reading your documents"
-              : busy === "submit"
-                ? "Submitting with Kernel"
-                : busy === "prepare"
-                  ? "Checking your receipt and policy"
-                  : busy.includes("hr_")
-                    ? "Sending demo HR email"
-                    : busy === "sync"
-                      ? "Checking HR replies"
-                      : "Working on it"}
+                : agentPhase === "triage"
+                  ? "Reading your new email and drafting replies"
+                  : "Reading your documents"
+            : busy === "scenario_next"
+              ? "Delivering the next email"
+              : busy === "draft_request"
+                ? "Drafting an email for your review"
+                : busy === "draft_send"
+                  ? "Sending your approved email"
+                  : busy === "analyze"
+                    ? "Reading your documents"
+                    : busy === "submit"
+                      ? "Submitting with Kernel"
+                      : busy === "prepare"
+                        ? "Checking your receipt and policy"
+                        : busy.includes("hr_")
+                          ? "Sending demo HR email"
+                          : busy === "sync"
+                            ? "Checking HR replies"
+                            : "Working on it"}
           <span>…</span>
         </div>
       )}
@@ -1065,9 +1147,9 @@ export default function Dashboard() {
               <div className="notice warning">
                 <CalendarDays size={18} />
                 <p>
-                  Your dates changed. Your agent will recheck documents for
-                  updated coverage details; confirm changes to submitted items
-                  with HR.
+                  {practice
+                    ? "Your dates changed. Check this task against the latest email before relying on its deadline."
+                    : "Your dates changed. Your agent will recheck documents for updated coverage details; confirm changes to submitted items with HR."}
                 </p>
               </div>
             )}
@@ -1083,7 +1165,9 @@ export default function Dashboard() {
                 <div>
                   <strong>Approved. One less loose end.</strong>
                   <p>
-                    HR confirmed your reimbursement. Payment is still pending.
+                    {practice
+                      ? "The approval is in writing. No payment has been recorded yet."
+                      : "HR confirmed your reimbursement. Payment is still pending."}
                   </p>
                 </div>
               </div>
@@ -1121,6 +1205,18 @@ export default function Dashboard() {
                 </div>
               </div>
             )}
+            {taskDraft && (
+              <DraftReview
+                key={taskDraft.id}
+                w={w}
+                draft={taskDraft}
+                busy={busy}
+                act={act}
+                viewEvidence={(e) =>
+                  setViewDoc({ id: e.documentId, page: e.page })
+                }
+              />
+            )}
             {task.missing.length > 0 && (
               <section className="detail-section">
                 <h3>
@@ -1157,6 +1253,19 @@ export default function Dashboard() {
                 );
               })}
             </section>
+            <TaskTimeline
+              w={w}
+              task={task}
+              badge={(status) => <StatusBadge status={status} />}
+              viewEvidence={(e) =>
+                setViewDoc({ id: e.documentId, page: e.page })
+              }
+            />
+            {practice &&
+              !taskDraft &&
+              !["done", "approved"].includes(task.status) && (
+                <RequestDraft task={task} busy={busy} act={act} />
+              )}
             {task.lastReply && (
               <section className="detail-section">
                 <h3>
@@ -1198,7 +1307,7 @@ export default function Dashboard() {
                 </div>
               </section>
             )}
-            {task.status === "needs_info" && (
+            {task.status === "needs_info" && task.claim && (
               <section className="detail-section">
                 <h3>
                   <Upload size={17} />{" "}
@@ -1324,7 +1433,7 @@ export default function Dashboard() {
                 ))}
               </section>
             )}
-            {task.status === "waiting" && w.demo && (
+            {task.status === "waiting" && w.demo && !practice && (
               <section className="demo-controls">
                 <span className="demo-pill">DEMO CONTROLS</span>
                 <p>
@@ -1358,19 +1467,24 @@ export default function Dashboard() {
             )}
           </div>
           <footer className="panel-footer">
-            {task.status === "todo" && task.category === "money" && (
-              <div className="agent-task-note">
-                <Sparkles size={17} />
-                <p>
-                  {task.missing.length
-                    ? "Add the missing evidence. Your agent will check eligibility again automatically."
-                    : "Your agent will check eligibility and prepare this claim for review."}
-                </p>
-                <button className="text-button" onClick={() => setUpload(true)}>
-                  Add evidence
-                </button>
-              </div>
-            )}
+            {task.status === "todo" &&
+              task.category === "money" &&
+              !practice && (
+                <div className="agent-task-note">
+                  <Sparkles size={17} />
+                  <p>
+                    {task.missing.length
+                      ? "Add the missing evidence. Your agent will check eligibility again automatically."
+                      : "Your agent will check eligibility and prepare this claim for review."}
+                  </p>
+                  <button
+                    className="text-button"
+                    onClick={() => setUpload(true)}
+                  >
+                    Add evidence
+                  </button>
+                </div>
+              )}
             {task.status === "ready" && w.demo && (
               <>
                 <p>
@@ -1432,9 +1546,10 @@ export default function Dashboard() {
                   : "I’ve handled this — mark complete"}
               </button>
             )}
-            {["waiting", "approved", "needs_info", "done"].includes(
-              task.status,
-            ) && (
+            {(practice ||
+              ["waiting", "approved", "needs_info", "done"].includes(
+                task.status,
+              )) && (
               <span className="footer-status">
                 <ShieldCheck size={14} />
                 {task.nextAction}
@@ -1684,7 +1799,15 @@ function StatusBadge({ status }: { status: Status }) {
     </span>
   );
 }
-function TaskCard({ task, open }: { task: Task; open: () => void }) {
+function TaskCard({
+  task,
+  drafted,
+  open,
+}: {
+  task: Task;
+  drafted: boolean;
+  open: () => void;
+}) {
   const c = categories[task.category];
   const Icon = task.title.toLowerCase().includes("learning")
     ? GraduationCap
@@ -1716,6 +1839,11 @@ function TaskCard({ task, open }: { task: Task; open: () => void }) {
         <FileText size={13} />
         {task.evidence.length}{" "}
         {task.evidence.length === 1 ? "source" : "sources"}
+        {drafted && (
+          <span className="card-draft">
+            <PenLine size={12} aria-hidden="true" /> Email draft ready
+          </span>
+        )}
       </div>
       <div className="card-bottom">
         <StatusBadge status={task.status} />
@@ -1746,17 +1874,36 @@ function SettingsForm({
   editDates: () => void;
   onUpdate: (w: Workspace) => void;
 }) {
-  const [confirmWorkspace, setConfirmWorkspace] = useState(false);
+  const [confirmWorkspace, setConfirmWorkspace] = useState<{
+    mode: "demo" | "personal" | "scenario";
+    scenarioId?: string;
+    title?: string;
+  } | null>(null);
+  const practice = !!w.scenario;
+  const fresh = w.demo && !practice ? "personal" : "demo";
   return (
     <div className="settings-grid">
       {confirmWorkspace && (
         <Modal
           className="modal-frame"
-          label="Create a new workspace?"
-          onClose={() => setConfirmWorkspace(false)}
+          label={
+            confirmWorkspace.mode === "scenario"
+              ? "Open a practice case?"
+              : "Create a new workspace?"
+          }
+          onClose={() => setConfirmWorkspace(null)}
         >
           <div className="form-modal">
-            <h2>Create a new workspace?</h2>
+            <h2>
+              {confirmWorkspace.mode === "scenario"
+                ? "Open this practice case?"
+                : "Create a new workspace?"}
+            </h2>
+            {confirmWorkspace.title && (
+              <p>
+                <strong>{confirmWorkspace.title}</strong>
+              </p>
+            )}
             <p>
               This replaces the workspace linked to this browser. You won’t be
               able to return to the current documents and history from here.
@@ -1769,7 +1916,7 @@ function SettingsForm({
             <div className="confirmation-actions">
               <button
                 className="secondary"
-                onClick={() => setConfirmWorkspace(false)}
+                onClick={() => setConfirmWorkspace(null)}
               >
                 Keep current workspace
               </button>
@@ -1779,13 +1926,20 @@ function SettingsForm({
                 onClick={async () => {
                   const result = await act(
                     "new_workspace",
-                    { mode: w.demo ? "personal" : "demo" },
-                    "New workspace created.",
+                    {
+                      mode: confirmWorkspace.mode,
+                      scenarioId: confirmWorkspace.scenarioId,
+                    },
+                    confirmWorkspace.mode === "scenario"
+                      ? "Practice case opened. Your agent is reading the first email."
+                      : "New workspace created.",
                   );
-                  if (result) setConfirmWorkspace(false);
+                  if (result) setConfirmWorkspace(null);
                 }}
               >
-                Create {w.demo ? "personal" : "demo"} workspace
+                {confirmWorkspace.mode === "scenario"
+                  ? "Open practice case"
+                  : `Create ${confirmWorkspace.mode} workspace`}
               </button>
             </div>
           </div>
@@ -1834,9 +1988,22 @@ function SettingsForm({
           <CalendarDays size={15} /> Edit transition dates
         </button>
       </form>
-      <GmailControls w={w} onUpdate={onUpdate} />
-      <OutlookControls w={w} onUpdate={onUpdate} />
-      <BackgroundControls w={w} onUpdate={onUpdate} />
+      {/* Practice mail is simulated, so real inbox connections and background
+          checks do not apply to it. */}
+      {!practice && (
+        <>
+          <GmailControls w={w} onUpdate={onUpdate} />
+          <OutlookControls w={w} onUpdate={onUpdate} />
+          <BackgroundControls w={w} onUpdate={onUpdate} />
+        </>
+      )}
+      <PracticeCases
+        current={w.scenario?.id}
+        busy={busy}
+        choose={(scenarioId, title) =>
+          setConfirmWorkspace({ mode: "scenario", scenarioId, title })
+        }
+      />
       <div className="settings-card">
         <h2>Workspace services</h2>
         <p className="muted">
@@ -1861,19 +2028,30 @@ function SettingsForm({
           className="secondary full"
           style={{ marginTop: 20 }}
           disabled={!!busy}
-          onClick={() => setConfirmWorkspace(true)}
+          onClick={() => setConfirmWorkspace({ mode: fresh })}
           type="button"
         >
-          {w.demo
+          {fresh === "personal"
             ? "Start with my own documents"
             : "Open a fresh demo workspace"}{" "}
           <ArrowRight size={15} />
         </button>
+        {practice && (
+          <button
+            className="text-button"
+            disabled={!!busy}
+            onClick={() => setConfirmWorkspace({ mode: "personal" })}
+            type="button"
+          >
+            Start with my own documents
+          </button>
+        )}
         <div className="notice">
           <ShieldCheck size={18} />
           <p>
-            This workspace is private to this browser. The demo uses fictional
-            employers and dedicated test email inboxes.
+            {practice
+              ? "This workspace is private to this browser. Practice cases use fictional people, and their email never leaves JobSwitch."
+              : "This workspace is private to this browser. The demo uses fictional employers and dedicated test email inboxes."}
           </p>
         </div>
       </div>

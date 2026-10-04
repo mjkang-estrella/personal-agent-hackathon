@@ -33,7 +33,13 @@ export const taskSchema = z.object({
   title: z.string(),
   description: z.string(),
   stage: z.enum(["before", "between", "after"]),
-  category: z.enum(["money", "health", "retirement", "onboarding"]),
+  category: z.enum([
+    "money",
+    "health",
+    "retirement",
+    "onboarding",
+    "offboarding",
+  ]),
   deadline: z.iso.date().nullable(),
   deadlineRule: z.enum([
     "departure",
@@ -68,6 +74,18 @@ export function context(w: Workspace) {
     profile: w.profile,
     documents: w.documents,
     tasks: w.tasks.map(({ browserUrl, browserSessionId, ...t }) => t),
+    ...(w.scenario && {
+      simulatedToday: w.scenario.clock,
+      emailDrafts: (w.drafts || [])
+        .filter((d) => d.status === "draft" || d.status === "sent")
+        .map((d) => ({
+          status:
+            d.status === "sent" ? "sent after approval" : "awaiting approval",
+          taskId: d.taskId,
+          to: d.to.map((c) => c.name),
+          subject: d.subject,
+        })),
+    }),
   });
 }
 const publicQueries = {

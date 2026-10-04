@@ -91,6 +91,10 @@ export async function advanceAgent(id: string) {
   });
   try {
     if (step.kind === "analyze") w = await analyzeWorkspace(id);
+    if (step.kind === "triage") {
+      const { triageMail } = await import("./triage");
+      w = await triageMail(id);
+    }
     if (step.kind === "prepare") {
       w = await prepareClaim(id, step.taskId);
       w = await mutate(id, (s) => {

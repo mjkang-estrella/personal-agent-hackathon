@@ -26,8 +26,26 @@ import { updateDates } from "@/lib/domain";
 import { completionCertificate } from "@/lib/fixtures";
 import { advanceAgent, analyzeWorkspace, workflowInput } from "@/lib/workflow";
 import { queueAgent } from "@/lib/automation";
+import {
+  deliverNext,
+  makeScenarioWorkspace,
+  replaceWorkspace,
+  scenarioIds,
+} from "@/lib/scenarios";
+import {
+  dismissDraft,
+  resolveDateProposal,
+  saveDraft,
+  sendDraft,
+} from "@/lib/mail-agent";
 const schema = z.object({
   action: z.enum([
+    "scenario_next",
+    "draft_save",
+    "draft_send",
+    "draft_dismiss",
+    "draft_request",
+    "date_proposal",
     "advance",
     "agent_pause",
     "agent_resume",
@@ -45,7 +63,15 @@ const schema = z.object({
     "research",
     "new_workspace",
   ]),
-  mode: z.enum(["demo", "personal"]).optional(),
+  mode: z.enum(["demo", "personal", "scenario"]).optional(),
+  scenarioId: z
+    .string()
+    .refine((id) => scenarioIds.includes(id))
+    .optional(),
+  draftId: z.string().max(80).optional(),
+  subject: z.string().max(200).optional(),
+  body: z.string().max(4000).optional(),
+  apply: z.boolean().optional(),
   approval: z.string().optional(),
   taskId: z.string().optional(),
   certificateId: z.string().optional(),
@@ -71,8 +97,14 @@ export async function POST(request: Request) {
           const outlook = await import("@/lib/outlook/oauth");
           await outlook.disconnect(id);
           if (w.background?.enabled) await setBackground(id, false);
+          if (data.mode === "scenario" && !data.scenarioId)
+            throw new Error("Choose one of the practice cases.");
           const next = await newSessionId();
           w = await getWorkspace(next);
+          if (data.mode === "scenario")
+            w = await mutate(next, (s) =>
+              replaceWorkspace(s, makeScenarioWorkspace(data.scenarioId!)),
+            );
           if (data.mode === "personal")
             w = await mutate(next, (s) => {
               s.demo = false;
@@ -97,6 +129,51 @@ export async function POST(request: Request) {
         }
         case "advance":
           w = await advanceAgent(id);
+          break;
+        case "scenario_next":
+          w = await mutate(id, (s) => {
+            deliverNext(s);
+            queueAgent(s);
+          });
+          break;
+        case "draft_save":
+          w = await mutate(id, (s) => {
+            saveDraft(
+              s,
+              data.draftId || "",
+              data.subject || "",
+              data.body || "",
+            );
+          });
+          break;
+        case "draft_send":
+          // Edits made in the review panel are saved and sent in one step; the
+          // approval must already describe the edited email.
+          w = await mutate(id, (s) => {
+            const d = s.drafts?.find((x) => x.id === data.draftId);
+            if (
+              d?.status === "draft" &&
+              data.subject !== undefined &&
+              data.body !== undefined &&
+              (data.subject.trim() !== d.subject || data.body.trim() !== d.body)
+            )
+              saveDraft(s, d.id, data.subject, data.body);
+            sendDraft(s, data.draftId || "", data.approval || "");
+          });
+          break;
+        case "draft_dismiss":
+          w = await mutate(id, (s) => dismissDraft(s, data.draftId || ""));
+          break;
+        case "draft_request": {
+          const { draftForTask } = await import("@/lib/triage");
+          w = await draftForTask(id, data.taskId || "");
+          break;
+        }
+        case "date_proposal":
+          w = await mutate(id, (s) => {
+            resolveDateProposal(s, data.apply === true);
+            queueAgent(s);
+          });
           break;
         case "agent_pause":
         case "agent_resume":
@@ -210,6 +287,15 @@ export async function POST(request: Request) {
                 "This claim must be completed through HR confirmation.",
               );
             t.status = t.status === "done" ? "todo" : "done";
+            if (t.history)
+              t.history.push({
+                at: s.scenario?.clock || new Date().toISOString(),
+                status: t.status,
+                note:
+                  t.status === "done"
+                    ? "You marked this complete"
+                    : "You reopened this task",
+              });
             activity(
               s,
               t.status === "done"

@@ -4,10 +4,15 @@ export function addDays(date: string, n: number) {
   d.setUTCDate(d.getUTCDate() + n);
   return d.toISOString().slice(0, 10);
 }
+// PDF extraction wraps lines mid-sentence, so compare with whitespace collapsed.
+// Every word and character must still appear verbatim and in order.
+const squash = (s: string) => s.replace(/\s+/g, " ").trim();
 export function validEvidence(e: Evidence, w: Workspace) {
-  return !!w.documents
-    .find((d) => d.id === e.documentId)
-    ?.pages[e.page - 1]?.includes(e.quote);
+  const page = w.documents.find((d) => d.id === e.documentId)?.pages[
+    e.page - 1
+  ];
+  const quote = squash(e.quote);
+  return !!page && quote.length >= 8 && squash(page).includes(quote);
 }
 export function updateDates(w: Workspace, lastDay: string, startDay: string) {
   if (

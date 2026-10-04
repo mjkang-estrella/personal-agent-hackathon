@@ -1027,3 +1027,499 @@
   min-width: 0;
   overflow-wrap: anywhere;
 }
+
+/* Practice cases: the case driver sits above the agent desk; drafts and
+   timelines reuse the panel's evidence language. */
+.app-shell .practice-strip {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(260px, 1fr);
+  gap: 18px;
+  padding: 18px;
+  margin-bottom: 28px;
+  border-radius: 24px;
+  background: var(--surface);
+  border: 1px solid #ece6dd;
+}
+.app-shell .practice-copy {
+  padding: 12px 10px 8px 12px;
+  min-width: 0;
+}
+.app-shell :is(.practice-eyebrow, .date-proposal-copy > small) {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: #294c83;
+}
+.app-shell .practice-copy h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  font-size: clamp(23px, 2.2vw, 30px);
+  line-height: 1.2;
+  letter-spacing: -0.6px;
+  margin: 12px 0 10px;
+  color: var(--ink);
+}
+.app-shell .practice-copy > p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+  max-width: 640px;
+}
+.app-shell .practice-progress {
+  display: flex;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 18px 0 0;
+  max-width: 320px;
+}
+.app-shell .practice-progress li {
+  flex: 1;
+  height: 6px;
+  border-radius: 6px;
+  background: #e5dfd7;
+}
+.app-shell .practice-progress li.reached {
+  background: var(--accent);
+}
+.app-shell .practice-checkpoint {
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.app-shell .practice-checkpoint summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  cursor: pointer;
+  color: var(--accent);
+  font-weight: 500;
+}
+.app-shell .practice-checkpoint p {
+  line-height: 1.6;
+  max-width: 640px;
+  margin-top: 6px;
+}
+.app-shell .practice-checkpoint strong {
+  display: inline-block;
+  min-width: 70px;
+  color: var(--ink);
+  font-weight: 600;
+}
+.app-shell .practice-next {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 22px;
+  border-radius: 18px;
+  background: var(--accent-soft);
+  color: #294c83;
+  min-width: 0;
+}
+.app-shell .practice-next > small {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+}
+.app-shell .practice-clock {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  font-size: 26px;
+  color: var(--ink);
+}
+.app-shell .practice-next > p {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #294c83;
+  margin-top: 4px;
+}
+.app-shell .practice-next > p svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.app-shell .practice-next > p.practice-hint {
+  font-size: 13px;
+  color: var(--muted);
+}
+.app-shell .practice-next > button {
+  margin-top: 2px;
+}
+.app-shell .practice-note {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.app-shell .date-proposal {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px 22px;
+  margin: 0 0 22px;
+  border-radius: 18px;
+  background: var(--warning-soft);
+  border: 1px solid #f1dcc6;
+}
+.app-shell .date-proposal-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #f8e2cc;
+  color: var(--warning);
+}
+.app-shell .date-proposal-copy {
+  flex: 1;
+  min-width: 0;
+}
+.app-shell .date-proposal-copy > small {
+  color: var(--warning);
+}
+.app-shell .date-proposal-copy > strong {
+  display: block;
+  font-size: 18px;
+  font-weight: 500;
+  margin: 6px 0 4px;
+  color: var(--ink);
+}
+.app-shell .date-proposal-copy > p {
+  font-size: 13px;
+  color: var(--muted);
+}
+.app-shell .date-proposal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.app-shell .quote-link {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 0;
+  border-left: 2px solid #c9d6ee;
+  border-radius: 0 10px 10px 0;
+  background: #ffffff99;
+  color: #4b535c;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.app-shell .quote-link:hover {
+  background: #fff;
+}
+.app-shell .quote-link > span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.app-shell .draft-review > h3 {
+  flex-wrap: wrap;
+}
+.app-shell .draft-tag {
+  margin-left: auto;
+  padding: 3px 9px;
+  border-radius: 20px;
+  background: var(--positive-soft);
+  color: var(--positive);
+  font-size: 11px;
+  font-weight: 500;
+}
+.app-shell .draft-reason {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #294c83;
+}
+.app-shell .draft-reason svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.app-shell .draft-paper {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  overflow: hidden;
+}
+.app-shell .draft-line {
+  display: grid;
+  grid-template-columns: 82px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 8px 16px;
+  min-height: 46px;
+  border-bottom: 1px solid #efebe4;
+  font-size: 14px;
+  color: var(--ink);
+}
+.app-shell .draft-line > small,
+.app-shell .draft-attachments > small {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+.app-shell .draft-line > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.app-shell .draft-line em {
+  display: block;
+  font-style: normal;
+  font-size: 12px;
+  color: var(--muted);
+}
+.app-shell .draft-line input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  padding: 6px 0;
+  background: transparent;
+  font-weight: 500;
+}
+.app-shell .draft-paper textarea {
+  display: block;
+  width: 100%;
+  min-height: 210px;
+  border: 0;
+  padding: 16px;
+  resize: vertical;
+  background: transparent;
+  font-size: 14px;
+  line-height: 1.65;
+  color: #3e4650;
+}
+.app-shell .draft-paper :is(input, textarea):focus-visible {
+  outline-offset: -3px;
+}
+.app-shell .draft-attachments {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
+  padding: 6px 16px;
+  border-top: 1px solid #efebe4;
+  background: #faf8f4;
+}
+.app-shell .draft-attachments .text-button {
+  font-size: 13px;
+}
+.app-shell .draft-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+.app-shell .draft-safety {
+  display: flex;
+  gap: 7px;
+  align-items: flex-start;
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.app-shell .draft-safety svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.app-shell .task-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 18px;
+  border-left: 1px solid #ddd6cb;
+}
+.app-shell .task-timeline li {
+  position: relative;
+  padding: 0 0 18px 4px;
+}
+.app-shell .task-timeline li::before {
+  content: "";
+  position: absolute;
+  left: -24px;
+  top: 6px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--accent);
+}
+.app-shell .task-timeline li:not(:first-child)::before {
+  border-color: #b8c0cc;
+}
+.app-shell .timeline-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.app-shell .task-timeline li > p {
+  margin-top: 6px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.app-shell .task-timeline .quote-link {
+  background: #f5f2ed;
+}
+
+.app-shell .practice-cases {
+  grid-column: 1 / -1;
+}
+.app-shell .practice-cases > p {
+  max-width: 720px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.app-shell .practice-cases ol {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 28px;
+}
+.app-shell .practice-cases li {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid #efebe4;
+}
+.app-shell .practice-cases li strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--ink);
+}
+.app-shell .practice-cases li small {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.app-shell .practice-number {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 18px;
+  color: var(--accent);
+}
+.app-shell .practice-cases .small-button {
+  font-size: 13px;
+  padding-inline: 16px;
+}
+.app-shell .practice-current {
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: var(--accent-soft);
+  color: #294c83;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.app-shell .card-evidence > .card-draft {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 0 0 auto;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: var(--accent-soft);
+  color: #294c83;
+  font-size: 11px;
+}
+.app-shell .inbox-from {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.app-shell .inbox-attachment-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.app-shell .inbox-attachments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 4px 0 14px;
+}
+.app-shell .inbox-attachments .text-button {
+  font-size: 13px;
+}
+
+@media (max-width: 960px) {
+  .app-shell .practice-strip {
+    grid-template-columns: 1fr;
+  }
+  .app-shell .practice-cases ol {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 720px) {
+  .app-shell .practice-strip {
+    padding: 12px;
+    border-radius: 20px;
+    margin-bottom: 22px;
+  }
+  .app-shell .practice-copy {
+    padding: 10px 8px 4px;
+  }
+  .app-shell .practice-next {
+    padding: 18px;
+  }
+  .app-shell .date-proposal {
+    flex-wrap: wrap;
+    padding: 18px;
+  }
+  .app-shell .date-proposal-icon {
+    display: none;
+  }
+  .app-shell .date-proposal-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .app-shell .draft-line {
+    grid-template-columns: 1fr;
+    gap: 2px;
+    padding: 10px 14px;
+  }
+  .app-shell .practice-cases li {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .app-shell .practice-number {
+    display: none;
+  }
+}

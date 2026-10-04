@@ -14,6 +14,24 @@ test("citations require exact source page evidence", () => {
     false,
   );
 });
+test("quotes still verify across PDF line wrapping, but never with changed words", () => {
+  const w = makeWorkspace();
+  w.documents[0].pages[0] = "Orbit People has\naccepted the correction.";
+  const e = {
+    documentId: w.documents[0].id,
+    page: 1,
+    quote: "Orbit People has accepted the correction.",
+  };
+  assert.equal(validEvidence(e, w), true);
+  assert.equal(
+    validEvidence(
+      { ...e, quote: "Orbit People has approved the correction." },
+      w,
+    ),
+    false,
+  );
+  assert.equal(validEvidence({ ...e, quote: "   \n  " }, w), false);
+});
 test("date changes invalidate prepared claims and recalculate inclusive enrollment deadlines", () => {
   const w = makeWorkspace();
   w.tasks[0].status = "ready";
