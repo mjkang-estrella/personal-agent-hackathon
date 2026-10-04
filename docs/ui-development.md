@@ -10,6 +10,10 @@ Osome is a visual reference for typography, spacing, photography, and approachab
 
 Use familiar icons to support labels and scanning. Icon-only controls need accessible names; status and meaning must not depend on color alone. Maintain visible keyboard focus, readable contrast, and comfortable touch targets.
 
+## Lead with conversation
+
+The workspace opens with a clear next step at every screen size. Use saved workspace state to explain what needs attention, why, and one concrete action before asking the user to invent a question. Keep this briefing visible on mobile as well as desktop. Chat helps the person understand and complete the step. Keep the conversation spacious and the composer visible. Keep Chat first in navigation, directly above Transition board. Preserve the other tabs as full workspace pages with their established layouts and controls; do not compress them into a chat side panel. Keep the right-hand assistant available on every other page, with collapse/reopen controls and expansion into the full Chat tab. Both presentations share one mounted conversation so messages and drafts survive navigation. Assistant references stay in the conversation until clicked, then open the appropriate full page. On narrow screens, open the panel from its launcher and return to the page when it closes. See the [arrival briefing decision](decisions/2026-10-04-215622-codex-chat-first-workspace.md), [preserved pages decision](decisions/2026-10-04-222054-codex-chat-tab-preserve-pages.md), and [chat on every page decision](decisions/2026-10-04-223335-codex-chat-on-every-page.md).
+
 ## Organize around the person’s next decision
 
 Keep agent progress, **Review & decide**, missing information, and the three-stage plan distinct. New capabilities should appear where people expect to use them, with a clear next action and contextual detail. Preserve navigation to documents, inbox, activity, and settings. Avoid duplicate action queues and unrelated controls competing for attention.
