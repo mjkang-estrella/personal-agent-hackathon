@@ -38,6 +38,7 @@ import {
 } from "lucide-react";
 import type { Workspace, Task, Document, Stage, Status } from "@/lib/types";
 import Assistant from "./assistant";
+import { nextTask } from "@/lib/presentation";
 import { MODEL_LABEL } from "@/lib/model-config";
 import { addDays, replyPayload } from "@/lib/domain";
 const money = (n: number) =>
@@ -114,6 +115,7 @@ export default function Dashboard() {
   const [dates, setDates] = useState(false);
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
+  const [taskSearch, setTaskSearch] = useState("");
   const [loadError, setLoadError] = useState("");
   const [certificateId, setCertificateId] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
@@ -247,16 +249,17 @@ export default function Dashboard() {
     ["documents", Files, "My documents"],
     ["activity", Activity, "Agent activity"],
   ];
+  const suggestedTask = nextTask(w.tasks);
   const visible = w.tasks.filter(
     (t) =>
       (filter === "all" ||
         (filter === "attention" &&
           ["ready", "needs_info"].includes(t.status)) ||
         (filter === "done" && ["approved", "done"].includes(t.status))) &&
-      (!search ||
+      (!taskSearch ||
         `${t.title} ${t.description}`
           .toLowerCase()
-          .includes(search.toLowerCase())),
+          .includes(taskSearch.toLowerCase())),
   );
   return (
     <div className="app-shell">
@@ -354,13 +357,18 @@ export default function Dashboard() {
           <div className="page-heading">
             <div>
               <h1>
-                {page === "board"
-                  ? "Your transition"
-                  : page === "documents"
-                    ? "Documents"
-                    : page === "activity"
-                      ? "Activity"
-                      : "Workspace settings"}
+                {page === "board" ? (
+                  <>
+                    A little clarity,{" "}
+                    <span>{w.profile.name.split(" ")[0]}.</span>
+                  </>
+                ) : page === "documents" ? (
+                  "Documents"
+                ) : page === "activity" ? (
+                  "Activity"
+                ) : (
+                  "Workspace settings"
+                )}
               </h1>
               <p>
                 {page === "board"
@@ -390,6 +398,33 @@ export default function Dashboard() {
                   </button>
                 </section>
               )}
+              <div className="workspace-shortcuts" aria-label="Quick actions">
+                <button onClick={() => setUpload(true)}>
+                  <Upload size={24} />
+                  <strong>Add documents</strong>
+                  <span>Give your plan some context</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setPage("documents");
+                    setSearch("");
+                  }}
+                >
+                  <Files size={24} />
+                  <strong>Browse your sources</strong>
+                  <span>{w.documents.length} documents in your workspace</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setChat(true);
+                    setSelected(null);
+                  }}
+                >
+                  <Sparkles size={24} />
+                  <strong>Ask your assistant</strong>
+                  <span>Make sense of the details</span>
+                </button>
+              </div>
               <section
                 className="transition-overview"
                 aria-label="Transition overview"
@@ -421,29 +456,51 @@ export default function Dashboard() {
                   </span>
                 </div>
               </section>
-              <section className="insight">
-                <span className="insight-symbol">
-                  <Sparkles size={19} />
-                </span>
-                <div>
-                  <strong>
-                    {attention
-                      ? `${attention} ${attention === 1 ? "task needs" : "tasks need"} your review`
-                      : "Your next steps"}
-                  </strong>
-                  <p>
-                    {w.analyzedAt
-                      ? w.analysisSummary
-                      : w.documents.length
-                        ? w.demo
-                          ? "Your learning reimbursement has a deadline. Start there, then check your health coverage between jobs."
-                          : "Your documents are ready. Run analysis to build a plan grounded in your employer policies."
-                        : "Add both employers’ documents, then run analysis to generate your personal plan."}
-                  </p>
+              <section className="next-step" aria-label="Your next step">
+                <div className="next-step-heading">
+                  <span className="next-step-icon">
+                    <Sparkles size={21} />
+                  </span>
+                  <div>
+                    <span className="next-step-eyebrow">
+                      {attention
+                        ? "NEEDS YOUR REVIEW"
+                        : "A GOOD PLACE TO START"}
+                    </span>
+                    <h2>
+                      {suggestedTask
+                        ? suggestedTask.title
+                        : w.tasks.length
+                          ? "No action needed from you right now."
+                          : "Let’s put your plan together."}
+                    </h2>
+                    <p>
+                      {suggestedTask
+                        ? suggestedTask.nextAction || suggestedTask.description
+                        : w.tasks.length
+                          ? "Open a task below to check its status and history."
+                          : "Add your employer documents, then analyze them to find your next steps."}
+                    </p>
+                  </div>
                 </div>
+                {suggestedTask && (
+                  <button
+                    className="primary"
+                    onClick={() => openTask(suggestedTask.id)}
+                  >
+                    Review task <ArrowRight size={16} />
+                  </button>
+                )}
+              </section>
+              <section className="analysis-row" aria-label="Document analysis">
+                <p>
+                  {w.analyzedAt
+                    ? "Your plan is grounded in your documents. Added something new? Refresh your analysis."
+                    : "Ready when you are. Analyze your documents to build a plan grounded in your policies."}
+                </p>
                 <button
                   className="text-button"
-                  disabled={!!busy}
+                  disabled={!!busy || !w.documents.length}
                   onClick={() =>
                     act(
                       "analyze",
@@ -467,18 +524,21 @@ export default function Dashboard() {
                 <div className="board-controls">
                   <div className="segmented">
                     <button
+                      aria-pressed={filter === "all"}
                       className={filter === "all" ? "selected" : ""}
                       onClick={() => setFilter("all")}
                     >
                       All tasks
                     </button>
                     <button
+                      aria-pressed={filter === "attention"}
                       className={filter === "attention" ? "selected" : ""}
                       onClick={() => setFilter("attention")}
                     >
                       Needs you{attention > 0 && <b>{attention}</b>}
                     </button>
                     <button
+                      aria-pressed={filter === "done"}
                       className={filter === "done" ? "selected" : ""}
                       onClick={() => setFilter("done")}
                     >
@@ -492,6 +552,24 @@ export default function Dashboard() {
                     <Plus size={15} /> Add documents
                   </button>
                 </div>
+              </div>
+              <div className="plan-search">
+                <Search size={18} />
+                <input
+                  aria-label="Search your tasks"
+                  placeholder="Find a task in your plan…"
+                  value={taskSearch}
+                  onChange={(e) => setTaskSearch(e.target.value)}
+                />
+                {taskSearch && (
+                  <button
+                    className="icon-button"
+                    aria-label="Clear task search"
+                    onClick={() => setTaskSearch("")}
+                  >
+                    <X size={16} />
+                  </button>
+                )}
               </div>
               <section className="kanban">
                 {stages.map((stage) => {
