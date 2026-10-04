@@ -10,6 +10,7 @@ import {
   RefreshCw,
   Send,
   ShieldCheck,
+  FileText,
 } from "lucide-react";
 import type { InboxMessage, InboxSnapshot } from "@/lib/types";
 import { caseTime } from "./practice";
@@ -27,7 +28,7 @@ export default function Inbox({
   focus,
 }: {
   openTask: (id: string) => void;
-  openDocument: (id: string) => void;
+  openDocument: (id: string, page?: number) => void;
   refreshKey?: number;
   focus?: { id: string; label: string; n: number };
 }) {
@@ -79,6 +80,7 @@ export default function Inbox({
     });
   }, [load, focus]);
   const practice = data?.provider === "scenario";
+  const demo = data?.provider === "demo";
   const timestamp = (at: string) =>
     practice ? caseTime(at, true) : localTime(at);
   return (
@@ -88,13 +90,17 @@ export default function Inbox({
           <Mail size={20} />
         </span>
         <div>
-          <h2>{practice ? "Practice inbox" : "HR replies"}</h2>
+          <h2>
+            {practice ? "Practice inbox" : demo ? "Demo inbox" : "HR replies"}
+          </h2>
           <p>
             {data?.provider === "gmail"
               ? "Saved replies from your selected email threads."
               : practice
                 ? "Every email in this case, including the ones you approved."
-                : "Messages for your transition."}
+                : demo
+                  ? "Sample emails to explore, alongside your test HR replies."
+                  : "Messages for your transition."}
           </p>
         </div>
         <button
@@ -107,6 +113,11 @@ export default function Inbox({
         </button>
       </header>
       <div className="inbox-scroll" aria-busy={busy}>
+        {data?.warning && (
+          <p className="inbox-notice" role="status">
+            {data.warning}
+          </p>
+        )}
         {error && (
           <div className="inbox-error" role="alert">
             <p>{error}</p>
@@ -124,9 +135,11 @@ export default function Inbox({
               <ArrowLeft size={15} /> All messages
             </button>
             <span className="inbox-eyebrow">
-              {selected.direction === "outbound"
-                ? "SENT AFTER YOUR APPROVAL"
-                : "RECEIVED EMAIL"}
+              {selected.demo
+                ? "FICTIONAL DEMO EMAIL"
+                : selected.direction === "outbound"
+                  ? "SENT AFTER YOUR APPROVAL"
+                  : "RECEIVED EMAIL"}
             </span>
             <h3>{selected.subject}</h3>
             <div className="inbox-sender">
@@ -156,6 +169,21 @@ export default function Inbox({
                   </button>
                 ))}
               </div>
+            )}
+            {!busy && !error && selected.source && (
+              <button
+                className="inbox-source text-button"
+                onClick={() =>
+                  openDocument(
+                    selected.source!.documentId,
+                    selected.source!.page,
+                  )
+                }
+              >
+                <FileText size={16} aria-hidden="true" />
+                Read source document · page {selected.source.page}
+                <ArrowUpRight size={15} aria-hidden="true" />
+              </button>
             )}
             {selected.taskId && (
               <button
@@ -210,6 +238,9 @@ export default function Inbox({
                           </time>
                         </span>
                         <strong>{message.subject}</strong>
+                        {message.demo && (
+                          <span className="inbox-sample-label">Demo email</span>
+                        )}
                         <p>{message.preview || "Open to read this message."}</p>
                         {!!message.attachments?.length && (
                           <span className="inbox-attachment-count">
@@ -267,7 +298,9 @@ export default function Inbox({
         <div>
           {practice
             ? "Simulated email for this practice case."
-            : "Only replies linked to this workspace."}
+            : demo
+              ? "Sample emails are fictional. Nothing is sent."
+              : "Only replies linked to this workspace."}
           <small>
             {practice
               ? "Nothing here is delivered to a real inbox."

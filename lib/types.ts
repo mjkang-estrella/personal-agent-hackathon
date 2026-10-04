@@ -235,11 +235,14 @@ export interface InboxMessage {
   direction?: "inbound" | "outbound";
   to?: string;
   attachments?: { id: string; name: string }[];
+  demo?: boolean;
+  source?: Evidence;
 }
 export interface InboxSnapshot {
-  provider?: "gmail" | "scenario";
+  provider?: "gmail" | "scenario" | "demo";
   connected: boolean;
   messages: InboxMessage[];
   limited: boolean;
   message?: InboxMessage;
+  warning?: string;
 }
