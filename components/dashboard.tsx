@@ -1749,7 +1749,8 @@ function SettingsForm({
             <p>
               This replaces the workspace linked to this browser. You won’t be
               able to return to the current documents and history from here.
-              Export your plan first if you need a copy.
+              Export your plan first if you need a copy. Any Gmail connection
+              for this workspace will be disconnected.
             </p>
             <a className="text-button" href="/api/export">
               <Download size={16} /> Export current plan

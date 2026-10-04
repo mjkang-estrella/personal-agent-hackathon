@@ -29,3 +29,7 @@ The assistant now uses the same modal interaction as other drawers. Users close 
 - [Audit and validation](../audits/2026-10-04-impeccable.md)
 - [Editorial design](2026-10-04-191324-codex-editorial-experience.md)
 - [Modal primitive](../../components/modal.tsx)
+
+## Upstream integration
+
+The final branch merges main through `fcc9eff`, including Gmail and the UI development guide. Preserve the connector behavior, apply the existing form styles, and exempt consent checkboxes from text-field sizing. Disclose Gmail disconnection in workspace replacement confirmation. Gmail visual checks use fictional browser-only responses; no user connection is authorized by this design task.

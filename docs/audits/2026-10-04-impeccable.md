@@ -56,3 +56,9 @@ The repeated pattern was a new visual layer covering only top-level screens whil
 - [Interaction decision](../decisions/2026-10-04-194223-codex-accessible-editorial-ui.md)
 
 The implemented order was harden → adapt → clarify → colorize → optimize → polish. Further product-context documentation can use `impeccable init`; missing PRODUCT.md/DESIGN.md did not block refinement of the existing system.
+
+## Upstream integration
+
+Merged `origin/main` at `fcc9eff` after the initial fix checkpoint, preserving the optional Gmail connector and UI development guide. The Gmail settings now inherit readable labels and button sizing, with an explicit checkbox exception so the full-width text-input rule cannot stretch the consent control. Workspace replacement also discloses that the prior Gmail connection is disconnected. This extends the existing responsive-form finding, rather than changing the connector contract.
+
+Final integrated validation: typecheck, **all 30 tests**, and production build pass. T3 inspected the connected Gmail form with fictional browser-only responses at 320px and 1440px; axe returned zero violations at both widths, and following a thread stayed disabled until the existing confirmation requirements were met. No real Gmail account, sender, or thread was accessed. See the [labeled Gmail fixture screenshot](../screenshots/impeccable-gmail-mobile-fixture.png). Browser mocks were discarded after inspection.

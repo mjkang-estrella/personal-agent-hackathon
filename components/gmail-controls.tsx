@@ -74,7 +74,10 @@ export default function GmailControls({
     (t) => !t.gmail && !["approved", "done", "submitting"].includes(t.status),
   );
   return (
-    <section className="settings-card" aria-label="Gmail connection">
+    <section
+      className="settings-card gmail-settings"
+      aria-label="Gmail connection"
+    >
       <h2>Your Gmail inbox</h2>
       <p className="muted">
         Optionally follow an HR request you have already sent. Google grants
@@ -84,7 +87,7 @@ export default function GmailControls({
       </p>
       {notice && <p role="status">{notice}</p>}
       {!connection ? (
-        <p>Loading connection…</p>
+        <p role="status">Loading connection…</p>
       ) : !connection.configured ? (
         <p>
           Gmail connection is not configured for this deployment. The demo uses
