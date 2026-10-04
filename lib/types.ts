@@ -85,3 +85,20 @@ export interface Workspace {
   inbox?: string;
   hrInbox?: string;
 }
+
+export interface InboxMessage {
+  id: string;
+  from: string;
+  subject: string;
+  preview: string;
+  at: string;
+  taskId: string;
+  taskTitle: string;
+  body?: string;
+}
+export interface InboxSnapshot {
+  connected: boolean;
+  messages: InboxMessage[];
+  limited: boolean;
+  message?: InboxMessage;
+}

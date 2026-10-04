@@ -42,6 +42,7 @@ import {
 } from "lucide-react";
 import type { Workspace, Task, Document, Stage, Status } from "@/lib/types";
 import Assistant from "./assistant";
+import Inbox from "./inbox";
 import { addDays, replyPayload } from "@/lib/domain";
 const money = (n: number) =>
   new Intl.NumberFormat("en-US", {
@@ -108,7 +109,7 @@ export default function Dashboard() {
   const [viewDoc, setViewDoc] = useState<{ id: string; page: number } | null>(
     null,
   );
-  const [chat, setChat] = useState(false);
+  const [panel, setPanel] = useState<"assistant" | "inbox" | null>(null);
   const [busy, setBusy] = useState("");
   const [toast, setToast] = useState<{ text: string; error: boolean } | null>(
     null,
@@ -147,7 +148,7 @@ export default function Dashboard() {
         setSelected(null);
         setUpload(false);
         setDates(false);
-        setChat(false);
+        setPanel(null);
       }
     };
     window.addEventListener("keydown", onKey);
@@ -191,6 +192,7 @@ export default function Dashboard() {
       if (action === "new_workspace") {
         setPage("board");
         setSelected(null);
+        setPanel(null);
       }
       if (message) notify(message);
       return json as Workspace;
@@ -202,7 +204,7 @@ export default function Dashboard() {
   }
   function openTask(id: string) {
     setSelected(id);
-    setChat(false);
+    setPanel(null);
     setCertificateId("");
   }
   const task = w?.tasks.find((t) => t.id === selected);
@@ -304,7 +306,7 @@ export default function Dashboard() {
         <button
           className="sidebar-assistant"
           onClick={() => {
-            setChat(true);
+            setPanel("assistant");
             setSelected(null);
           }}
         >
@@ -361,6 +363,17 @@ export default function Dashboard() {
             </span>
           </div>
           <div className="topbar-right">
+            <button
+              className="inbox-trigger"
+              aria-expanded={panel === "inbox"}
+              aria-controls="workspace-side-panel"
+              onClick={() => {
+                setPanel("inbox");
+                setSelected(null);
+              }}
+            >
+              <Mail size={17} /> Inbox
+            </button>
             <button className="demo-pill" onClick={() => setPage("settings")}>
               {w.demo ? "Demo workspace" : "Personal workspace"}
             </button>
@@ -406,7 +419,7 @@ export default function Dashboard() {
             <button
               className="primary"
               onClick={() => {
-                setChat(true);
+                setPanel("assistant");
                 setSelected(null);
               }}
             >
@@ -1277,7 +1290,85 @@ export default function Dashboard() {
           </aside>
         </>
       )}
-      {chat && <Assistant close={() => setChat(false)} />}
+      {panel && (
+        <aside
+          className="workspace-side-panel"
+          id="workspace-side-panel"
+          aria-label="Workspace side panel"
+        >
+          <div className="side-panel-bar">
+            <div
+              role="tablist"
+              aria-label="Workspace tools"
+              onKeyDown={(event) => {
+                if (
+                  !["ArrowLeft", "ArrowRight", "Home", "End"].includes(
+                    event.key,
+                  )
+                )
+                  return;
+                event.preventDefault();
+                const next =
+                  event.key === "Home"
+                    ? "assistant"
+                    : event.key === "End"
+                      ? "inbox"
+                      : panel === "assistant"
+                        ? "inbox"
+                        : "assistant";
+                setPanel(next);
+                event.currentTarget
+                  .querySelector<HTMLButtonElement>(`#${next}-tab`)
+                  ?.focus();
+              }}
+            >
+              <button
+                role="tab"
+                id="assistant-tab"
+                aria-selected={panel === "assistant"}
+                aria-controls="assistant-tabpanel"
+                tabIndex={panel === "assistant" ? 0 : -1}
+                onClick={() => setPanel("assistant")}
+              >
+                <Sparkles size={16} /> Assistant
+              </button>
+              <button
+                role="tab"
+                id="inbox-tab"
+                aria-selected={panel === "inbox"}
+                aria-controls="inbox-tabpanel"
+                tabIndex={panel === "inbox" ? 0 : -1}
+                onClick={() => setPanel("inbox")}
+              >
+                <Mail size={16} /> Inbox
+              </button>
+            </div>
+            <button
+              className="icon-button"
+              aria-label="Close side panel"
+              onClick={() => setPanel(null)}
+            >
+              <X size={20} />
+            </button>
+          </div>
+          <div
+            role="tabpanel"
+            id="assistant-tabpanel"
+            aria-labelledby="assistant-tab"
+            hidden={panel !== "assistant"}
+          >
+            <Assistant />
+          </div>
+          <div
+            role="tabpanel"
+            id="inbox-tabpanel"
+            aria-labelledby="inbox-tab"
+            hidden={panel !== "inbox"}
+          >
+            {panel === "inbox" && <Inbox openTask={openTask} />}
+          </div>
+        </aside>
+      )}
       {document && viewDoc && (
         <div className="modal-backdrop" onClick={() => setViewDoc(null)}>
           <section

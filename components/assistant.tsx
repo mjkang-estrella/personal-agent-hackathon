@@ -8,7 +8,7 @@ import {
 import { useChatRuntime } from "@assistant-ui/ai-sdk";
 import { DefaultChatTransport } from "ai";
 import ReactMarkdown from "react-markdown";
-import { ArrowUp, Sparkles, X, Square } from "lucide-react";
+import { ArrowUp, Sparkles, Square } from "lucide-react";
 function MarkdownText({ text }: { text: string }) {
   return <ReactMarkdown>{text}</ReactMarkdown>;
 }
@@ -32,7 +32,7 @@ function AssistantMessage() {
     </MessagePrimitive.Root>
   );
 }
-export default function Assistant({ close }: { close: () => void }) {
+export default function Assistant() {
   const runtime = useChatRuntime({
     transport: new DefaultChatTransport({ api: "/api/chat" }),
   });
@@ -48,13 +48,6 @@ export default function Assistant({ close }: { close: () => void }) {
             <small>Here to connect the dots.</small>
           </div>
         </div>
-        <button
-          className="icon-button"
-          onClick={close}
-          aria-label="Close assistant"
-        >
-          <X size={20} />
-        </button>
       </header>
       <AssistantRuntimeProvider runtime={runtime}>
         <ThreadPrimitive.Root className="chat-thread">
