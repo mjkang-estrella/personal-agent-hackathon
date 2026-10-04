@@ -2,7 +2,10 @@ import { createHmac, timingSafeEqual, createHash } from "node:crypto";
 import { z } from "zod";
 import type { Task } from "./types";
 import { sessionSigningSecret } from "./secrets";
-import { serviceSchema, type Service } from "./connections/config";
+import {
+  calendarServiceSchema,
+  type CalendarService,
+} from "./connections/config";
 export const reminderInput = z
   .object({
     taskId: z.string().min(1).max(200),
@@ -24,7 +27,7 @@ export const reminderInput = z
   .strict();
 export const previewSchema = reminderInput
   .extend({
-    service: serviceSchema,
+    service: calendarServiceSchema,
     account: z.string(),
     email: z.string(),
     generation: z.string().uuid(),
@@ -85,7 +88,7 @@ export function validatePreview(
     );
 }
 export function eventPayload(
-  service: Service,
+  service: CalendarService,
   p: ReminderPreview,
   requestId: string,
 ) {

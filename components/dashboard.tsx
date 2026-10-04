@@ -45,6 +45,7 @@ import Modal, { ModalNotice } from "./modal";
 import Inbox from "./inbox";
 import BackgroundControls from "./background-controls";
 import CalendarControls from "./calendar-controls";
+import CloudDocuments from "./cloud-documents";
 import OutlookControls from "./outlook-controls";
 import GmailControls from "./gmail-controls";
 import BrowserAccounts from "./browser-accounts";
@@ -851,6 +852,7 @@ export default function Dashboard() {
                   <Upload size={16} /> Add document
                 </button>
               </div>
+              <CloudDocuments w={w} onUpdate={setW} />
               <div className="documents-list">
                 <div className="list-header">
                   <span>DOCUMENT</span>
@@ -902,6 +904,7 @@ export default function Dashboard() {
                         <span>
                           <strong>{d.name}</strong>
                           <small>
+                            {d.cloudSource && `${d.cloudSource.service === "google-drive" ? "Google Drive" : "OneDrive"} copy · `}
                             {d.kind.charAt(0).toUpperCase() + d.kind.slice(1)} ·
                             Added{" "}
                             {new Date(d.addedAt).toLocaleDateString("en-US", {

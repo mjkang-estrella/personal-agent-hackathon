@@ -14,6 +14,12 @@ export interface Evidence {
   quote: string;
 }
 export interface Document {
+  cloudSource?: {
+    service: "google-drive" | "microsoft-drive";
+    account: string;
+    fileId: string;
+    version: string;
+  };
   emailSource?: {
     id: string;
     from: string;

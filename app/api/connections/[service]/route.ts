@@ -2,7 +2,11 @@ import { requireUser, SignInRequired } from "@/lib/auth/server";
 import { z } from "zod";
 import { sessionId, sameOrigin, publicError } from "@/lib/session";
 import { withWorkspaceLock, getWorkspace, WorkspaceBusyError } from "@/lib/db";
-import { serviceSchema, configured } from "@/lib/connections/config";
+import {
+  serviceSchema,
+  calendarServiceSchema,
+  configured,
+} from "@/lib/connections/config";
 import { connection, disconnect } from "@/lib/connections/store";
 import { begin } from "@/lib/connections/oauth";
 import { preview, createReminder, receipts } from "@/lib/connections/calendar";
@@ -20,7 +24,9 @@ export async function GET(_: Request, context: Context) {
         connected: c?.status === "connected",
         status: c?.status,
         email: c?.email,
-        receipts: await receipts(id, service),
+        receipts: calendarServiceSchema.safeParse(service).success
+          ? await receipts(id, calendarServiceSchema.parse(service))
+          : [],
       },
       { headers: { "Cache-Control": "no-store" } },
     );
@@ -60,8 +66,9 @@ export async function POST(request: Request, context: Context) {
           "Please start a personal workspace before connecting this service.",
         );
       if (data.action === "connect") return { url: await begin(id, service) };
-      if (data.action === "preview") return preview(id, service, data.data);
-      return createReminder(id, service, data.data);
+      const calendar = calendarServiceSchema.parse(service);
+      if (data.action === "preview") return preview(id, calendar, data.data);
+      return createReminder(id, calendar, data.data);
     });
     return Response.json(result, { headers: { "Cache-Control": "no-store" } });
   } catch (e) {
