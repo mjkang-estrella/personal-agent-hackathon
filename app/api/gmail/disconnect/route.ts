@@ -1,0 +1,15 @@
+import { withWorkspaceLock, WorkspaceBusyError } from "@/lib/db";
+import { sameOrigin, sessionId, publicError } from "@/lib/session";
+import { disconnect } from "@/lib/gmail/oauth";
+export async function POST() {
+  try {
+    await sameOrigin();
+    const id = await sessionId();
+    return Response.json(await withWorkspaceLock(id, () => disconnect(id)));
+  } catch (e) {
+    return Response.json(
+      { error: publicError(e) },
+      { status: e instanceof WorkspaceBusyError ? 409 : 400 },
+    );
+  }
+}

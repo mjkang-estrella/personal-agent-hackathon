@@ -327,7 +327,8 @@ export async function syncMail(id: string, generation?: string) {
   );
   for (const claim of claims.rows) {
     const task = w.tasks.find((t) => t.id === claim.task_id);
-    if (!task || !["waiting", "needs_info"].includes(task.status)) continue;
+    if (!task || task.gmail || !["waiting", "needs_info"].includes(task.status))
+      continue;
     const response = await mail().inboxes.messages.list(w.inbox, {
       limit: 30,
       subject: [`[JobSwitch ${claim.id}]`],
@@ -368,6 +369,7 @@ export async function syncMail(id: string, generation?: string) {
         if (generation && !isCurrentRun(s, generation)) return;
         if (
           !t ||
+          t.gmail ||
           !applyHRReply(t, {
             ...parsed,
             id: msg.messageId,
