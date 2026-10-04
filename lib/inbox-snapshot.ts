@@ -2,6 +2,7 @@ import { AgentMailClient } from "agentmail";
 import { readImportedGmail } from "./gmail/inbox";
 import { pool } from "./db";
 import { readInbox } from "./inbox";
+import { readDemoInbox } from "./demo-inbox";
 import { scenarioInbox } from "./mail-agent";
 import type { InboxSnapshot, Workspace } from "./types";
 
@@ -15,25 +16,33 @@ export async function inboxSnapshot(
   if (!w.demo) return readImportedGmail(w, messageId);
   if (messageId && messageId.length > 1000)
     return { connected: true, messages: [], limited: false };
-  const claims = await pool.query<{ id: string; task_id: string }>(
-    "SELECT id,task_id FROM jobswitch_claims WHERE workspace_id=$1",
-    [id],
-  );
-  return readInbox(
-    {
-      inbox: w.inbox,
-      hrInbox: w.hrInbox,
-      demo: w.demo,
-      claims: claims.rows.map((claim) => ({
-        id: claim.id,
-        taskId: claim.task_id,
-        title:
-          w.tasks.find((task) => task.id === claim.task_id)?.title ||
-          "Reimbursement claim",
-      })),
+  return readDemoInbox(
+    w,
+    async (liveMessageId) => {
+      if (!w.inbox || !w.hrInbox)
+        return { connected: false, messages: [], limited: false };
+      const claims = await pool.query<{ id: string; task_id: string }>(
+        "SELECT id,task_id FROM jobswitch_claims WHERE workspace_id=$1",
+        [id],
+      );
+      return readInbox(
+        {
+          inbox: w.inbox,
+          hrInbox: w.hrInbox,
+          demo: w.demo,
+          claims: claims.rows.map((claim) => ({
+            id: claim.id,
+            taskId: claim.task_id,
+            title:
+              w.tasks.find((task) => task.id === claim.task_id)?.title ||
+              "Reimbursement claim",
+          })),
+        },
+        new AgentMailClient({ apiKey: process.env.AGENTMAIL_API_KEY }).inboxes
+          .messages,
+        liveMessageId,
+      );
     },
-    new AgentMailClient({ apiKey: process.env.AGENTMAIL_API_KEY }).inboxes
-      .messages,
     messageId,
   );
 }

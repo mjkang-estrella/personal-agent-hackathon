@@ -18,8 +18,9 @@ import {
   LoaderCircle,
   Search,
   CircleAlert,
+  SquarePen,
 } from "lucide-react";
-import { createContext, useContext, useEffect, useRef } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import type { WorkspaceFocus } from "@/lib/focus";
 
 const FocusContext = createContext<{
@@ -100,15 +101,31 @@ function AssistantMessage() {
     </MessagePrimitive.Root>
   );
 }
-export default function Assistant({
-  open,
-  close,
-  onFocus,
-}: {
+type AssistantProps = {
   open: boolean;
   close: () => void;
   onFocus: (focus: WorkspaceFocus) => void;
-}) {
+};
+
+export default function Assistant(props: AssistantProps) {
+  const [conversation, setConversation] = useState(0);
+  // A fresh runtime drops message history, draft text, errors and pending tool
+  // results together. Hiding the dock does not unmount this conversation.
+  return (
+    <AssistantConversation
+      key={conversation}
+      {...props}
+      newChat={() => setConversation((n) => n + 1)}
+    />
+  );
+}
+
+function AssistantConversation({
+  open,
+  close,
+  onFocus,
+  newChat,
+}: AssistantProps & { newChat: () => void }) {
   const runtime = useChatRuntime({
     transport: new DefaultChatTransport({ api: "/api/chat" }),
   });
@@ -118,11 +135,36 @@ export default function Assistant({
     onFocusRef.current = onFocus;
   }, [onFocus]);
   const apply = useRef((f: WorkspaceFocus) => onFocusRef.current(f)).current;
+  const input = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    input.current?.focus({ preventScroll: true });
+  }, [open]);
+  function hideAssistant() {
+    close();
+    // Wait for the launcher to mount; inert blurs the composer before effect
+    // cleanup, so restore focus explicitly after the close action.
+    requestAnimationFrame(() => {
+      document
+        .querySelector<HTMLElement>(".assistant-launcher, .sidebar-assistant")
+        ?.focus({ preventScroll: true });
+    });
+  }
   return (
     <aside
+      id="assistant-dock"
       className="assistant-dock"
       aria-label="JobSwitch assistant"
-      hidden={!open}
+      aria-hidden={!open}
+      inert={!open}
+      data-open={open}
+      onKeyDown={(event) => {
+        if (event.key === "Escape") {
+          event.preventDefault();
+          event.stopPropagation();
+          hideAssistant();
+        }
+      }}
     >
       <header>
         <div className="assistant-heading">
@@ -134,13 +176,26 @@ export default function Assistant({
             <small>Ask, and your workspace follows along.</small>
           </div>
         </div>
-        <button
-          className="icon-button"
-          onClick={close}
-          aria-label="Hide assistant"
-        >
-          <PanelRightClose size={20} />
-        </button>
+        <div className="assistant-actions">
+          <button
+            className="assistant-new text-button"
+            onClick={() => {
+              runtime.thread.cancelRun();
+              newChat();
+            }}
+            aria-label="New chat"
+            title="Start a fresh conversation"
+          >
+            <SquarePen size={16} aria-hidden="true" /> New
+          </button>
+          <button
+            className="icon-button"
+            onClick={hideAssistant}
+            aria-label="Hide assistant"
+          >
+            <PanelRightClose size={20} />
+          </button>
+        </div>
       </header>
       <FocusContext.Provider value={{ apply, applied }}>
         <AssistantRuntimeProvider runtime={runtime}>
@@ -183,6 +238,7 @@ export default function Assistant({
             </ThreadPrimitive.Viewport>
             <ComposerPrimitive.Root className="chat-composer">
               <ComposerPrimitive.Input
+                ref={input}
                 placeholder="Ask anything about your transition…"
                 aria-label="Message your assistant"
               />
