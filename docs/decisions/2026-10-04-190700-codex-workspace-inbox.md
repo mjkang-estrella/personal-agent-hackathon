@@ -26,7 +26,7 @@ Only demo HR replies tied to claims in the current workspace appear. Personal ma
 
 ## Validation
 
-- TypeScript, all 11 domain/inbox tests, and production build pass.
+- TypeScript, all 12 domain/inbox/secret tests, and production build pass.
 - Reader tests cover foreign/prefix/ambiguous claim subjects, participants, detail authorization, missing connection, personal workspaces, ordering, duplicate results, and provider errors.
 - Live local API checks use two separate workspace cookies, verify private no-store responses, and reject unknown message IDs.
 - T3 preview checks desktop and 390px mobile layouts, empty/list/detail views, manual refresh, error retry, related task navigation, tab switching, keyboard arrows, and Escape.

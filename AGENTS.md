@@ -10,7 +10,7 @@ Use fictional documents and a test HR environment. Keep policy facts linked to s
 
 ## Standing authorization for Git
 
-For work the user has requested, automatically commit and push completed, coherent changes and their relevant decision records to the task branch. Do not ask for routine commit or push permission. This authorization does not authorize unrelated work, deployment, merging, destructive Git operations, or sending messages to people.
+For work the user has requested, automatically commit and push completed, coherent changes and their relevant decision records to the task branch. Do not ask for routine commit or push permission. This authorization includes merging the task PR when the requested feature is complete and checks pass. It does not authorize unrelated work, deployment, destructive Git operations, or sending messages to people.
 
 Commit at meaningful checkpoints and before final handoff, rather than after every file save. Do not create empty commits. If access, checks, or conflicts prevent a push, preserve the work and report the exact blocker; never claim an unsuccessful push succeeded.
 
@@ -47,21 +47,21 @@ Do not log every minor code edit or copy private conversations. Commit a decisio
 3. Stage only named files or reviewed hunks belonging to the task. Avoid blanket staging in a shared working tree.
 4. Review the staged diff and run `git diff --cached --check`.
 5. Commit with a descriptive message such as `feat: add transition board`, `fix: prevent duplicate claim submission`, or `docs: record workflow ownership decision`.
-6. Push the task branch, setting its upstream on the first push. Verify the remote branch points to the intended commit. Do not merge it automatically.
-7. Open or update a pull request when the available tooling permits it. Describe the problem, resulting behavior, decisions, validation, and remaining limitations. If PR creation is unavailable, report the pushed branch and next review step.
+6. Push the task branch, setting its upstream on the first push. Verify the remote branch points to the intended commit. Merge the task PR after the requested feature is complete, the diff has been reviewed, and relevant checks pass.
+7. Open or update a pull request when the available tooling permits it. Merge it once the feature is complete and required checks and reviews are satisfied. Describe the problem, resulting behavior, decisions, validation, and remaining limitations. If PR creation is unavailable, report the pushed branch and next review step.
 8. In the final handoff, state what changed, checks performed, branch, commit, push status, and PR link when available. Flag coordination needs and unresolved decisions.
 
 If checks fail, fix them before treating the task as complete. A necessary work-in-progress handoff may be committed and pushed to its task branch only when clearly labeled as incomplete, with failures disclosed and a draft PR if available.
 
 ## Integration policy
 
-Pull requests need review by another teammate before merging to `main`, unless the user explicitly authorizes an exception. Repository administrators should enforce this with GitHub branch protection or a ruleset, required checks once CI exists, and blocked force pushes. This file guides agents; it cannot enforce GitHub permissions or schedule agents to run on its own.
+Nolan explicitly authorized agents to merge completed feature PRs after reviewing the diff and passing relevant checks. Use a separate task branch and PR for every feature; never bypass required GitHub reviews or checks. Incomplete work stays on its task branch. Repository administrators should enforce this with GitHub branch protection or a ruleset, required checks once CI exists, and blocked force pushes. This file guides agents; it cannot enforce GitHub permissions or schedule agents to run on its own.
 
 ## Implementation requirements
 
 # JobSwitch
 
-Next.js/TypeScript app. Mastra + OpenAI gpt-6-luna, Exa, Kernel, AgentMail, and Neon Postgres.
+Next.js/TypeScript app. Mastra + Neon AI Gateway gpt-5-6-luna, Exa, Kernel, AgentMail, and Neon Postgres.
 Use the authorized .env keys without printing secrets. Never commit .env or .neon.
 Keep public sources distinct from employer policy. Cite exact document pages and verbatim supporting quotes. Missing evidence means unknown, never assumed eligibility.
 Only explicitly approved payloads may be submitted. Changed payloads invalidate approval. Never duplicate submissions on retries. Distinguish submitted, approved, and paid.

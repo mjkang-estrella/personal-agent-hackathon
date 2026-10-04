@@ -32,3 +32,5 @@ Type checking, six domain tests, production build, T3 desktop/mobile inspection,
 
 - [Team workflow](2026-10-04-team-git-workflow.md)
 - [Run and demo guide](../../README.md)
+
+The model-routing choice is superseded by [Neon Luna](2026-10-04-185710-codex-neon-luna.md).

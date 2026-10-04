@@ -21,3 +21,7 @@ Frequent coherent checkpoints make work recoverable and visible. Isolated branch
 ## Consequences
 
 Agents commit and push without repetitive permission requests, but do not automatically merge or deploy. The team must configure GitHub enforcement separately. Until CI and branch rules exist, compliance depends on following `AGENTS.md`.
+
+## Subsequent decision
+
+The no-automatic-merge policy is superseded by [completed feature PR integration](2026-10-04-185849-nolan-feature-pr-integration.md). Other provisions remain in effect.
