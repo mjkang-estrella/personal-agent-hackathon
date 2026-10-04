@@ -12,7 +12,7 @@ export async function sessionId() {
   );
   const user = await currentUser();
   if (user) {
-    const id = await accountWorkspace(user.id, candidate);
+    const id = await accountWorkspace(user, candidate);
     if (id !== candidate) await setWorkspaceCookie(id);
     return id;
   }
@@ -56,7 +56,7 @@ export function publicError(error: unknown) {
 export async function newSessionId() {
   const user = await currentUser();
   const id = user
-    ? await accountWorkspace(user.id, undefined, true)
+    ? await accountWorkspace(user, undefined, true)
     : crypto.randomUUID();
   await setWorkspaceCookie(id);
   return id;

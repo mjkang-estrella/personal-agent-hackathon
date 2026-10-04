@@ -301,7 +301,7 @@ export function makeWorkspace(): Workspace {
   };
 }
 // A signed-in account starts blank; fictional demo data never becomes personal data.
-export function makePersonalWorkspace(): Workspace {
+export function makePersonalWorkspace(name?: string | null): Workspace {
   const w = makeWorkspace();
   return {
     ...w,
@@ -310,7 +310,7 @@ export function makePersonalWorkspace(): Workspace {
     tasks: [],
     profile: {
       ...w.profile,
-      name: "Your name",
+      name: name?.trim() || "Your name",
       previousEmployer: "Previous employer",
       nextEmployer: "New employer",
     },

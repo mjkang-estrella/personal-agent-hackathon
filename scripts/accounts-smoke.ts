@@ -223,7 +223,7 @@ try {
   const blank = (await request(a, "/api/state")).data;
   assert.equal(blank.demo, false);
   assert.equal(blank.documents.length, 0);
-  assert.equal(blank.profile.name, "Your name");
+  assert.equal(blank.profile.name, "Fictional account", "Name comes from Google");
   assert.equal(
     (await request(guestCopy, "/api/state")).status,
     401,
@@ -263,6 +263,18 @@ try {
   b.set(tokenName, "fixture-b");
   const bAccount = await request(b, "/api/account");
   assert.notEqual(bAccount.data.activeWorkspace, guestId);
+  // Accounts created before personal workspaces only owned demo data.
+  await admin.query(
+    "UPDATE jobswitch_workspaces SET data=jsonb_set(data,'{demo}','true') WHERE id=$1",
+    [bAccount.data.activeWorkspace],
+  );
+  const repaired = await request(b, "/api/account");
+  assert.notEqual(
+    repaired.data.activeWorkspace,
+    bAccount.data.activeWorkspace,
+    "A demo-only account is moved to a new personal workspace",
+  );
+  assert.equal((await request(b, "/api/state")).data.demo, false);
   assert.equal(
     (
       await request(b, "/api/account", {
