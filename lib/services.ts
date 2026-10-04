@@ -78,7 +78,7 @@ export async function prepareClaim(id: string, taskId: string) {
     policyDocumentId: z.enum(policyIds as [string, ...string[]]),
   });
   const result = await analyst.generate(
-    `Evaluate this specific reimbursement task against the receipt, employer policy and HR confirmation. Do not prepare an allowance for future purchases. A missing certificate is allowed ONLY if a supplied HR email explicitly permits initial submission without it. Need documented prior approval, balance and repayment terms if policy requires them. Return eligibleToSubmit=false and explain missing evidence if any required item is unverified. Use exact employee, course, receipt ID and amount.\nTASK: ${JSON.stringify(t)}\nWORKSPACE: ${context(w)}`,
+    `Evaluate this specific reimbursement task against the receipt, employer policy and HR confirmation. Do not prepare an allowance for future purchases. A missing certificate is allowed ONLY if a supplied HR email explicitly permits initial submission without it. Need documented prior approval, balance and repayment terms if policy requires them. Return eligibleToSubmit=false and explain missing evidence if any item required for INITIAL submission is unverified. The missing array must contain only blockers to INITIAL submission. If supplied HR evidence explicitly defers the certificate to later review, explain that outstanding follow-up in note, not missing; eligibility to submit is not final approval or payment. Use exact employee, course, receipt ID and amount.\nTASK: ${JSON.stringify(t)}\nWORKSPACE: ${context(w)}`,
     { structuredOutput: { schema: exactClaimSchema } },
   );
   const c = result.object;
@@ -104,6 +104,7 @@ export async function prepareClaim(id: string, taskId: string) {
     if (task.status !== "todo" && task.status !== "ready")
       throw new Error("This task has already moved forward.");
     task.missing = c.missing;
+    delete task.claim;
     task.description = c.reason;
     if (c.eligibleToSubmit && c.missing.length === 0) {
       task.claim = {
@@ -126,6 +127,9 @@ export async function prepareClaim(id: string, taskId: string) {
       );
     } else {
       task.status = "todo";
+      task.missing = c.missing.length ? c.missing : [c.reason];
+      task.nextAction =
+        "Add the missing evidence; your agent will check again.";
       activity(state, "A few details need confirmation", c.reason);
     }
   });

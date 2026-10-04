@@ -2,7 +2,10 @@ import pg from "pg";
 import { randomUUID } from "node:crypto";
 import { makeWorkspace } from "./fixtures";
 import type { Workspace, Activity } from "./types";
-const globals = globalThis as unknown as { jobswitchPool?: pg.Pool };
+const globals = globalThis as unknown as {
+  jobswitchPool?: pg.Pool;
+  jobswitchLockPool?: pg.Pool;
+};
 export const pool =
   globals.jobswitchPool ??
   new pg.Pool({
@@ -11,6 +14,16 @@ export const pool =
     connectionTimeoutMillis: 10000,
   });
 globals.jobswitchPool = pool;
+// Locks can span model calls. A separate bounded pool leaves query connections
+// available when several workspaces run concurrently.
+export const lockPool =
+  globals.jobswitchLockPool ??
+  new pg.Pool({
+    connectionString: process.env.DATABASE_URL,
+    max: 5,
+    connectionTimeoutMillis: 10000,
+  });
+globals.jobswitchLockPool = lockPool;
 export async function getWorkspace(id: string): Promise<Workspace> {
   const r = await pool.query(
     "SELECT data FROM jobswitch_workspaces WHERE id=$1",
@@ -64,4 +77,32 @@ export function activity(
     type,
   });
   w.activity = w.activity.slice(0, 100);
+}
+
+// Transaction-scoped advisory locks work with Neon's transaction pooler.
+// Keep this separate from row mutations so state/progress remains readable.
+export async function withWorkspaceLock<T>(
+  id: string,
+  fn: () => Promise<T>,
+): Promise<T> {
+  const client = await lockPool.connect();
+  try {
+    await client.query("BEGIN");
+    const result = await client.query(
+      "SELECT pg_try_advisory_xact_lock(hashtextextended($1, 0)) AS locked",
+      [id],
+    );
+    if (!result.rows[0].locked)
+      throw new Error(
+        "Your agent is finishing a step. Please try again shortly.",
+      );
+    const value = await fn();
+    await client.query("COMMIT");
+    return value;
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
 }

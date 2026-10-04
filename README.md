@@ -20,15 +20,15 @@ The workspace is linked to the `jobswitch-dev` branch of the configured Neon pro
 
 ## Demo
 
-1. The default workspace includes fictional Northstar and Orbit handbooks, a receipt, and an HR eligibility confirmation.
-2. Click **Analyze documents** to regenerate the board using Mastra and Neon’s `gpt-5-6-luna`.
-3. Open the learning reimbursement task. **Check eligibility & prepare claim**.
-4. Review the claim and source documents. **Approve & submit claim** sends the approved fields through a Kernel browser to the test portal.
-5. **Send demo HR document request** sends a real AgentMail message between dedicated demo-owned inboxes. **Check replies** runs the HR reply through Mastra.
-6. Add the provided demo certificate, review the reply, then **Approve & send reply**.
-7. **Send demo HR approval**, then check replies. The final state is **Approved · unpaid**, never an assertion that payment arrived.
+1. Open the default workspace with fictional Northstar and Orbit handbooks, a receipt, and an HR eligibility confirmation. The agent automatically analyzes documents with Mastra and Neon’s `gpt-5-6-luna`, then checks reimbursement evidence and prepares supported claims.
+2. Open a prepared claim in **Review & decide**. Inspect its fields and exact source pages; **Approve & submit claim** sends only the approved fields through a Kernel browser to the test portal.
+3. **Send demo HR document request** simulates the employer using real AgentMail delivery between dedicated demo-owned inboxes. The agent processes replies automatically; simulated HR messages remain explicit demo controls.
+4. Add the provided demo certificate, inspect the drafted reply and attachment contents, then **Approve & send reply**.
+5. **Send demo HR approval**. The agent tracks the confirmation as **Approved · unpaid**, never an assertion that payment arrived.
 
-The UI checks for HR replies every 20 seconds while open. It is not a background worker when the browser is closed. Demo HR controls are explicitly simulated employer responses, delivered through real email infrastructure.
+The agent runs one bounded step at a time while the workspace is open, with inbox checks no more frequently than every 20 seconds. It is not a background worker when the browser is closed. **Pause** stops further automatic work; **Resume** restarts it. A service failure stops the loop and shows **Retry**, preserving progress. New documents, profile edits, and date changes queue fresh analysis without resuming a deliberately paused agent. Claims blocked on evidence are checked once per input version, then wait for new evidence.
+
+**Review & decide** separates prepared claims and reply drafts from missing information. Health elections, retirement decisions, unsupported portal tasks, and unknown eligibility still require the person or employer. Exact payload approval is always required for claims and outgoing replies; the automatic loop cannot submit, send email, simulate HR, or mark a task complete.
 
 Use **Workspace settings → Start with my own documents** for an empty personal workspace. Set your name, employers, and dates, then upload text-based PDFs, TXT, or Markdown files. Scanned PDFs need OCR outside this MVP. Real employer portal integrations are not configured; the executable submission demo uses the fictional Northstar portal only.
 
@@ -36,7 +36,7 @@ Use **Workspace settings → Start with my own documents** for an empty personal
 
 - **Next.js + assistant-ui:** transition board, evidence viewer, approval controls, streaming assistant.
 - **Mastra + Neon AI Gateway (gpt-5-6-luna):** structured document analysis, claim validation, HR reply interpretation, and conversational help. Exa is a Mastra tool.
-- **Neon Postgres:** durable workspaces, task states, source text, history, and idempotent claim records.
+- **Neon Postgres:** durable workspaces, input fingerprints, pause/retry state, history, and idempotent claim records. Transaction advisory locks serialize agent and manual mutations within a workspace; a separate bounded lock pool preserves query capacity. No schema migration is needed.
 - **Kernel:** real browser form filling and submission to the deployed test portal.
 - **AgentMail:** dedicated demo inboxes, real email delivery, threaded replies, and certificate attachments.
 - **Exa:** public official guidance. Private documents never become search queries.
@@ -49,7 +49,9 @@ Workspaces are isolated by signed, random HttpOnly cookies. This is a browser-bo
 npm run typecheck
 npm test
 npm run build
-# Live test: incurs API calls and sends only to demo-owned email inboxes.
+# Preparation-only live test: incurs model calls, never sends a claim or email.
+JOBSWITCH_TEST_URL=http://localhost:3000 node --env-file=.env --import tsx scripts/automation-smoke.ts
+# Live end-to-end test: incurs API calls and sends only to demo-owned email inboxes.
 node --import tsx scripts/smoke.ts
 ```
 

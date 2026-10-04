@@ -73,7 +73,18 @@ export interface Resource {
   url: string;
   description: string;
 }
+export interface AgentState {
+  enabled: boolean;
+  phase?: "analyze" | "prepare" | "sync" | "idle";
+  pending?: boolean;
+  analyzedInput?: string;
+  preparedInputs?: Record<string, string>;
+  lastSyncedAt?: string;
+  lastRunAt?: string;
+  error?: string;
+}
 export interface Workspace {
+  agent?: AgentState;
   profile: Profile;
   documents: Document[];
   tasks: Task[];
