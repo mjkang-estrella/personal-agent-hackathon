@@ -8,18 +8,14 @@ import {
   Files,
   Activity,
   Settings,
-  ChevronDown,
   ChevronRight,
   Plus,
   Check,
-  CheckCheck,
   CalendarDays,
-  Clock,
   ShieldCheck,
   Heart,
   Wallet,
   Sparkles,
-  MoreHorizontal,
   X,
   Upload,
   FileText,
@@ -241,10 +237,6 @@ export default function Dashboard() {
     .map((n) => n[0])
     .slice(0, 2)
     .join("");
-  const currentDay = new Date().toISOString().slice(0, 10);
-  const departureDays = Math.ceil(
-    (Date.parse(w.profile.lastDay) - Date.parse(currentDay)) / 86400000,
-  );
   const selectedCertificate = w.documents.find(
     (d) =>
       d.id ===
@@ -275,19 +267,12 @@ export default function Dashboard() {
           </span>
           JobSwitch<span className="brand-dot">.</span>
         </a>
-        <div className="workspace-switch">
-          <span className="workspace-icon">A</span>
-          <div>
-            <strong>My next chapter</strong>
-            <small>Personal workspace</small>
-          </div>
-          <ChevronDown size={14} />
-        </div>
-        <p className="nav-label">YOUR TRANSITION</p>
         <nav>
           {links.map(([id, Icon, label]) => (
             <button
               key={id}
+              aria-label={label}
+              aria-current={page === id ? "page" : undefined}
               className={`nav-item ${page === id ? "active" : ""}`}
               onClick={() => setPage(id)}
             >
@@ -303,6 +288,7 @@ export default function Dashboard() {
           ))}
         </nav>
         <button
+          aria-label="Ask JobSwitch"
           className="sidebar-assistant"
           onClick={() => {
             setChat(true);
@@ -314,23 +300,8 @@ export default function Dashboard() {
           <span className="shortcut">↗</span>
         </button>
         <div className="sidebar-bottom">
-          <div className="quiet-card">
-            <span className="little-stars">✦</span>
-            <h4>
-              A fresh start.
-              <br />
-              Fewer loose ends.
-            </h4>
-            <p>
-              We’ll keep track of the details, so you can focus on what’s next.
-            </p>
-            <div className="mini-horizon">
-              <span />
-              <span />
-              <span />
-            </div>
-          </div>
           <button
+            aria-label="Workspace settings"
             className={`nav-item ${page === "settings" ? "active" : ""}`}
             onClick={() => setPage("settings")}
           >
@@ -382,21 +353,18 @@ export default function Dashboard() {
         <main className="main-content">
           <div className="page-heading">
             <div>
-              <div className="eyebrow">
-                <span className="green-dot" /> YOUR NEXT CHAPTER, HANDLED
-              </div>
               <h1>
                 {page === "board"
-                  ? "A smoother move starts here."
+                  ? "Your transition"
                   : page === "documents"
-                    ? "All the details. One place."
+                    ? "Documents"
                     : page === "activity"
-                      ? "Your agent, at work."
-                      : "Make this workspace yours."}
+                      ? "Activity"
+                      : "Workspace settings"}
               </h1>
               <p>
                 {page === "board"
-                  ? `From ${w.profile.previousEmployer} to ${w.profile.nextEmployer}. Let’s take care of everything in between.`
+                  ? `${w.profile.previousEmployer} → ${w.profile.nextEmployer}`
                   : page === "documents"
                     ? "The source of truth for your transition. Every recommendation starts here."
                     : page === "activity"
@@ -404,15 +372,6 @@ export default function Dashboard() {
                       : "Your dates and details keep every next step in sync."}
               </p>
             </div>
-            <button
-              className="primary"
-              onClick={() => {
-                setChat(true);
-                setSelected(null);
-              }}
-            >
-              <Sparkles size={16} /> Ask JobSwitch
-            </button>
           </div>
           {page === "board" && (
             <>
@@ -431,98 +390,35 @@ export default function Dashboard() {
                   </button>
                 </section>
               )}
-              <section className="journey">
-                <div className="employer">
-                  <span className="employer-logo northstar">✳</span>
-                  <div>
-                    <small>LEAVING</small>
-                    <strong>{w.profile.previousEmployer}</strong>
-                    <span>Last day · {date(w.profile.lastDay)}</span>
-                  </div>
-                </div>
-                <div className="journey-bridge">
-                  <span className="journey-line" />
-                  <span className="journey-symbol">
-                    <ArrowRight size={18} />
+              <section
+                className="transition-overview"
+                aria-label="Transition overview"
+              >
+                <div className="transition-dates">
+                  <span>
+                    Last day <strong>{date(w.profile.lastDay)}</strong>
                   </span>
-                  <span className="journey-line" />
-                  <small>A new beginning</small>
-                </div>
-                <div className="employer">
-                  <span className="employer-logo orbit">
-                    o<span>◦</span>
+                  <ArrowRight size={15} aria-hidden="true" />
+                  <span>
+                    First day <strong>{date(w.profile.startDay)}</strong>
                   </span>
-                  <div>
-                    <small>JOINING</small>
-                    <strong>{w.profile.nextEmployer}</strong>
-                    <span>First day · {date(w.profile.startDay)}</span>
-                  </div>
+                  <button
+                    className="text-button"
+                    onClick={() => setDates(true)}
+                  >
+                    Edit dates
+                  </button>
                 </div>
-                <button
-                  className="text-button edit-dates"
-                  onClick={() => setDates(true)}
-                >
-                  <CalendarDays size={15} /> Edit dates
-                </button>
-              </section>
-              <section className="summary-grid">
-                <div className="summary-card">
-                  <div className="summary-icon peach">
-                    <Wallet size={20} />
-                  </div>
-                  <div>
-                    <span>Potential benefits to explore</span>
-                    <div className="stat">
-                      {money(w.tasks.reduce((n, t) => n + (t.amount || 0), 0))}
-                      <small>in policy allowances & claims</small>
-                    </div>
-                  </div>
-                  <ArrowUpRight size={17} className="muted" />
-                </div>
-                <div className="summary-card">
-                  <div className="summary-icon sage">
-                    <CheckCheck size={21} />
-                  </div>
-                  <div>
-                    <span>Your transition progress</span>
-                    <div className="stat">
-                      {complete}
-                      <small>of {w.tasks.length} tasks resolved</small>
-                    </div>
-                  </div>
-                  <svg className="progress-ring" viewBox="0 0 40 40">
-                    <circle cx="20" cy="20" r="16" />
-                    <circle
-                      cx="20"
-                      cy="20"
-                      r="16"
-                      style={{
-                        strokeDasharray: `${w.tasks.length ? (complete / w.tasks.length) * 100.5 : 0} 100.5`,
-                      }}
-                    />
-                  </svg>
-                </div>
-                <div className="summary-card">
-                  <div className="summary-icon lavender">
-                    <CalendarDays size={20} />
-                  </div>
-                  <div>
-                    <span>
-                      {departureDays >= 0
-                        ? "Until your last day"
-                        : "Your departure date"}
-                    </span>
-                    <div className="stat">
-                      {departureDays >= 0
-                        ? departureDays
-                        : date(w.profile.lastDay)}
-                      <small>
-                        {departureDays >= 0
-                          ? "days to tie up loose ends"
-                          : "time to look ahead"}
-                      </small>
-                    </div>
-                  </div>
+                <div className="transition-summary">
+                  <span>
+                    <strong>{w.tasks.length - complete}</strong> tasks remaining
+                  </span>
+                  <span>
+                    <strong>{attention}</strong> need your review
+                  </span>
+                  <span>
+                    <strong>{complete}</strong> resolved
+                  </span>
                 </div>
               </section>
               <section className="insight">
@@ -532,8 +428,8 @@ export default function Dashboard() {
                 <div>
                   <strong>
                     {attention
-                      ? `${attention} ${attention === 1 ? "task needs" : "tasks need"} your attention`
-                      : "A little attention now. A lot less to worry about later."}
+                      ? `${attention} ${attention === 1 ? "task needs" : "tasks need"} your review`
+                      : "Your next steps"}
                   </strong>
                   <p>
                     {w.analyzedAt
@@ -615,15 +511,10 @@ export default function Dashboard() {
                         <p>{stage.caption}</p>
                       </header>
                       <div className="column-cards">
-                        {tasks.map((t, i) => (
+                        {tasks.map((t) => (
                           <TaskCard
                             key={t.id}
                             task={t}
-                            featured={
-                              t.stage === "before" &&
-                              i === 0 &&
-                              t.category === "money"
-                            }
                             open={() => openTask(t.id)}
                           />
                         ))}
@@ -635,22 +526,6 @@ export default function Dashboard() {
                                 ? "Nothing here yet."
                                 : "No matching tasks."}
                             </p>
-                          </div>
-                        )}
-                        {stage.id === "between" && filter === "all" && (
-                          <div className="breathing-room">
-                            <span>☀</span>
-                            <strong>A little breathing room.</strong>
-                            <p>
-                              You’re allowed to enjoy the space
-                              <br />
-                              between one chapter and the next.
-                            </p>
-                            <div className="terrain">
-                              <i />
-                              <i />
-                              <i />
-                            </div>
                           </div>
                         )}
                       </div>
@@ -1523,35 +1398,24 @@ function StatusBadge({ status }: { status: Status }) {
     </span>
   );
 }
-function TaskCard({
-  task,
-  featured,
-  open,
-}: {
-  task: Task;
-  featured: boolean;
-  open: () => void;
-}) {
+function TaskCard({ task, open }: { task: Task; open: () => void }) {
   const c = categories[task.category];
   const Icon = task.title.toLowerCase().includes("learning")
     ? GraduationCap
     : c.icon;
   return (
     <button
-      className={`task-card ${featured ? "featured" : ""} ${["done", "approved"].includes(task.status) ? "resolved" : ""}`}
+      className={`task-card ${["done", "approved"].includes(task.status) ? "resolved" : ""}`}
       onClick={open}
     >
       <div className="card-top">
-        <span className={`card-icon ${c.color}`}>
-          <Icon size={20} />
+        <span className="card-category">
+          <Icon size={15} aria-hidden="true" />
+          {c.label}
         </span>
-        <span className="card-menu">
-          <ArrowUpRight size={17} />
-        </span>
+        <ArrowUpRight size={16} className="muted" aria-hidden="true" />
       </div>
-      <span className="card-category">{c.label}</span>
       <h4>{task.title}</h4>
-      <p>{task.description}</p>
       {task.amount !== null && (
         <div className="amount-line">
           {money(task.amount)}
@@ -1566,7 +1430,6 @@ function TaskCard({
         <FileText size={13} />
         {task.evidence.length}{" "}
         {task.evidence.length === 1 ? "source" : "sources"}
-        <span>·</span> Evidence attached
       </div>
       <div className="card-bottom">
         <StatusBadge status={task.status} />
@@ -1577,11 +1440,6 @@ function TaskCard({
           </span>
         )}
       </div>
-      {featured && task.status === "todo" && (
-        <div className="card-recommended">
-          <Sparkles size={12} /> A good place to start <ArrowRight size={13} />
-        </div>
-      )}
     </button>
   );
 }
