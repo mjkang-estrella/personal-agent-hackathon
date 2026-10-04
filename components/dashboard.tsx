@@ -44,6 +44,7 @@ import Assistant from "./assistant";
 import Modal, { ModalNotice } from "./modal";
 import Inbox from "./inbox";
 import BackgroundControls from "./background-controls";
+import CalendarControls from "./calendar-controls";
 import OutlookControls from "./outlook-controls";
 import GmailControls from "./gmail-controls";
 import { MODEL_LABEL } from "@/lib/model-config";
@@ -152,7 +153,8 @@ export default function Dashboard() {
     load();
     if (
       new URLSearchParams(window.location.search).has("gmail") ||
-      new URLSearchParams(window.location.search).has("outlook")
+      new URLSearchParams(window.location.search).has("outlook") ||
+      new URLSearchParams(window.location.search).has("connection")
     )
       setPage("settings");
   }, [load]);
@@ -1836,6 +1838,7 @@ function SettingsForm({
       </form>
       <GmailControls w={w} onUpdate={onUpdate} />
       <OutlookControls w={w} onUpdate={onUpdate} />
+      <CalendarControls w={w} onUpdate={onUpdate} />
       <BackgroundControls w={w} onUpdate={onUpdate} />
       <div className="settings-card">
         <h2>Workspace services</h2>

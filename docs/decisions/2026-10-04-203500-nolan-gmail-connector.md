@@ -33,3 +33,7 @@ Apply the additive Gmail migration and configure the four server environment var
 ## Integration with the inbox and review queue
 
 Main subsequently added a read-only inbox and workspace advisory locks around agent preparation. Preserve both: Gmail sync/track/disconnect routes share the lock, and the durable monitor invokes Gmail inside that existing lock. The personal Inbox displays saved, selected Gmail reply evidence; refreshing it never fetches, classifies, or sends mail. Metadata is stored with each imported evidence document, and list/detail reads remain scoped to the signed workspace. Untracking gets a new binding identity on re-link so old in-flight classifications cannot apply to a new selection. AgentMail's demo inbox and outgoing approval checks remain unchanged.
+
+## Calendar integration update
+
+The [calendar connection decision](2026-10-04-200244-nolan-calendar-approval.md) supersedes only the provider-revocation behavior above: Gmail disconnect now removes local access without revoking the shared Google app grant. Other decisions remain in force.
