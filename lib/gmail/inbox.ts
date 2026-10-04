@@ -21,7 +21,7 @@ export function readImportedGmail(
     .sort((a, b) => Date.parse(b.at) - Date.parse(a.at));
   return {
     provider: "gmail",
-    connected: messages.length > 0 || w.tasks.some((t) => t.gmail),
+    connected: messages.length > 0 || w.tasks.some((t) => t.gmail || t.outlook),
     limited: false,
     messages: messageId ? [] : messages.map(({ body: _, ...m }) => m),
     message: messageId ? messages.find((m) => m.id === messageId) : undefined,

@@ -8,7 +8,7 @@ type ConnectionStatus = {
   email?: string;
 };
 type Thread = { id: string; subject: string; at: string };
-export default function GmailControls({
+export default function OutlookControls({
   w,
   onUpdate,
 }: {
@@ -24,7 +24,7 @@ export default function GmailControls({
   const [taskId, setTaskId] = useState("");
   const [confirmed, setConfirmed] = useState(false);
   async function refresh() {
-    const r = await fetch("/api/gmail/status");
+    const r = await fetch("/api/outlook/status");
     if (!r.ok)
       throw new Error("Connection status unavailable. Please try again.");
     setConnection(await r.json());
@@ -35,22 +35,22 @@ export default function GmailControls({
         "Connection status unavailable. Please reopen settings to retry.",
       ),
     );
-    const result = new URLSearchParams(window.location.search).get("gmail");
+    const result = new URLSearchParams(window.location.search).get("outlook");
     if (result) {
       setNotice(
         result === "connected"
-          ? "Gmail connected. Choose an HR thread below."
+          ? "Outlook connected. Choose an HR thread below."
           : result === "denied"
-            ? "Gmail access was not granted."
-            : "Gmail connection failed or expired. Please try again.",
+            ? "Outlook access was not granted."
+            : "Outlook connection failed or expired. Please try again.",
       );
       const url = new URL(window.location.href);
-      url.searchParams.delete("gmail");
+      url.searchParams.delete("outlook");
       window.history.replaceState(null, "", url);
     }
   }, []);
   async function post(path: string, body?: object) {
-    const r = await fetch(`/api/gmail/${path}`, {
+    const r = await fetch(`/api/outlook/${path}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body || {}),
@@ -71,24 +71,28 @@ export default function GmailControls({
     }
   }
   const availableTasks = w.tasks.filter(
-    (t) => !t.gmail && !t.outlook && !["approved", "done", "submitting"].includes(t.status),
+    (t) =>
+      !t.outlook &&
+      !t.gmail &&
+      !["approved", "done", "submitting"].includes(t.status),
   );
   return (
-    <section className="settings-card" aria-label="Gmail connection">
-      <h2>Your Gmail inbox</h2>
+    <section className="settings-card" aria-label="Outlook connection">
+      <h2>Your Outlook inbox</h2>
       <p className="muted">
-        Optionally follow an HR request you have already sent. Google grants
-        read-only inbox access; JobSwitch processes only the sender and thread
-        you select. Selected reply text is stored as evidence and sent to our AI
-        provider for analysis. This connection cannot send email.
+        Optionally follow an HR request you have already sent. Microsoft grants
+        read-only mail access; JobSwitch processes only the sender and thread
+        you select in your Inbox folder. Selected reply text is stored as
+        evidence and sent to our AI provider for analysis. This connection
+        cannot send email.
       </p>
       {notice && <p role="status">{notice}</p>}
       {!connection ? (
         <p>Loading connection…</p>
       ) : !connection.configured ? (
         <p>
-          Gmail connection is not configured for this deployment. The demo uses
-          its own AgentMail inbox.
+          Outlook connection is not configured for this deployment. The demo
+          uses its own AgentMail inbox.
         </p>
       ) : (
         <>
@@ -97,8 +101,8 @@ export default function GmailControls({
           ) : (
             <p>
               {connection.status === "reconnect"
-                ? "Gmail access expired. Disconnect, then connect again."
-                : "Gmail is not connected."}
+                ? "Outlook access expired. Disconnect, then connect again."
+                : "Outlook is not connected."}
             </p>
           )}
           {!w.demo &&
@@ -111,13 +115,13 @@ export default function GmailControls({
                   run(async () => {
                     const data = await post("connect");
                     const url = new URL(data.url);
-                    if (url.origin !== "https://accounts.google.com")
+                    if (url.origin !== "https://login.microsoftonline.com")
                       throw new Error("Invalid sign-in destination.");
                     window.location.assign(url.href);
                   })
                 }
               >
-                Connect Gmail
+                Connect Outlook
               </button>
             )}
           {connection.status && (
@@ -133,19 +137,19 @@ export default function GmailControls({
                   if (r.ok) onUpdate(await r.json());
                   setNotice(
                     result.revoked
-                      ? "Gmail disconnected. Previously imported evidence is retained."
-                      : "Disconnected locally. Remove JobSwitch access in your Google Account permissions too. Imported evidence is retained.",
+                      ? "Outlook disconnected. Previously imported evidence is retained."
+                      : "Disconnected locally. Remove JobSwitch access in your Microsoft account application permissions too. Imported evidence is retained.",
                   );
                 })
               }
             >
-              Disconnect Gmail
+              Disconnect Outlook
             </button>
           )}
           {w.demo && (
             <p>
               The demo uses a separate AgentMail inbox. Choose “Start with my
-              own documents” below before connecting your Gmail.
+              own documents” below before connecting your Outlook.
             </p>
           )}
           {connection.connected && !w.demo && (
@@ -159,7 +163,9 @@ export default function GmailControls({
                     setSearchedSender(sender);
                     setConfirmed(false);
                     if (!data.threads.length)
-                      setNotice("No matching threads in the last 90 days.");
+                      setNotice(
+                        "No matching conversations in your Inbox in the last 90 days.",
+                      );
                   });
                 }}
               >
@@ -244,12 +250,12 @@ export default function GmailControls({
                 </div>
               )}
               {w.tasks
-                .filter((t) => t.gmail)
+                .filter((t) => t.outlook)
                 .map((t) => (
                   <div key={t.id} className="service-row">
                     <div>
                       <strong>{t.title}</strong>
-                      <small>{t.gmail!.sender}</small>
+                      <small>{t.outlook!.sender}</small>
                     </div>
                     <button
                       className="text-button"
@@ -274,7 +280,7 @@ export default function GmailControls({
                 ))}
               <button
                 className="primary"
-                disabled={busy || !w.tasks.some((t) => t.gmail)}
+                disabled={busy || !w.tasks.some((t) => t.outlook)}
                 onClick={() =>
                   run(async () => {
                     onUpdate(await post("sync"));

@@ -43,6 +43,7 @@ import type { Workspace, Task, Document, Stage, Status } from "@/lib/types";
 import Assistant from "./assistant";
 import Inbox from "./inbox";
 import BackgroundControls from "./background-controls";
+import OutlookControls from "./outlook-controls";
 import GmailControls from "./gmail-controls";
 import { MODEL_LABEL } from "@/lib/model-config";
 import { reviewKind } from "@/lib/automation";
@@ -141,7 +142,10 @@ export default function Dashboard() {
   }, []);
   useEffect(() => {
     load();
-    if (new URLSearchParams(window.location.search).has("gmail"))
+    if (
+      new URLSearchParams(window.location.search).has("gmail") ||
+      new URLSearchParams(window.location.search).has("outlook")
+    )
       setPage("settings");
   }, [load]);
   useEffect(() => {
@@ -422,7 +426,6 @@ export default function Dashboard() {
                 ) : (
                   "Workspace settings"
                 )}
-
               </h1>
               <p>
                 {page === "board"
@@ -663,7 +666,6 @@ export default function Dashboard() {
                     View requests <ArrowRight size={15} />
                   </button>
                 )}
-
               </section>
               <div className="board-toolbar">
                 <div className="board-title">
@@ -1755,6 +1757,7 @@ function SettingsForm({
         </button>
       </form>
       <GmailControls w={w} onUpdate={onUpdate} />
+      <OutlookControls w={w} onUpdate={onUpdate} />
       <BackgroundControls w={w} onUpdate={onUpdate} />
       <div className="settings-card">
         <h2>Connected to your next chapter</h2>
