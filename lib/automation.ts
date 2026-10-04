@@ -29,6 +29,7 @@ export function nextAgentStep(
   )
     return { kind: "prepare", taskId: task.id };
   if (
+    !w.background?.enabled &&
     w.inbox &&
     w.hrInbox &&
     w.tasks.some((t) => ["waiting", "needs_info"].includes(t.status)) &&

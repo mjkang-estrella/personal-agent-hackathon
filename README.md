@@ -26,7 +26,7 @@ The workspace is linked to the `jobswitch-dev` branch of the configured Neon pro
 4. Add the provided demo certificate, inspect the drafted reply and attachment contents, then **Approve & send reply**.
 5. **Send demo HR approval**. The agent tracks the confirmation as **Approved · unpaid**, never an assertion that payment arrived.
 
-The agent runs one bounded step at a time while the workspace is open, with inbox checks no more frequently than every 20 seconds. It is not a background worker when the browser is closed. **Pause** stops further automatic work; **Resume** restarts it. A service failure stops the loop and shows **Retry**, preserving progress. New documents, profile edits, and date changes queue fresh analysis without resuming a deliberately paused agent. Claims blocked on evidence are checked once per input version, then wait for new evidence.
+The agent runs one bounded step at a time while the workspace is open, with inbox checks no more frequently than every 20 seconds. Document analysis and claim preparation stop when the browser closes. Opt-in durable HR monitoring in Workspace settings continues independently. **Pause** stops further automatic work; **Resume** restarts it. A service failure stops the loop and shows **Retry**, preserving progress. New documents, profile edits, and date changes queue fresh analysis without resuming a deliberately paused agent. Claims blocked on evidence are checked once per input version, then wait for new evidence.
 
 **Review & decide** separates prepared claims and reply drafts from missing information. Health elections, retirement decisions, unsupported portal tasks, and unknown eligibility still require the person or employer. Exact payload approval is always required for claims and outgoing replies; the automatic loop cannot submit, send email, simulate HR, or mark a task complete.
 
@@ -62,3 +62,17 @@ The live smoke test verifies claim preparation, browser submission, duplicate pr
 All model calls go through Neon AI Gateway using `NEON_AI_GATEWAY_TOKEN` and the branch host in `NEON_AI_GATEWAY_BASE_URL`. The OpenAI-compatible SDK is only the transport; no `OPENAI_API_KEY` is used or required. The selected model is `gpt-5-6-luna`. A paid Neon plan with AI Gateway credits is required. Missing Neon credentials fail closed rather than falling back to another provider.
 
 Pull gateway credentials with `neon env pull --service ai-gateway --file .env`. This updates the gateway variables without changing the app database. On Vercel, configure both gateway variables as server-side environment variables in production and preview.
+
+## Background agent
+
+Workspace settings now includes **Enable background checks**. Vercel Workflow persists the run and wakes it every five minutes for up to seven days, independent of the browser. Pause stops future checks; restart creates a new generation so old runs cannot apply updates. Five consecutive service failures pause the run with an actionable error. When background checks are enabled, foreground automation leaves email polling to the worker and refreshes saved state. Without background checks, the open workspace checks replies at most every 20 seconds. The preparation pause control does not disable separately enabled background monitoring.
+
+The worker checks demo HR replies and reconciles submissions interrupted for more than ten minutes against the portal's persisted claim. A confirmed submission becomes waiting; an unconfirmed attempt returns to review and requires another explicit approval. It never automatically sends a claim or email. Approval cannot be reversed by a stale HR request.
+
+Production background execution requires deploying this Workflow-enabled build on Vercel. Locally, keep `npm run dev` running; Workflow stores its execution data under ignored `.workflow-data/`. Existing workspaces start with checks off. After deployment, enable monitoring explicitly in settings. No schema migration is required for this feature.
+
+A local integration check creates its own fictional workspace, verifies background execution and recovery, and removes that workspace without sending email or submitting a claim:
+
+```sh
+TEST_BASE_URL=http://localhost:3001 node --env-file=.env --import tsx scripts/background-smoke.ts
+```

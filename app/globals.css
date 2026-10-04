@@ -1,11 +1,11 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&family=Manrope:wght@400;500;600;650;700;750;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&display=swap");
 :root {
-  --paper: #f8f9f6;
+  --paper: #f7f7f4;
   --white: #fff;
-  --ink: #263c36;
-  --muted: #839089;
+  --ink: #252823;
+  --muted: #697068;
   --line: #e5e9e2;
-  --green: #284e40;
+  --green: #3f5d50;
   --orange: #d57b4d;
   --soft-orange: #fcf0e5;
   --sage: #eaf1e8;
@@ -81,7 +81,7 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: "Manrope", "DM Sans", sans-serif;
+  font-family: "DM Sans", sans-serif;
 }
 h1 {
   font-weight: 650;
@@ -126,7 +126,7 @@ svg {
   align-items: center;
   gap: 10px;
   padding: 0 12px;
-  font-family: Manrope, sans-serif;
+  font-family: "DM Sans", sans-serif;
   font-weight: 800;
   letter-spacing: -1.1px;
   font-size: 25px;
@@ -163,7 +163,7 @@ svg {
   color: #76836b;
   display: grid;
   place-items: center;
-  font-family: Manrope;
+  font-family: "DM Sans", sans-serif;
   font-weight: 700;
   font-size: 15px;
 }
@@ -630,7 +630,7 @@ svg {
   color: #939d92;
 }
 .stat {
-  font-family: Manrope;
+  font-family: "DM Sans", sans-serif;
   font-size: 24px;
   letter-spacing: -0.7px;
   font-weight: 650;
@@ -875,7 +875,7 @@ p.muted {
   align-items: baseline;
   gap: 7px;
   margin-top: 13px;
-  font-family: Manrope;
+  font-family: "DM Sans", sans-serif;
   font-weight: 700;
   font-size: 20px;
   color: #64764b;
@@ -2471,7 +2471,7 @@ select {
 }
 /* Keep evidence and actions readable at laptop sizes. */
 :root {
-  --muted: #6f7e70;
+  --muted: #697068;
 }
 .topbar {
   height: 62px;
@@ -2598,7 +2598,7 @@ select {
   color: #7c6a9e;
 }
 .coverage-period strong {
-  font-family: Manrope;
+  font-family: "DM Sans", sans-serif;
   font-size: 24px;
   white-space: nowrap;
 }
@@ -2680,6 +2680,309 @@ select {
   background: #edf2e5;
   padding: 10px;
   border-radius: 7px;
+}
+
+/* Quiet surfaces and a compact overview keep the transition plan in focus. */
+.sidebar {
+  background: #f2f3ef;
+  border-color: var(--line);
+}
+.sidebar nav {
+  margin-top: 40px;
+}
+.brand {
+  font-size: 23px;
+  font-weight: 650;
+}
+.brand-dot {
+  color: var(--green);
+}
+.nav-item {
+  color: #626960;
+  font-size: 14px;
+}
+.nav-item.active {
+  background: #e5eae3;
+  color: var(--green);
+}
+.sidebar-assistant {
+  border: 1px solid var(--line);
+  background: var(--white);
+  color: var(--green);
+  font-size: 14px;
+}
+.topbar {
+  background: transparent;
+}
+.main-content {
+  max-width: 1440px;
+  padding-top: 36px;
+}
+.page-heading {
+  margin-bottom: 24px;
+}
+.page-heading h1 {
+  font-size: 30px;
+  font-weight: 550;
+  letter-spacing: -0.8px;
+}
+.page-heading p {
+  font-size: 14px;
+  color: var(--muted);
+}
+.transition-overview {
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+.transition-dates,
+.transition-summary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.transition-dates strong {
+  color: var(--ink);
+  font-weight: 500;
+  margin-left: 6px;
+}
+.transition-dates button {
+  margin-left: auto;
+}
+.transition-summary {
+  margin-top: 20px;
+  gap: 24px;
+}
+.transition-summary strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+.insight {
+  background: #eef1eb;
+  border: 1px solid var(--line);
+  padding: 18px 20px;
+  margin: 24px 0;
+}
+.insight strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+.insight p {
+  font-size: 13px;
+  color: var(--muted);
+}
+.insight-symbol {
+  display: none;
+}
+.primary {
+  box-shadow: none;
+}
+.board-toolbar {
+  margin: 28px 0 24px;
+}
+.board-title h2 {
+  font-size: 17px;
+  font-weight: 600;
+}
+.kanban {
+  gap: 24px;
+}
+.column-header,
+.stage-between .column-header,
+.stage-after .column-header {
+  border-bottom: 1px solid var(--line);
+}
+.column-header > div,
+.stage-between .column-header > div,
+.stage-after .column-header > div {
+  color: var(--muted);
+}
+.column-header h3 {
+  font-size: 14px;
+  color: var(--ink);
+  font-weight: 550;
+}
+.column-header p {
+  font-size: 12px;
+  color: var(--muted);
+}
+.column-header > div > span {
+  background: transparent;
+  font-size: 12px;
+  color: var(--muted);
+}
+.task-card {
+  padding: 20px;
+  box-shadow: none;
+  border-color: var(--line);
+}
+.task-card:hover {
+  transform: none;
+  box-shadow: 0 3px 12px #25282308;
+  border-color: #aeb9ad;
+}
+.card-top {
+  margin-bottom: 14px;
+  gap: 12px;
+}
+.card-category {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--muted);
+}
+.task-card h4 {
+  font-size: 16px;
+  font-weight: 550;
+  line-height: 1.45;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+.amount-line {
+  font-size: 20px;
+  color: var(--ink);
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.amount-line span,
+.card-evidence,
+.card-date {
+  font-size: 12px;
+  color: var(--muted);
+}
+.status-badge {
+  font-size: 11px;
+}
+.status-todo {
+  background: #f1f2ee;
+  color: #62685e;
+}
+.card-bottom {
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.board-footer span,
+.board-footer a {
+  color: var(--muted);
+  font-size: 12px;
+}
+.task-description,
+.evidence-card blockquote,
+.email-preview p,
+.claim-review dd,
+.document-paper pre,
+.assistant-message {
+  color: #454e43;
+}
+.document-row small,
+.activity-item p,
+.document-help p,
+.form-modal > p,
+.chat-welcome > p,
+.suggestion {
+  color: var(--muted);
+}
+.peach,
+.lavender,
+.sage,
+.blue {
+  background: #edf0e9;
+  color: var(--green);
+}
+.chat-avatar,
+.send-button {
+  background: var(--green);
+  color: white;
+}
+.chat-welcome h3 {
+  font-weight: 550;
+}
+@media (max-width: 960px) {
+  .nav-item {
+    font-size: 0;
+  }
+  .kanban {
+    gap: 14px;
+  }
+  .task-card {
+    padding: 16px;
+  }
+  .sidebar-bottom {
+    display: block;
+    padding-top: 16px;
+  }
+  .sidebar-bottom .profile {
+    display: none;
+  }
+}
+@media (max-width: 720px) {
+  .main-content {
+    padding: 24px 18px;
+  }
+  .page-heading h1 {
+    font-size: 28px;
+  }
+  .transition-dates {
+    gap: 12px;
+    font-size: 12px;
+  }
+  .transition-dates button {
+    margin-left: 0;
+  }
+  .transition-summary {
+    gap: 10px 18px;
+    font-size: 12px;
+  }
+  .insight {
+    padding: 16px;
+  }
+  .kanban {
+    gap: 24px;
+  }
+  .task-card h4 {
+    font-size: 16px;
+  }
+}
+/* Keep controls readable and the compact rail contained. */
+.primary,
+.secondary,
+.text-button,
+.segmented button {
+  font-size: 13px;
+  min-height: 36px;
+}
+.breadcrumbs,
+.demo-pill {
+  font-size: 12px;
+}
+@media (max-width: 960px) {
+  .brand {
+    font-size: 0;
+  }
+}
+@media (max-width: 720px) {
+  .board-controls {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .breadcrumbs {
+    font-size: 0;
+  }
+  .breadcrumbs > span {
+    font-size: 12px;
+  }
+  .topbar .demo-pill {
+    font-size: 11px;
+  }
+  .board-footer {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
 }
 
 /* Agent-led workspace: automatic preparation, explicit human review. */
@@ -2967,4 +3270,14 @@ select {
   .agent-capabilities small {
     font-size: 9px;
   }
+}
+
+.agent-scope-settings {
+  border: 0;
+  padding: 0;
+  margin-left: auto;
+  color: inherit;
+  background: transparent;
+  text-decoration: underline;
+  font-size: inherit;
 }

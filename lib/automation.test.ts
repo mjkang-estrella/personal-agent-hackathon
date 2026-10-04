@@ -132,3 +132,26 @@ test("new transition dates invalidate a ready claim before it can be reviewed ag
   assert.equal(w.agent!.pending, true);
   assert.deepEqual(nextAgentStep(w, "changed-dates"), { kind: "analyze" });
 });
+
+test("foreground leaves inbox polling to an enabled durable monitor", () => {
+  const w = prepared();
+  w.tasks = [w.tasks[0]];
+  w.tasks[0].status = "waiting";
+  w.inbox = "demo@example.test";
+  w.hrInbox = "hr@example.test";
+  w.background = {
+    enabled: true,
+    generation: "run-1",
+    status: "running",
+    startedAt: new Date().toISOString(),
+  };
+  assert.equal(nextAgentStep(w, "v1"), null);
+  w.background.enabled = false;
+  assert.deepEqual(nextAgentStep(w, "v1"), { kind: "sync" });
+  w.background.enabled = true;
+  assert.deepEqual(
+    nextAgentStep(w, "v2"),
+    { kind: "analyze" },
+    "background monitoring does not prevent foreground preparation",
+  );
+});

@@ -42,3 +42,7 @@ The feature adds no deployment or real-message authorization. The requested hand
 - [Neon model routing](2026-10-04-185710-codex-neon-luna.md)
 - [Run and demo guide](../../README.md)
 - [Preparation-only smoke test](../../scripts/automation-smoke.ts)
+
+## Subsequent integration
+
+The browser-only HR monitoring limitation is superseded by [integration with the team's opt-in durable monitor and minimal UI](2026-10-04-191913-codex-review-integration.md). Foreground preparation still runs while the workspace is open.

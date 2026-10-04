@@ -45,7 +45,7 @@ export default function Assistant({ close }: { close: () => void }) {
           </span>
           <div>
             <strong>Your transition assistant</strong>
-            <small>Here to connect the dots.</small>
+            <small>Answers grounded in your documents.</small>
           </div>
         </div>
         <button
@@ -62,7 +62,7 @@ export default function Assistant({ close }: { close: () => void }) {
             <ThreadPrimitive.Empty>
               <div className="chat-welcome">
                 <Sparkles size={30} />
-                <h3>A little clarity goes a long way.</h3>
+                <h3>How can I help?</h3>
                 <p>
                   Ask about your documents, upcoming deadlines, or what to
                   handle next.

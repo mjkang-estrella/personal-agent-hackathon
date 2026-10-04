@@ -43,6 +43,12 @@ try {
       withWorkspaceLock(lockId, async () => {}),
       /finishing a step/,
     );
+    const { checkWorkspace } = await import("../workflows/monitor");
+    assert.deepEqual(
+      await checkWorkspace(lockId, "test-generation"),
+      { active: true, delay: 15000 },
+      "background contention defers without a service failure",
+    );
     await withWorkspaceLock(randomUUID(), async () => {
       await pool.query("SELECT 1");
     });

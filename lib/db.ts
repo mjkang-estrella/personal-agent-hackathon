@@ -79,6 +79,12 @@ export function activity(
   w.activity = w.activity.slice(0, 100);
 }
 
+export class WorkspaceBusyError extends Error {
+  constructor() {
+    super("Your agent is finishing a step. Please try again shortly.");
+  }
+}
+
 // Transaction-scoped advisory locks work with Neon's transaction pooler.
 // Keep this separate from row mutations so state/progress remains readable.
 export async function withWorkspaceLock<T>(
@@ -92,10 +98,7 @@ export async function withWorkspaceLock<T>(
       "SELECT pg_try_advisory_xact_lock(hashtextextended($1, 0)) AS locked",
       [id],
     );
-    if (!result.rows[0].locked)
-      throw new Error(
-        "Your agent is finishing a step. Please try again shortly.",
-      );
+    if (!result.rows[0].locked) throw new WorkspaceBusyError();
     const value = await fn();
     await client.query("COMMIT");
     return value;

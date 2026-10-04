@@ -1,3 +1,4 @@
+import { setBackground } from "@/lib/background";
 export const maxDuration = 300;
 import { z } from "zod";
 import {
@@ -6,7 +7,13 @@ import {
   sameOrigin,
   publicError,
 } from "@/lib/session";
-import { getWorkspace, mutate, activity, withWorkspaceLock } from "@/lib/db";
+import {
+  getWorkspace,
+  mutate,
+  activity,
+  withWorkspaceLock,
+  WorkspaceBusyError,
+} from "@/lib/db";
 import { research } from "@/lib/agent";
 import {
   prepareClaim,
@@ -58,6 +65,7 @@ export async function POST(request: Request) {
       let w = await getWorkspace(id);
       switch (data.action) {
         case "new_workspace": {
+          if (w.background?.enabled) await setBackground(id, false);
           const next = await newSessionId();
           w = await getWorkspace(next);
           if (data.mode === "personal")
@@ -223,6 +231,9 @@ export async function POST(request: Request) {
       return Response.json(w);
     });
   } catch (error) {
-    return Response.json({ error: publicError(error) }, { status: 400 });
+    return Response.json(
+      { error: publicError(error) },
+      { status: error instanceof WorkspaceBusyError ? 409 : 400 },
+    );
   }
 }
