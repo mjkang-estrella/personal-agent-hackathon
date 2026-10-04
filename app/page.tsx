@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -150,11 +151,13 @@ export default function Page() {
           className={styles.heroVisual}
           aria-label="A calmer next chapter"
         >
-          <img
+          <Image
             src="/images/next-chapter.jpg"
             alt="A professional enjoying a quiet moment at a sunlit home office"
-            width="1536"
-            height="1024"
+            width={1536}
+            height={1024}
+            sizes="90vw"
+            loading="eager"
             fetchPriority="high"
           />
           <div className={styles.photoCaption}>
@@ -283,12 +286,12 @@ export default function Page() {
           </div>
           <article className={styles.photoFeatureRow}>
             <div className={styles.featurePhoto}>
-              <img
+              <Image
                 src="/images/document-clarity.jpg"
                 alt="A professional thoughtfully reviewing documents in a sunlit cafe"
-                width="1536"
-                height="1024"
-                loading="lazy"
+                width={1536}
+                height={1024}
+                sizes="(max-width: 760px) 88vw, 45vw"
               />
               <div className={styles.photoOverlay}>
                 <span className={styles.overlaySymbol}>
@@ -339,12 +342,12 @@ export default function Page() {
             className={`${styles.photoFeatureRow} ${styles.photoFeatureReverse}`}
           >
             <div className={styles.featurePhoto}>
-              <img
+              <Image
                 src="/images/life-in-between.jpg"
                 alt="A professional checking his phone over coffee on a leafy outdoor terrace"
-                width="1536"
-                height="1024"
-                loading="lazy"
+                width={1536}
+                height={1024}
+                sizes="(max-width: 760px) 88vw, 45vw"
               />
               <div
                 className={`${styles.photoOverlay} ${styles.followupOverlay}`}
