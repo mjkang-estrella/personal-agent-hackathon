@@ -1,5 +1,6 @@
 export const maxDuration = 300;
 import { z } from "zod";
+import { MODEL_LABEL } from "@/lib/model-config";
 import { randomUUID } from "node:crypto";
 import {
   sessionId,
@@ -126,7 +127,7 @@ export async function POST(request: Request) {
           activity(
             s,
             "Your documents have been analyzed",
-            `${supported.length} tasks grounded in verified document quotes. Model: gpt-6-luna.`,
+            `${supported.length} tasks grounded in verified document quotes. Model: ${MODEL_LABEL}.`,
           );
         });
         break;

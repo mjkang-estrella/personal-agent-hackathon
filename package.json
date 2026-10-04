@@ -40,7 +40,7 @@
     "start": "next start --hostname 0.0.0.0",
     "typecheck": "tsc --noEmit",
     "db:migrate": "node --env-file=.env --import tsx scripts/migrate.ts",
-    "test": "node --import tsx --test lib/domain.test.ts"
+    "test": "node --import tsx --test lib/*.test.ts"
   },
   "engines": {
     "node": "24.x"
