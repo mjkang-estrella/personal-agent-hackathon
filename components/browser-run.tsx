@@ -93,7 +93,36 @@ export default function RunPanel({
       {r.question && (
         <div className={styles.review}>
           <h4>Your decision</h4>
-          <p>{r.question}</p>
+          {r.pending ? (
+            <>
+              <p>Your agent wants to do one step outside the plan:</p>
+              <dl>
+                <dt>Step</dt>
+                <dd>{r.pending.description}</dd>
+                {r.pending.value !== undefined && (
+                  <>
+                    <dt>Exact value</dt>
+                    <dd>
+                      <pre>{r.pending.value}</pre>
+                    </dd>
+                  </>
+                )}
+              </dl>
+              <p className={styles.small}>
+                Allow it once, exactly as shown, on the current page. Or open
+                the live browser and do it yourself, then resume.
+              </p>
+              <button
+                disabled={busy}
+                className={styles.primary}
+                onClick={() => void run({ action: "allow", id: a.id })}
+              >
+                Allow this step <ArrowRight size={16} />
+              </button>
+            </>
+          ) : (
+            <p>{r.question}</p>
+          )}
         </div>
       )}
 

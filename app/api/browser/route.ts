@@ -16,6 +16,7 @@ import {
   advanceRun,
   confirmRun,
   draftRun,
+  allowStep,
   pauseRun,
   resumeRun,
 } from "@/lib/browser/runner";
@@ -42,6 +43,7 @@ const schema = z.discriminatedUnion("action", [
       "advance",
       "pause",
       "resume",
+      "allow",
       "close",
     ]),
     id: z.string().uuid(),
@@ -138,6 +140,8 @@ export async function POST(request: Request) {
             return pauseRun(workspace, a);
           case "resume":
             return resumeRun(workspace, a);
+          case "allow":
+            return allowStep(workspace, a);
           case "close":
             return closeRun(workspace, a);
         }

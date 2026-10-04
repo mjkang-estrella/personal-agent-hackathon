@@ -57,6 +57,15 @@ export interface BrowserRun {
     evidence?: string;
   };
   confirmedAt?: string;
+  // A paused step the user may allow once, exactly as shown, on the same page.
+  pending?: PendingStep;
+  approved?: PendingStep;
+}
+export interface PendingStep {
+  action: StagehandAction;
+  reason: string;
+  url: string;
+  consequential: boolean;
 }
 
 export interface BrowserAccount {
@@ -76,7 +85,11 @@ export interface PublicBrowserAccount {
   url: string;
   hasPassword: boolean;
   status: BrowserAccount["status"];
-  run?: Omit<BrowserRun, "sessionId" | "extensionLoaded" | "intent"> & {
+  run?: Omit<
+    BrowserRun,
+    "sessionId" | "extensionLoaded" | "intent" | "pending" | "approved"
+  > & {
+    pending?: { description: string; value?: string; reason: string };
     // Field values are shown to the owner for confirmation, as in claims.
     intent: BrowserIntent;
   };

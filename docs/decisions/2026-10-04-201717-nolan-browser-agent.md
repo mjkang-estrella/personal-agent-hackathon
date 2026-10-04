@@ -50,7 +50,9 @@ Confirming the intent keeps the user's approval tied to the exact payload and ou
 - Uploads send a workspace document's extracted text as a `.txt` file, because original binaries are not stored.
 - Two model calls per step (plan, then observe).
 - Live end-to-end runs need real Neon gateway credentials. Local `.env` files in the agent worktrees contain placeholders.
-- Live checks so far: extension upload, model-free replay, variable substitution, domain blocking, reconnecting to a surviving session, and accessibility snapshots on Kernel.
+- When the agent pauses on a specific step, the user can **allow that step once**. It replays exactly as shown, only on the same page, and doesn't change the confirmed plan. Resuming without allowing discards the step.
+- A value made of pieces of a confirmed value is allowed (for example `18` and `00` for `18:00`), since portals often split dates and times. Keystroke entries on native date and time inputs are replayed as `fill`, because typing leaves them empty.
+- Live verification: `scripts/browser-agent-smoke.ts` runs the real runner on Kernel, Stagehand and the Neon gateway against httpbin's sample form with fictional data and an in-memory database. After the fixes, 3 of 3 runs drafted the plan, filled every confirmed value, submitted exactly once, and finished with the portal's echo as evidence (roughly 2–2.5 minutes each). Earlier runs exposed the split-time and keystroke issues fixed above, plus a temporary Kernel slowdown that the next automatic advance recovers from.
 - 1Password autofill (Kernel Vaults) is available for later.
 
 ## Links

@@ -68,6 +68,13 @@ const SEARCH = /\b(search|filter|find)\b/i;
 export type Decision =
   { kind: "auto" } | { kind: "outcome" } | { kind: "pause"; reason: string };
 
+// Portals often split one value across inputs (hour/minute, month/day/year,
+// phone parts). A piece of a confirmed value is still that confirmed value.
+const fromConfirmed = (arg: string, value: string) =>
+  arg === value ||
+  (arg.trim().length > 0 &&
+    value.split(/[\s:/.,-]+/).some((part) => part === arg.trim()));
+
 const variable = (arg: string) => /^%([a-z][a-z0-9_]{0,39})%$/.exec(arg)?.[1];
 
 // Decide whether a proposed action fits the confirmed intent. Page content and
@@ -96,14 +103,14 @@ export function reviewAction(
     const name = variable(args[0]);
     const confirmed = name
       ? intent.fields.some((f) => f.name === name)
-      : intent.fields.some((f) => f.value === args[0]) ||
+      : intent.fields.some((f) => fromConfirmed(args[0], f.value)) ||
         (method !== "selectOptionFromDropdown" &&
           SEARCH.test(action.description) &&
           args[0].length <= 100);
     if (!confirmed)
       return {
         kind: "pause",
-        reason: `The portal asks for a value you haven't confirmed: ${action.description}`,
+        reason: `The portal asks for a value you haven't confirmed: ${action.description} → "${args[0].slice(0, 80)}"`,
       };
     return { kind: "auto" };
   }

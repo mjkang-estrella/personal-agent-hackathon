@@ -43,6 +43,11 @@ export function publicAccount(a: BrowserAccount): PublicBrowserAccount {
       history: r.history.slice(-30),
       outcome: r.outcome,
       confirmedAt: r.confirmedAt,
+      pending: r.pending && {
+        description: r.pending.action.description,
+        value: r.pending.action.arguments?.[0],
+        reason: r.pending.reason,
+      },
     },
   };
 }

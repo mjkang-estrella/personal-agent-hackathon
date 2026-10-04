@@ -46,7 +46,12 @@ try {
   console.log("field value:", value);
   try {
     await page.goto("https://example.com/");
-    console.log("domain policy: NOT enforced, url", await page.url());
+    const url = await page.url();
+    console.log(
+      url.startsWith("chrome-error:")
+        ? "domain policy enforced: navigation blocked"
+        : "domain policy NOT enforced: " + url,
+    );
   } catch (e) {
     console.log("domain policy enforced:", (e as Error).message.slice(0, 120));
   }

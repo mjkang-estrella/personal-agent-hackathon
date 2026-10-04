@@ -8,7 +8,7 @@ import { pool } from "./db";
 import { account, saveRunIfCurrent } from "./browser/store";
 import { portalUrl, publicAccount, trustedKernelUrl } from "./browser/security";
 import { intentHash, reviewAction } from "./browser/intent";
-import { confirmRun, resumeRun } from "./browser/runner";
+import { allowStep, confirmRun, resumeRun } from "./browser/runner";
 import { deleteAccount } from "./browser/service";
 import type {
   BrowserAccount,
@@ -107,6 +107,28 @@ test("entries must use confirmed values; unknown values pause", () => {
     ).kind,
     "auto",
   );
+  const timed = {
+    ...intent,
+    fields: [
+      ...intent.fields,
+      { name: "pickup_time", label: "Pickup time", value: "18:00" },
+    ],
+  };
+  assert.equal(
+    reviewAction(act("Hours spinbutton", "fill", ["18"]), timed, false, false)
+      .kind,
+    "auto",
+  );
+  assert.equal(
+    reviewAction(act("Minutes spinbutton", "fill", ["00"]), timed, false, false)
+      .kind,
+    "auto",
+  );
+  assert.equal(
+    reviewAction(act("Hours spinbutton", "fill", ["19"]), timed, false, false)
+      .kind,
+    "pause",
+  );
   assert.equal(
     reviewAction(
       act("Search policies box", "type", ["reimbursement"]),
@@ -121,6 +143,8 @@ test("entries must use confirmed values; unknown values pause", () => {
     act("Course fee input", "fill", ["9999"]),
     act("Claim type", "selectOptionFromDropdown", ["Relocation"]),
     act("Notes", "fill", ["a", "b"]),
+    act("Course fee input", "fill", ["120"]),
+    act("Course fee input", "fill", [" "]),
   ])
     assert.equal(reviewAction(a, intent, false, false).kind, "pause");
 });
@@ -291,4 +315,44 @@ test("deletion removes browser, auth, credentials and profile before local recor
     "profile",
     "local",
   ]);
+});
+
+test("a paused step can be allowed exactly once, and only when one is waiting", async () => {
+  mock.method(pool, "query", async () => ({ rowCount: 1, rows: [] }));
+  const a = fixture();
+  a.run!.status = "paused";
+  await assert.rejects(allowStep("workspace-a", a), /No step/);
+  const pending = {
+    action: act("Hours spinbutton", "fill", ["06"]),
+    reason: "Needs a value",
+    url: "https://portal.example.com/form",
+    consequential: false,
+  };
+  a.run!.pending = pending;
+  const shown = publicAccount(a).run!.pending!;
+  assert.deepEqual(shown, {
+    description: "Hours spinbutton",
+    value: "06",
+    reason: "Needs a value",
+  });
+  assert.ok(!JSON.stringify(publicAccount(a)).includes("xpath="));
+  await allowStep("workspace-a", a);
+  assert.equal(a.run!.status, "running");
+  assert.deepEqual(a.run!.approved, pending);
+  assert.equal(a.run!.pending, undefined);
+  await assert.rejects(allowStep("workspace-a", a), /No step/);
+});
+test("resuming without allowing discards the waiting step", async () => {
+  mock.method(pool, "query", async () => ({ rowCount: 1, rows: [] }));
+  const a = fixture();
+  a.run!.status = "paused";
+  a.run!.pending = {
+    action: act("Pay now"),
+    reason: "r",
+    url: "u",
+    consequential: true,
+  };
+  await resumeRun("workspace-a", a);
+  assert.equal(a.run!.pending, undefined);
+  assert.equal(a.run!.approved, undefined);
 });
