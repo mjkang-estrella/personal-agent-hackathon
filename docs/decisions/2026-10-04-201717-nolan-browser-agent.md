@@ -1,7 +1,7 @@
 # Browser agent: Stagehand on Kernel with intent-level confirmation
 
 - Date: 2026-10-04
-- Status: proposed (Nolan decided the approval model and asked the agent to choose the framework; it touches the team-wide approval contract and expands scope to real portals, so it needs team agreement)
+- Status: accepted (Nolan approved the intent-level approval model and the merge on 2026-10-04. It supersedes per-step browser approval for connected portal accounts; claim submission keeps its exact-payload approval.)
 - Owner: Nolan; implemented by Claude Code, continuing Codex's uncommitted `codex/secure-browser-accounts` work
 
 ## Context
