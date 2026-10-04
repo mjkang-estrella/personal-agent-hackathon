@@ -73,6 +73,10 @@ export async function checkWorkspace(id: string, generation: string) {
           const { syncGmail } = await import("../lib/gmail/sync");
           await syncGmail(id, generation);
         }
+        if (w.tasks.some((t: import("../lib/types").Task) => t.outlook)) {
+          const { syncOutlook } = await import("../lib/outlook/sync");
+          await syncOutlook(id, generation);
+        }
         const state = await mutate(id, (s) => {
           if (!isCurrentRun(s, generation)) return;
           s.background!.status = "running";

@@ -44,6 +44,7 @@ import Assistant from "./assistant";
 import Modal, { ModalNotice } from "./modal";
 import Inbox from "./inbox";
 import BackgroundControls from "./background-controls";
+import OutlookControls from "./outlook-controls";
 import GmailControls from "./gmail-controls";
 import AccountControls from "./account-controls";
 import { MODEL_LABEL } from "@/lib/model-config";
@@ -137,8 +138,11 @@ export default function Dashboard() {
   const fileRef = useRef<HTMLInputElement>(null);
   const notify = (text: string, error = false) => setToast({ text, error });
   const load = useCallback(async () => {
+    setLoadError("");
     try {
-      const res = await fetch("/api/state");
+      const res = await fetch("/api/state", {
+        signal: AbortSignal.timeout(15000),
+      });
       const json = await res.json();
       if (res.status === 401) {
         window.location.assign("/sign-in");
@@ -147,15 +151,18 @@ export default function Dashboard() {
       if (!res.ok) throw new Error(json.error);
       setW(json);
       setLoadError("");
-    } catch (e) {
-      setLoadError((e as Error).message);
+    } catch {
+      setLoadError(
+        "We couldn’t open your workspace. Please try again in a moment.",
+      );
     }
   }, []);
   useEffect(() => {
     load();
     if (
       new URLSearchParams(window.location.search).has("gmail") ||
-      new URLSearchParams(window.location.search).has("account")
+      new URLSearchParams(window.location.search).has("account") ||
+      new URLSearchParams(window.location.search).has("outlook")
     )
       setPage("settings");
   }, [load]);
@@ -249,24 +256,52 @@ export default function Dashboard() {
   const document = w?.documents.find((d) => d.id === viewDoc?.id);
   if (!w)
     return (
-      <main className="app-shell loading-screen">
-        <span className="brand-mark">
-          <ArrowLeftRight size={24} />
-        </span>
-        <h1>JobSwitch</h1>
-        {loadError ? (
-          <>
-            <p role="alert">{loadError}</p>
-            <button className="primary" onClick={load}>
-              Try again
-            </button>
-          </>
-        ) : (
-          <p role="status">
-            <LoaderCircle size={16} className="spin" /> Getting your next
-            chapter ready…
+      <main className="workspace-entry">
+        <a className="workspace-entry-brand" href="/">
+          <span>
+            <ArrowLeftRight size={23} />
+          </span>{" "}
+          jobswitch
+        </a>
+        <section
+          className="workspace-entry-content"
+          aria-live="polite"
+          aria-busy={!loadError}
+        >
+          <span className="workspace-entry-symbol">
+            {loadError ? (
+              <CircleHelp size={32} />
+            ) : (
+              <BriefcaseBusiness size={32} />
+            )}
+          </span>
+          <p className="workspace-entry-eyebrow">YOUR NEXT CHAPTER</p>
+          <h1>
+            {loadError
+              ? "Let’s try that again."
+              : "A little clarity is on its way."}
+          </h1>
+          <p
+            className="workspace-entry-description"
+            role={loadError ? "alert" : undefined}
+          >
+            {loadError ||
+              "Opening your workspace, so you can see your plan and what needs your attention."}
           </p>
-        )}
+          {loadError ? (
+            <button className="workspace-entry-retry" onClick={load}>
+              Try again <ArrowRight size={17} />
+            </button>
+          ) : (
+            <p className="workspace-entry-progress" role="status">
+              <LoaderCircle size={18} className="spin" /> Opening your
+              workspace…
+            </p>
+          )}
+          <a className="workspace-entry-back" href="/">
+            Back to JobSwitch <ArrowUpRight size={15} />
+          </a>
+        </section>
       </main>
     );
   const attention = w.tasks.filter((t) => reviewKind(t, w) !== null).length;
@@ -1770,7 +1805,7 @@ function SettingsForm({
             <p>
               Your signed-in workspaces stay saved under Your account. You can
               return to them using Saved workspaces. Background monitoring for
-              this workspace will pause and its Gmail connection will
+              this workspace will pause and its inbox connections will
               disconnect. Anonymous demo history stays only in this browser
               until you sign in.
             </p>
@@ -1846,6 +1881,7 @@ function SettingsForm({
         </button>
       </form>
       <GmailControls w={w} onUpdate={onUpdate} />
+      <OutlookControls w={w} onUpdate={onUpdate} />
       <BackgroundControls w={w} onUpdate={onUpdate} />
       <div className="settings-card">
         <h2>Workspace services</h2>

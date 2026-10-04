@@ -38,3 +38,7 @@ Use the repository's typecheck, tests, and build. `scripts/accounts-smoke.ts` ru
 - [Gmail connector](2026-10-04-203500-nolan-gmail-connector.md): separate mailbox consent remains in force.
 - [Neon Next.js integration](https://neon.com/docs/auth/quick-start/nextjs-api-only)
 - [Neon Google OAuth setup](https://neon.com/docs/auth/guides/setup-oauth)
+
+## Upstream integration
+
+The Outlook connector merged during this task. Its private inbox routes now enforce the same account requirement as Gmail, with a sign-in callout in Settings. Outlook remains a separate mail connection; it is not a JobSwitch login provider. Existing loading timeout/recovery and connector UI changes are preserved.

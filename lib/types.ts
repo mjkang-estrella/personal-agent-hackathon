@@ -42,6 +42,12 @@ export interface Task {
   missing: string[];
   nextAction: string;
   claim?: ClaimDraft;
+  outlook?: {
+    threadId: string;
+    sender: string;
+    generation: string;
+    bindingId: string;
+  };
   gmail?: {
     threadId: string;
     sender: string;

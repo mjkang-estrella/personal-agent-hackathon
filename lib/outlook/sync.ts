@@ -3,17 +3,17 @@ import { z } from "zod";
 import { activity, getWorkspace } from "../db";
 import { applyHRReply, isCurrentRun } from "../background-state";
 import {
-  gmailGet,
+  outlookGet,
   header,
   plainText,
   newReplyText,
-  type GmailMessage,
+  type OutlookMessage,
 } from "./client";
 import { access, connection, mutateConnected } from "./store";
 import { senderAddress } from "./security";
 import type { Workspace } from "../types";
 
-export function eligibleMessage(m: GmailMessage, sender: string) {
+export function eligibleMessage(m: OutlookMessage, sender: string) {
   return (
     senderAddress(header(m, "From")) === sender &&
     !m.labelIds?.some((l) => ["SENT", "DRAFT", "SPAM", "TRASH"].includes(l)) &&
@@ -23,17 +23,17 @@ export function eligibleMessage(m: GmailMessage, sender: string) {
 }
 export async function listThreads(id: string, sender: string) {
   const { token } = await access(id);
-  const result = await gmailGet(token, "threads", {
+  const result = await outlookGet(token, "threads", {
     q: `from:${sender} newer_than:90d -in:spam -in:trash`,
     maxResults: "15",
   });
   const threads = [];
   for (const t of (result.threads || []).slice(0, 15)) {
-    if (typeof t.id !== "string" || !/^[a-f0-9]+$/i.test(t.id)) continue;
-    const data = await gmailGet(token, `threads/${t.id}`, {
+    if (typeof t.id !== "string" || t.id.length > 1024) continue;
+    const data = await outlookGet(token, `threads/${t.id}`, {
       format: "metadata",
     });
-    const messages = (data.messages || []) as GmailMessage[];
+    const messages = (data.messages || []) as OutlookMessage[];
     const last = messages
       .filter((m) => eligibleMessage(m, sender))
       .sort((a, b) => Number(b.internalDate) - Number(a.internalDate))[0];
@@ -53,29 +53,31 @@ export async function trackThread(
   sender: string,
 ) {
   const { token, connection: c } = await access(id);
-  const data = await gmailGet(token, `threads/${threadId}`, {
+  const data = await outlookGet(token, `threads/${threadId}`, {
     format: "metadata",
   });
   if (
-    !(data.messages || []).some((m: GmailMessage) => eligibleMessage(m, sender))
+    !(data.messages || []).some((m: OutlookMessage) =>
+      eligibleMessage(m, sender),
+    )
   )
     throw new Error("Choose a thread from that HR sender.");
   return mutateConnected(id, c.generation, (w) => {
     if (w.demo)
       throw new Error(
-        "Please start a personal workspace before tracking Gmail replies.",
+        "Please start a personal workspace before tracking Outlook replies.",
       );
     const t = w.tasks.find((t) => t.id === taskId);
     if (!t || ["approved", "done", "submitting"].includes(t.status))
       throw new Error("Choose an open task to track.");
     // Rebinding could apply older evidence to a different request. Untrack explicitly first.
-    if (t.gmail || t.outlook)
+    if (t.outlook || t.gmail)
       throw new Error(
         "This task already tracks an HR thread. Stop tracking it first.",
       );
-    if (w.tasks.some((t) => t.gmail?.threadId === threadId))
+    if (w.tasks.some((t) => t.outlook?.threadId === threadId))
       throw new Error("This thread is already linked to another task.");
-    t.gmail = {
+    t.outlook = {
       threadId,
       sender,
       generation: c.generation,
@@ -98,36 +100,36 @@ export async function trackThread(
 }
 export async function untrackThread(id: string, taskId: string) {
   const c = await connection(id);
-  if (!c) throw new Error("Please connect Gmail first.");
+  if (!c) throw new Error("Please connect Outlook first.");
   return mutateConnected(id, c.generation, (w) => {
     const t = w.tasks.find((t) => t.id === taskId);
     if (!t) throw new Error("Task not found.");
-    delete t.gmail;
+    delete t.outlook;
     activity(w, "HR thread tracking stopped", t.title, "user");
   });
 }
-export async function syncGmail(id: string, generation?: string) {
+export async function syncOutlook(id: string, generation?: string) {
   const w = await getWorkspace(id);
   if (generation && !isCurrentRun(w, generation)) return w;
   const c = await connection(id);
-  if (!c || !w.tasks.some((t) => t.gmail?.generation === c.generation))
+  if (!c || !w.tasks.some((t) => t.outlook?.generation === c.generation))
     return w;
   const { token, connection: current } = await access(id);
   if (current.generation !== c.generation) return getWorkspace(id);
   for (const task of w.tasks.filter(
     (t) =>
-      t.gmail?.generation === c.generation &&
+      t.outlook?.generation === c.generation &&
       ["waiting", "needs_info"].includes(t.status),
   )) {
-    const binding = task.gmail!;
-    const data = await gmailGet(token, `threads/${binding.threadId}`, {
+    const binding = task.outlook!;
+    const data = await outlookGet(token, `threads/${binding.threadId}`, {
       format: "full",
     });
-    const messages = ((data.messages || []) as GmailMessage[])
+    const messages = ((data.messages || []) as OutlookMessage[])
       .filter(
         (m) =>
           eligibleMessage(m, binding.sender) &&
-          !task.processedMessageIds?.includes("gmail:" + m.id),
+          !task.processedMessageIds?.includes("outlook:" + m.id),
       )
       .sort((a, b) => Number(a.internalDate) - Number(b.internalDate));
     // Bound each check. The next check resumes from the saved message IDs.
@@ -137,17 +139,17 @@ export async function syncGmail(id: string, generation?: string) {
         mutateConnected(id, c.generation, (s) => {
           if (generation && !isCurrentRun(s, generation)) return;
           const t = s.tasks.find((t) => t.id === task.id);
-          const messageId = "gmail:" + m.id;
+          const messageId = "outlook:" + m.id;
           if (
             !t ||
-            t.gmail?.bindingId !== binding.bindingId ||
+            t.outlook?.bindingId !== binding.bindingId ||
             t.processedMessageIds?.includes(messageId)
           )
             return;
           t.processedMessageIds = [...(t.processedMessageIds || []), messageId];
           activity(
             s,
-            "Review an HR reply in Gmail",
+            "Review an HR reply in Outlook",
             `A reply for “${t.title}” could not be interpreted with reliable plain-text evidence. Its status was left unchanged.`,
             "mail",
           );
@@ -180,23 +182,23 @@ export async function syncGmail(id: string, generation?: string) {
         const t = s.tasks.find((t) => t.id === task.id);
         if (
           !t ||
-          t.gmail?.threadId !== binding.threadId ||
-          t.gmail.generation !== c.generation ||
-          t.gmail.bindingId !== binding.bindingId ||
-          t.gmail.sender !== binding.sender
+          t.outlook?.threadId !== binding.threadId ||
+          t.outlook.generation !== c.generation ||
+          t.outlook.bindingId !== binding.bindingId ||
+          t.outlook.sender !== binding.sender
         )
           return;
         if (
           !applyHRReply(t, {
             ...parsed,
-            id: "gmail:" + m.id,
+            id: "outlook:" + m.id,
             threadId: binding.threadId,
             at: new Date(Number(m.internalDate)).toISOString(),
             text,
           })
         )
           return;
-        const docId = "gmail-" + m.id;
+        const docId = "outlook-" + m.id;
         // Preserve exact source text for citations, within existing workspace limits.
         const page = `From: ${binding.sender}\nSubject: ${header(m, "Subject")}\nDate: ${new Date(Number(m.internalDate)).toISOString()}\n\n${text}`;
         if (!s.documents.some((d) => d.id === docId)) {
@@ -210,13 +212,13 @@ export async function syncGmail(id: string, generation?: string) {
           s.documents.push({
             id: docId,
             emailSource: {
-              id: "gmail:" + m.id,
+              id: "outlook:" + m.id,
               from: binding.sender,
               subject: header(m, "Subject").slice(0, 200),
               at: new Date(Number(m.internalDate)).toISOString(),
               taskId: t.id,
             },
-            name: `Gmail · ${header(m, "Subject").slice(0, 120)}`,
+            name: `Outlook · ${header(m, "Subject").slice(0, 120)}`,
             employer: "personal",
             kind: "other",
             pages: [page],

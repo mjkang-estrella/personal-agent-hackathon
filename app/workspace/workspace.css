@@ -489,6 +489,98 @@
   color: var(--muted);
 }
 
+/* The initial fetch renders before .app-shell exists. Keep this state scoped too. */
+.workspace-entry {
+  min-height: 100svh;
+  background: #fbfaf7;
+  color: #222a35;
+  padding: 32px clamp(24px, 5vw, 80px);
+}
+.workspace-entry-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #0866ff;
+  font-size: 25px;
+  font-weight: 650;
+  letter-spacing: -1px;
+  text-decoration: none;
+}
+.workspace-entry-brand > span {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #0866ff;
+  color: white;
+}
+.workspace-entry-content {
+  max-width: 660px;
+  margin: clamp(80px, 16vh, 170px) auto 60px;
+  text-align: center;
+}
+.workspace-entry-symbol {
+  display: inline-grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: 24px;
+  background: #eaf0ff;
+  color: #0866ff;
+  transform: rotate(-7deg);
+  margin-bottom: 26px;
+}
+.workspace-entry-eyebrow {
+  font-size: 10px;
+  letter-spacing: 2px;
+  margin-bottom: 18px;
+}
+.workspace-entry-content h1 {
+  font-family: Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(38px, 5vw, 64px);
+  line-height: 1.08;
+  letter-spacing: -2px;
+}
+.workspace-entry-description {
+  max-width: 440px;
+  margin: 24px auto 30px;
+  color: #646970;
+  font-size: 16px;
+  line-height: 1.7;
+}
+.workspace-entry-progress,
+.workspace-entry-back,
+.workspace-entry-retry {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.workspace-entry-progress { color: #0866ff; font-size: 14px; }
+.workspace-entry-retry {
+  border: 0;
+  border-radius: 999px;
+  padding: 15px 25px;
+  background: #0866ff;
+  color: white;
+  cursor: pointer;
+}
+.workspace-entry-back {
+  display: flex;
+  width: fit-content;
+  margin: 32px auto 0;
+  color: #646970;
+  font-size: 13px;
+  text-decoration: none;
+}
+.workspace-entry a:focus-visible,
+.workspace-entry button:focus-visible { outline: 3px solid #0866ff; outline-offset: 5px; }
+@media (prefers-reduced-motion: reduce) {
+  .workspace-entry .spin { animation: none; }
+}
+
 /* The editorial system also covers forms, evidence, status, and navigation. */
 .app-shell {
   --accent: #075bd8;

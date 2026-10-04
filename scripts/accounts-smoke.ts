@@ -150,6 +150,11 @@ try {
     "/api/gmail/track",
     "/api/gmail/sync",
     "/api/gmail/disconnect",
+    "/api/outlook/connect",
+    "/api/outlook/threads",
+    "/api/outlook/track",
+    "/api/outlook/sync",
+    "/api/outlook/disconnect",
   ]) {
     assert.ok(
       (await request(guest, path, {})).status >= 400,
