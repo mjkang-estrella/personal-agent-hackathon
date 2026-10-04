@@ -16,6 +16,7 @@ import RunPanel from "./browser-run";
 export default function BrowserAccounts() {
   const [accounts, setAccounts] = useState<PublicBrowserAccount[]>([]);
   const [configured, setConfigured] = useState(true);
+  const [signedOut, setSignedOut] = useState(false);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
@@ -24,6 +25,8 @@ export default function BrowserAccounts() {
   async function load() {
     const r = await fetch("/api/browser", { cache: "no-store" });
     const data = await r.json();
+    setSignedOut(r.status === 401);
+    if (r.status === 401) return;
     if (!r.ok) throw new Error(data.error);
     setAccounts(data.accounts);
     setConfigured(data.configured);
@@ -93,6 +96,12 @@ export default function BrowserAccounts() {
       )}
       {loading ? (
         <p role="status">Loading connected accounts…</p>
+      ) : signedOut ? (
+        <p className={styles.notice}>
+          Connected accounts hold access to your personal portals, so they need
+          a signed-in account. <a href="/sign-in">Sign in with Google</a> to
+          connect one.
+        </p>
       ) : !configured ? (
         <p className={styles.notice}>
           Browser connections are not configured yet. Your existing workspace is
