@@ -71,6 +71,7 @@ function CalendarConnection({
   onUpdate: (w: Workspace) => void;
 }) {
   const [state, setState] = useState<State>();
+  const [needsSignIn, setNeedsSignIn] = useState(false);
   const [busy, setBusy] = useState(false),
     [notice, setNotice] = useState("");
   const [taskId, setTaskId] = useState(""),
@@ -86,6 +87,11 @@ function CalendarConnection({
   }>();
   async function refresh() {
     const r = await fetch(`/api/connections/${service}`);
+    if (r.status === 401) {
+      setNeedsSignIn(true);
+      return;
+    }
+    setNeedsSignIn(false);
     if (!r.ok)
       throw new Error(
         "Connection status unavailable. Reopen Settings to retry.",
@@ -130,7 +136,11 @@ function CalendarConnection({
         invitations.
       </p>
       {notice && <p role="status">{notice}</p>}
-      {!state ? (
+      {needsSignIn ? (
+        <p>
+          <a href="/sign-in">Sign in with Google</a> to connect your calendar.
+        </p>
+      ) : !state ? (
         <p>Loading connection…</p>
       ) : !state.configured ? (
         <p>This calendar connection is awaiting setup.</p>

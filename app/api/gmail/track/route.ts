@@ -1,3 +1,4 @@
+import { requireUser, SignInRequired } from "@/lib/auth/server";
 import { withWorkspaceLock, WorkspaceBusyError } from "@/lib/db";
 import { z } from "zod";
 import { sessionId, sameOrigin, publicError } from "@/lib/session";
@@ -5,6 +6,7 @@ import { senderAddress } from "@/lib/gmail/security";
 import { trackThread, untrackThread } from "@/lib/gmail/sync";
 export async function POST(request: Request) {
   try {
+    await requireUser();
     await sameOrigin();
     const data = z
       .discriminatedUnion("action", [
@@ -33,7 +35,14 @@ export async function POST(request: Request) {
   } catch (e) {
     return Response.json(
       { error: publicError(e) },
-      { status: e instanceof WorkspaceBusyError ? 409 : 400 },
+      {
+        status:
+          e instanceof SignInRequired
+            ? 401
+            : e instanceof WorkspaceBusyError
+              ? 409
+              : 400,
+      },
     );
   }
 }

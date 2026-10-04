@@ -1,3 +1,4 @@
+import { requireUser } from "@/lib/auth/server";
 import { sessionId } from "@/lib/session";
 import { finishConnect } from "@/lib/outlook/oauth";
 import { outlookConfig } from "@/lib/outlook/security";
@@ -5,6 +6,7 @@ export async function GET(request: Request) {
   const q = new URL(request.url).searchParams;
   let result = "failed";
   try {
+    await requireUser();
     result = (await finishConnect(
       await sessionId(),
       q.get("state") || "",
